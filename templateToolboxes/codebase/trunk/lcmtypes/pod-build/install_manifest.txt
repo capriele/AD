@@ -1,0 +1,11 @@
+/home/ra/workspace/code/starter_toolboxes/codebase/build/lib/liblcmtypes_lcmtypes.a
+/home/ra/workspace/code/starter_toolboxes/codebase/build/include/lcmtypes/agile_pose_t.h
+/home/ra/workspace/code/starter_toolboxes/codebase/build/include/lcmtypes/lcmtypes.h
+/home/ra/workspace/code/starter_toolboxes/codebase/build/lib/pkgconfig/lcmtypes_lcmtypes.pc
+/home/ra/workspace/code/starter_toolboxes/codebase/build/include/lcmtypes/agile/pose_t.hpp
+/home/ra/workspace/code/starter_toolboxes/codebase/build/include/lcmtypes/lcmtypes.hpp
+/home/ra/workspace/code/starter_toolboxes/codebase/build/share/java/lcmtypes_lcmtypes.jar
+/home/ra/workspace/code/starter_toolboxes/codebase/build/lib/python2.7/dist-packages/agile/__init__.py
+/home/ra/workspace/code/starter_toolboxes/codebase/build/lib/python2.7/dist-packages/agile/pose_t.py
+/home/ra/workspace/code/starter_toolboxes/codebase/build/share/lcmtypes/pose_t.lcm
+/home/ra/workspace/code/starter_toolboxes/codebase/build/lib/pkgconfig/lcmtypes.pc

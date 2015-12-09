@@ -1,0 +1,9 @@
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/src/bot_core/CMakeFiles/bot2-core.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/CMakeFiles/gCirTgodPeEsx1ewvhAGjWyOYw4aOCQB.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/java/CMakeFiles/jar.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/CMakeFiles/lcmgen_c.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/CMakeFiles/lcmgen_cpp.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/CMakeFiles/lcmgen_java.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/CMakeFiles/lcmgen_python.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/CMakeFiles/lcmtypes_bot2-core.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-core/pod-build/CMakeFiles/lcmtypes_bot2-core_jar.dir

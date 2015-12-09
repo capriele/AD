@@ -1,0 +1,11 @@
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/CMakeFiles/CJ4mjGBdMniHN1TnlS3VgAhwdCZ90CxD.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/src/CMakeFiles/bot2-frames.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/src/renderer/CMakeFiles/bot2-frames-renderers.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/src/test/CMakeFiles/coord-frames-test.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/CMakeFiles/lcmgen_c.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/CMakeFiles/lcmgen_cpp.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/CMakeFiles/lcmgen_java.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/CMakeFiles/lcmgen_python.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/CMakeFiles/lcmtypes_bot2-frames.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/CMakeFiles/lcmtypes_bot2-frames_jar.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-frames/pod-build/src/renderer/CMakeFiles/test-viewer.dir

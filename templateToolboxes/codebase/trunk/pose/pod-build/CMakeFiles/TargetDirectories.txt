@@ -1,0 +1,2 @@
+/home/ra/workspace/code/starter_toolboxes/codebase/trunk/pose/pod-build/src/CMakeFiles/pose.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/trunk/pose/pod-build/CMakeFiles/q3XaVtPw59AepvR2s9Ff8D8WjvXmlJLl.dir

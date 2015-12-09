@@ -1,0 +1,6 @@
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-lcm-utils/pod-build/CMakeFiles/7zU1x5yxVUBQS0pd7hAAyrDbERFhVQ9X.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-lcm-utils/pod-build/src/logfilter/CMakeFiles/bot-lcm-logfilter.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-lcm-utils/pod-build/src/logsplice/CMakeFiles/bot-lcm-logsplice.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-lcm-utils/pod-build/src/tunnel/CMakeFiles/bot-lcm-tunnel.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-lcm-utils/pod-build/src/who/CMakeFiles/bot-lcm-who.dir
+/home/ra/workspace/code/starter_toolboxes/codebase/libbot2/trunk/bot2-lcm-utils/pod-build/src/tunnel/CMakeFiles/ldpc-wrapper-test.dir

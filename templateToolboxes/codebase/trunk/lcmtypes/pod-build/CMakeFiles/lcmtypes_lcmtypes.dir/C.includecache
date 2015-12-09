@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lcmtypes/c/lcmtypes/agile_pose_t.h
+stdint.h
+-
+stdlib.h
+-
+lcm/lcm_coretypes.h
+-
+lcm/lcm.h
+-
+
+/home/ra/workspace/code/starter_toolboxes/codebase/trunk/lcmtypes/lcmtypes/c/lcmtypes/agile_pose_t.c
+string.h
+-
+lcmtypes/agile_pose_t.h
+/home/ra/workspace/code/starter_toolboxes/codebase/trunk/lcmtypes/lcmtypes/c/lcmtypes/lcmtypes/agile_pose_t.h
+
+/usr/local/include/lcm/eventlog.h
+stdio.h
+-
+stdint.h
+-
+
+/usr/local/include/lcm/lcm.h
+stdint.h
+-
+eventlog.h
+/usr/local/include/lcm/eventlog.h
+
+/usr/local/include/lcm/lcm_coretypes.h
+stdio.h
+-
+stdint.h
+-
+string.h
+-
+stdlib.h
+-
+
