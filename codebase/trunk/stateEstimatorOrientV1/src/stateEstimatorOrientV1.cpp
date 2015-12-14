@@ -149,7 +149,7 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 
 				podWorker->w_stats->bias.x = podWorker->stateVariances.imuBiasGyro[0];
 				podWorker->w_stats->bias.y = podWorker->stateVariances.imuBiasGyro[1];
-				podWorker->w_stats->bias.z = podWorker->stateVariances.imuBiasGyro[2];
+				podWorker->w_stats->bias.z = podWorker->stateVariances.imuBiasGyro[2]; //@TODO gravity"bias?"
 				
 				
 				/*

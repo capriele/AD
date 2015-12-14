@@ -208,71 +208,75 @@ renderer_pose_control_draw (BotViewer *viewer, BotRenderer *renderer) {
       q[0] = self->stateVariances_last->orient[0];
       q[1] = self->stateVariances_last->orient[1];
       q[2] = self->stateVariances_last->orient[2];
-      q[3] = self->stateVariances_last->orient[3];
+      q[3] = self->stateVariances_last->orient[3];	
 
-    
+	//Create rotation matrix https://www.opengl.org/sdk/docs/man2/xhtml/glMultMatrix.xml http://stackoverflow.com/questions/7938373/from-quaternions-to-opengl-rotations
+
+	//Transform angles and axes from our CS (z-down by rot 180deg about x ) to GUI angles
+	quat2Euler(q, &(yaw), &(pitch), &(roll));
+
+	yaw=-yaw;
+	pitch=-pitch;
+
+	printf("euler X: %f %f %f\n",yaw/3.14*180, pitch/3.14*180, roll/3.14*180); //@TODO remove
+
+	Euler2quat(q, &(yaw), &(pitch), &(roll));
+	//---	
+
+	rotmatrix[0] = pow(q[0],2) +  pow(q[1],2) - pow(q[2],2) -pow(q[3],2);
+	rotmatrix[1] = 2*q[1]*q[2] + 2*q[0]*q[3];
+	rotmatrix[2] = 2*q[1]*q[3]-2*q[0]*q[2];
+	rotmatrix[3] = 0;
+
+	rotmatrix[4] = 2*q[1]*q[2]-2*q[0]*q[3];
+	rotmatrix[5] = pow(q[0],2) - pow(q[1],2) + pow(q[2],2) -pow(q[3],2);
+	rotmatrix[6] = 2*q[2]*q[3]+2*q[0]*q[1];
+	rotmatrix[7] = 0;
+
+	rotmatrix[8] = 2*q[1]*q[3]+2*q[0]*q[2];
+	rotmatrix[9] = 2*q[2]*q[3]-2*q[0]*q[1];
+	rotmatrix[10] = pow(q[0],2) - pow(q[1],2) - pow(q[2],2) -pow(q[3],2);
+	rotmatrix[11] = 0;
+
+	rotmatrix[12] = 0;
+	rotmatrix[13] = 0;
+	rotmatrix[14] = 0;
+	rotmatrix[15] = 1;
+
+
+	glTranslated(dx, dy, dz);
+	glMultMatrixd(rotmatrix);	
+	/*	
+	glRotated(rot_z, 0, 0, 1);
+	glRotated(rot_y, 0, 1, 0);
+	glRotated(rot_x, 1, 0, 0);
+	*/
+
+
+	const double kModelRotX = 90.0;
+	const double kModelRotY = 0.0;
+	const double kModelRotZ = 225.0;
+	const double kModelDX = 0.0;//-2.6;
+	const double kModelDY = 0.0;//-0.9;
+	const double kModelDZ = 0.0;
+	const double kModelScale = 1; //4.5 / 13.5; lamborgini;
+
+	glTranslated(kModelDX, kModelDY, kModelDZ);
+	glRotated(kModelRotZ, 0, 0, 1);
+	glRotated(kModelRotY, 0, 1, 0);
+	glRotated(kModelRotX, 1, 0, 0);
+	glScaled(kModelScale, kModelScale, kModelScale);
+
+
+
+  
     }
   
-  //Create rotation matrix https://www.opengl.org/sdk/docs/man2/xhtml/glMultMatrix.xml http://stackoverflow.com/questions/7938373/from-quaternions-to-opengl-rotations
 
-  //Transform angles and axes from our CS (z-down by rot 180deg about x ) to GUI angles
-  quat2Euler(q, &(yaw), &(pitch), &(roll));
-  yaw=-yaw;
-  pitch=-pitch;
-  Euler2quat(q, &(yaw), &(pitch), &(roll));
-  //---	
+if (self->display_lists_ready && self->wavefront_dl)
+draw_wavefront_model (self);
 
-  rotmatrix[0] = pow(q[0],2) +  pow(q[1],2) - pow(q[2],2) -pow(q[3],2);
-  rotmatrix[1] = 2*q[1]*q[2] + 2*q[0]*q[3];
-  rotmatrix[2] = 2*q[1]*q[3]-2*q[0]*q[2];
-  rotmatrix[3] = 0;
-
-  rotmatrix[4] = 2*q[1]*q[2]-2*q[0]*q[3];
-  rotmatrix[5] = pow(q[0],2) - pow(q[1],2) + pow(q[2],2) -pow(q[3],2);
-  rotmatrix[6] = 2*q[2]*q[3]+2*q[0]*q[1];
-  rotmatrix[7] = 0;
-
-  rotmatrix[8] = 2*q[1]*q[3]+2*q[0]*q[2];
-  rotmatrix[9] = 2*q[2]*q[3]-2*q[0]*q[1];
-  rotmatrix[10] = pow(q[0],2) - pow(q[1],2) - pow(q[2],2) -pow(q[3],2);
-  rotmatrix[11] = 0;
-
-  rotmatrix[12] = 0;
-  rotmatrix[13] = 0;
-  rotmatrix[14] = 0;
-  rotmatrix[15] = 1;
-
-
-  glTranslated(dx, dy, dz);
-  glMultMatrixd(rotmatrix);	
-  /*	
-  glRotated(rot_z, 0, 0, 1);
-  glRotated(rot_y, 0, 1, 0);
-  glRotated(rot_x, 1, 0, 0);
-  */
-
-    
-  const double kModelRotX = 90.0;
-  const double kModelRotY = 0.0;
-  const double kModelRotZ = 225.0;
-  const double kModelDX = 0.0;//-2.6;
-  const double kModelDY = 0.0;//-0.9;
-  const double kModelDZ = 0.0;
-  const double kModelScale = 1; //4.5 / 13.5; lamborgini;
-  
-  glTranslated(kModelDX, kModelDY, kModelDZ);
-  glRotated(kModelRotZ, 0, 0, 1);
-  glRotated(kModelRotY, 0, 1, 0);
-  glRotated(kModelRotX, 1, 0, 0);
-  glScaled(kModelScale, kModelScale, kModelScale);
-  
-  
-  if (self->display_lists_ready && self->wavefront_dl)
-    draw_wavefront_model (self);
-  
-  glPopMatrix();
-  
-  
+glPopMatrix();
   return;
 }
 

@@ -1,4 +1,4 @@
-prefix=/home/ra/workspace/code/codebase/build
+prefix=/home/ra/workspace/AgileDrones/codebase/build
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
