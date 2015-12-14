@@ -143,15 +143,15 @@ void loop(void)
    
   Serial.print(micros()); Serial.print(" ");
   
-  Serial.print(gz); Serial.print(" ");
   Serial.print(gx); Serial.print(" ");
-  Serial.print(gy); Serial.print(" "); //Serial.print("rad/s "); 
-  Serial.print(az); Serial.print(" ");
+  Serial.print(gy); Serial.print(" ");
+  Serial.print(gz); Serial.print(" "); //Serial.print("rad/s "); 
   Serial.print(ax); Serial.print(" ");
-  Serial.print(ay); Serial.print(" "); //Serial.print("m/s^2 "); 
-  Serial.print(mz); Serial.print(" ");
+  Serial.print(ay); Serial.print(" ");
+  Serial.print(az); Serial.print(" ");   //Serial.print("m/s^2 "); 
   Serial.print(mx); Serial.print(" ");
-  Serial.println(my);
+  Serial.print(my); Serial.print(" ");
+  Serial.println(mz);
   
    //Serial.println("  "); //Serial.println("uT");
   //Serial.print(p);  Serial.println("  "); //Serial.println("hPa");     

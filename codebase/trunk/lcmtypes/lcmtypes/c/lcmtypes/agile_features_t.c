@@ -21,7 +21,7 @@ int64_t __agile_features_t_hash_recursive(const __lcm_hash_ptr *p)
     cp.v = (void*)__agile_features_t_get_hash;
     (void) cp;
 
-    int64_t hash = (int64_t)0xe10cf85ccb7a5858LL
+    int64_t hash = (int64_t)0xad4a7e92f3cf8e8fLL
          + __int64_t_hash_recursive(&cp)
          + __int64_t_hash_recursive(&cp)
          + __int16_t_hash_recursive(&cp)
@@ -79,14 +79,14 @@ int __agile_features_t_encode_array(void *buf, int offset, int maxlen, const agi
 
         { int a;
         for (a = 0; a < 40; a++) {
-            thislen = __double_encode_array(buf, offset + pos, maxlen - pos, p[element].versorDirection[a], 3);
+            thislen = __double_encode_array(buf, offset + pos, maxlen - pos, p[element].featureDirectionVersor[a], 3);
             if (thislen < 0) return thislen; else pos += thislen;
         }
         }
 
         { int a;
         for (a = 0; a < 40; a++) {
-            thislen = __double_encode_array(buf, offset + pos, maxlen - pos, p[element].vdVariances[a], 9);
+            thislen = __double_encode_array(buf, offset + pos, maxlen - pos, p[element].featDirVersorVariances[a], 9);
             if (thislen < 0) return thislen; else pos += thislen;
         }
         }
@@ -136,13 +136,13 @@ int __agile_features_t_encoded_array_size(const agile_features_t *p, int element
 
         { int a;
         for (a = 0; a < 40; a++) {
-            size += __double_encoded_array_size(p[element].versorDirection[a], 3);
+            size += __double_encoded_array_size(p[element].featureDirectionVersor[a], 3);
         }
         }
 
         { int a;
         for (a = 0; a < 40; a++) {
-            size += __double_encoded_array_size(p[element].vdVariances[a], 9);
+            size += __double_encoded_array_size(p[element].featDirVersorVariances[a], 9);
         }
         }
 
@@ -189,14 +189,14 @@ int __agile_features_t_decode_array(const void *buf, int offset, int maxlen, agi
 
         { int a;
         for (a = 0; a < 40; a++) {
-            thislen = __double_decode_array(buf, offset + pos, maxlen - pos, p[element].versorDirection[a], 3);
+            thislen = __double_decode_array(buf, offset + pos, maxlen - pos, p[element].featureDirectionVersor[a], 3);
             if (thislen < 0) return thislen; else pos += thislen;
         }
         }
 
         { int a;
         for (a = 0; a < 40; a++) {
-            thislen = __double_decode_array(buf, offset + pos, maxlen - pos, p[element].vdVariances[a], 9);
+            thislen = __double_decode_array(buf, offset + pos, maxlen - pos, p[element].featDirVersorVariances[a], 9);
             if (thislen < 0) return thislen; else pos += thislen;
         }
         }
@@ -232,13 +232,13 @@ int __agile_features_t_decode_array_cleanup(agile_features_t *p, int elements)
 
         { int a;
         for (a = 0; a < 40; a++) {
-            __double_decode_array_cleanup(p[element].versorDirection[a], 3);
+            __double_decode_array_cleanup(p[element].featureDirectionVersor[a], 3);
         }
         }
 
         { int a;
         for (a = 0; a < 40; a++) {
-            __double_decode_array_cleanup(p[element].vdVariances[a], 9);
+            __double_decode_array_cleanup(p[element].featDirVersorVariances[a], 9);
         }
         }
 
@@ -294,13 +294,13 @@ int __agile_features_t_clone_array(const agile_features_t *p, agile_features_t *
 
         { int a;
         for (a = 0; a < 40; a++) {
-            __double_clone_array(p[element].versorDirection[a], q[element].versorDirection[a], 3);
+            __double_clone_array(p[element].featureDirectionVersor[a], q[element].featureDirectionVersor[a], 3);
         }
         }
 
         { int a;
         for (a = 0; a < 40; a++) {
-            __double_clone_array(p[element].vdVariances[a], q[element].vdVariances[a], 9);
+            __double_clone_array(p[element].featDirVersorVariances[a], q[element].featDirVersorVariances[a], 9);
         }
         }
 

@@ -45,13 +45,13 @@ public:
 	this->statusCalib = -2;
 	this->starttimeCalib = 0;
 
-	this->features.versorDirection[0][0] = 0;
-	this->features.versorDirection[0][1] = 0;
-	this->features.versorDirection[0][2] = 0;
+	this->features.featureDirectionVersor[0][0] = 0;
+	this->features.featureDirectionVersor[0][1] = 0;
+	this->features.featureDirectionVersor[0][2] = 0;
 	
-	this->features.versorDirection[1][0] = 0;
-	this->features.versorDirection[1][1] = 0;
-	this->features.versorDirection[1][2] = 0;
+	this->features.featureDirectionVersor[1][0] = 0;
+	this->features.featureDirectionVersor[1][1] = 0;
+	this->features.featureDirectionVersor[1][2] = 0;
 	
 
 	};

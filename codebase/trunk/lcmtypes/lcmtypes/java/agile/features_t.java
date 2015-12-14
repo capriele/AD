@@ -17,20 +17,20 @@ public final class features_t implements lcm.lcm.LCMEncodable
     public short featureId[];
     public double pixelLocation[][];
     public double plVariances[][];
-    public double versorDirection[][];
-    public double vdVariances[][];
+    public double featureDirectionVersor[][];
+    public double featDirVersorVariances[][];
  
     public features_t()
     {
         featureId = new short[40];
         pixelLocation = new double[40][2];
         plVariances = new double[40][4];
-        versorDirection = new double[40][3];
-        vdVariances = new double[40][9];
+        featureDirectionVersor = new double[40][3];
+        featDirVersorVariances = new double[40][9];
     }
  
     public static final long LCM_FINGERPRINT;
-    public static final long LCM_FINGERPRINT_BASE = 0xe10cf85ccb7a5858L;
+    public static final long LCM_FINGERPRINT_BASE = 0xad4a7e92f3cf8e8fL;
  
     static {
         LCM_FINGERPRINT = _hashRecursive(new ArrayList<Class<?>>());
@@ -80,13 +80,13 @@ public final class features_t implements lcm.lcm.LCMEncodable
  
         for (int a = 0; a < 40; a++) {
             for (int b = 0; b < 3; b++) {
-                outs.writeDouble(this.versorDirection[a][b]); 
+                outs.writeDouble(this.featureDirectionVersor[a][b]); 
             }
         }
  
         for (int a = 0; a < 40; a++) {
             for (int b = 0; b < 9; b++) {
-                outs.writeDouble(this.vdVariances[a][b]); 
+                outs.writeDouble(this.featDirVersorVariances[a][b]); 
             }
         }
  
@@ -139,17 +139,17 @@ public final class features_t implements lcm.lcm.LCMEncodable
             }
         }
  
-        this.versorDirection = new double[(int) 40][(int) 3];
+        this.featureDirectionVersor = new double[(int) 40][(int) 3];
         for (int a = 0; a < 40; a++) {
             for (int b = 0; b < 3; b++) {
-                this.versorDirection[a][b] = ins.readDouble();
+                this.featureDirectionVersor[a][b] = ins.readDouble();
             }
         }
  
-        this.vdVariances = new double[(int) 40][(int) 9];
+        this.featDirVersorVariances = new double[(int) 40][(int) 9];
         for (int a = 0; a < 40; a++) {
             for (int b = 0; b < 9; b++) {
-                this.vdVariances[a][b] = ins.readDouble();
+                this.featDirVersorVariances[a][b] = ins.readDouble();
             }
         }
  
@@ -174,13 +174,13 @@ public final class features_t implements lcm.lcm.LCMEncodable
         for (int a = 0; a < 40; a++) {
             System.arraycopy(this.plVariances[a], 0, outobj.plVariances[a], 0, 4);        }
  
-        outobj.versorDirection = new double[(int) 40][(int) 3];
+        outobj.featureDirectionVersor = new double[(int) 40][(int) 3];
         for (int a = 0; a < 40; a++) {
-            System.arraycopy(this.versorDirection[a], 0, outobj.versorDirection[a], 0, 3);        }
+            System.arraycopy(this.featureDirectionVersor[a], 0, outobj.featureDirectionVersor[a], 0, 3);        }
  
-        outobj.vdVariances = new double[(int) 40][(int) 9];
+        outobj.featDirVersorVariances = new double[(int) 40][(int) 9];
         for (int a = 0; a < 40; a++) {
-            System.arraycopy(this.vdVariances[a], 0, outobj.vdVariances[a], 0, 9);        }
+            System.arraycopy(this.featDirVersorVariances[a], 0, outobj.featDirVersorVariances[a], 0, 9);        }
  
         return outobj;
     }

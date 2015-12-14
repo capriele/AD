@@ -9,8 +9,8 @@ struct features_t {
 	double pixelLocation[40][2];
 	double plVariances[40][4];
 
-	double versorDirection[40][3];
-	double vdVariances[40][9];
+	double featureDirectionVersor[40][3];
+	double featDirVersorVariances[40][9];
 
 }
 

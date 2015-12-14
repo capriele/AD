@@ -220,13 +220,13 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 			podWorker->stateVariances.imuBiasGyro[1] = podWorker->imuCalib.gyro[1];	
 			podWorker->stateVariances.imuBiasGyro[2] = podWorker->imuCalib.gyro[2];
 		
-			podWorker->features.versorDirection[0][0] = podWorker->imuCalib.accel[0];
-			podWorker->features.versorDirection[0][1] = podWorker->imuCalib.accel[1];
-			podWorker->features.versorDirection[0][2] = podWorker->imuCalib.accel[2];
+			podWorker->features.featureDirectionVersor[0][0] = podWorker->imuCalib.accel[0];
+			podWorker->features.featureDirectionVersor[0][1] = podWorker->imuCalib.accel[1];
+			podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2];
 			
-			podWorker->features.versorDirection[1][0] = podWorker->imuCalib.magn[0];
-			podWorker->features.versorDirection[1][1] = podWorker->imuCalib.magn[1];
-			podWorker->features.versorDirection[1][2] = podWorker->imuCalib.magn[2];
+			podWorker->features.featureDirectionVersor[1][0] = podWorker->imuCalib.magn[0];
+			podWorker->features.featureDirectionVersor[1][1] = podWorker->imuCalib.magn[1];
+			podWorker->features.featureDirectionVersor[1][2] = podWorker->imuCalib.magn[2];
 		
 			
 			podWorker->stateVariances.imuVarianceGyro[0] = podWorker->stateVariances.imuVarianceGyro[0]/(podWorker->nMeasurements-2);
@@ -243,13 +243,13 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		}
 		else if (podWorker->statusCalib==0)
 		{
-			podWorker->features.versorDirection[0][0] = imuRaw.accel[0];
-			podWorker->features.versorDirection[0][1] = imuRaw.accel[1];
-			podWorker->features.versorDirection[0][2] = imuRaw.accel[2];
+			podWorker->features.featureDirectionVersor[0][0] = imuRaw.accel[0];
+			podWorker->features.featureDirectionVersor[0][1] = imuRaw.accel[1];
+			podWorker->features.featureDirectionVersor[0][2] = imuRaw.accel[2];
 			
-			podWorker->features.versorDirection[1][0] = imuRaw.magn[0];
-			podWorker->features.versorDirection[1][1] = imuRaw.magn[1];
-			podWorker->features.versorDirection[1][2] = imuRaw.magn[2];
+			podWorker->features.featureDirectionVersor[1][0] = imuRaw.magn[0];
+			podWorker->features.featureDirectionVersor[1][1] = imuRaw.magn[1];
+			podWorker->features.featureDirectionVersor[1][2] = imuRaw.magn[2];
 
 	
 			podWorker->lcm.publish ("features", &podWorker->features);

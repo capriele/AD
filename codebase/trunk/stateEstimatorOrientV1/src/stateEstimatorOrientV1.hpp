@@ -44,9 +44,9 @@ public:
 		this->got_initial_features = -1;
 		
 		// this value is changed for the first time by the end of calibration
-		this->features.versorDirection[0][0] = 0;		
-		this->features.versorDirection[0][1] = 0;	
-		this->features.versorDirection[0][2] = 0;	
+		this->features.featureDirectionVersor[0][0] = 0;		
+		this->features.featureDirectionVersor[0][1] = 0;	
+		this->features.featureDirectionVersor[0][2] = 0;	
 		
 		this->q[0] = 0.0;		//initial quaternion
 		this->q[1] = 0.0;	

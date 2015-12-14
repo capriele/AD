@@ -24,8 +24,8 @@ struct _agile_features_t
     int16_t    featureId[40];
     double     pixelLocation[40][2];
     double     plVariances[40][4];
-    double     versorDirection[40][3];
-    double     vdVariances[40][9];
+    double     featureDirectionVersor[40][3];
+    double     featDirVersorVariances[40][9];
 };
 
 /**

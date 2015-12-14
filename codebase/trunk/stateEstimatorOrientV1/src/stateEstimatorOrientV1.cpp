@@ -120,21 +120,21 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 		}
 		else if(podWorker->got_initial_features == 0)
 		{
-			if (podWorker->features.versorDirection[0][0] != 0 || 
-			    podWorker->features.versorDirection[0][1] != 0 ||
-			    podWorker->features.versorDirection[0][2] != 0   )
+			if (podWorker->features.featureDirectionVersor[0][0] != 0 || 
+			    podWorker->features.featureDirectionVersor[0][1] != 0 ||
+			    podWorker->features.featureDirectionVersor[0][2] != 0   )
 			{		
 		 	   	printf("IMU calibration ok! Continuing...\n");
 			   	podWorker->got_initial_features == 1;
 				
 				//@TODO: generalize for n-versors when using the camera
-				podWorker->reference_versors->r1[0]=podWorker->features.versorDirection[0][0];
-				podWorker->reference_versors->r1[1]=podWorker->features.versorDirection[0][1];
-				podWorker->reference_versors->r1[2]=podWorker->features.versorDirection[0][2];
+				podWorker->reference_versors->r1[0]=podWorker->features.featureDirectionVersor[0][0];
+				podWorker->reference_versors->r1[1]=podWorker->features.featureDirectionVersor[0][1];
+				podWorker->reference_versors->r1[2]=podWorker->features.featureDirectionVersor[0][2];
 
-				podWorker->reference_versors->r2[0]=podWorker->features.versorDirection[1][0];
-				podWorker->reference_versors->r2[1]=podWorker->features.versorDirection[1][1];
-				podWorker->reference_versors->r2[2]=podWorker->features.versorDirection[1][2];
+				podWorker->reference_versors->r2[0]=podWorker->features.featureDirectionVersor[1][0];
+				podWorker->reference_versors->r2[1]=podWorker->features.featureDirectionVersor[1][1];
+				podWorker->reference_versors->r2[2]=podWorker->features.featureDirectionVersor[1][2];
 
 				//@TODO: this could be removed after uptading the imu calibration 
 				//(still need to be implemented)

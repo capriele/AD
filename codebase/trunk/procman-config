@@ -4,19 +4,14 @@ group "G1Simulation - no Estimation" {
         exec = "controllerPDOrient stateVariancesSim";
         host = "ra-Desktop01";
     }
-    cmd "simulatorG1" {
+    cmd "motorCommanderG1" {
         auto_respawn = "true";
-        exec = "simulator";
+        exec = "motorCommander";
         host = "ra-Desktop01";
     }
     cmd "viewerG1" {
         auto_respawn = "true";
         exec = "viewer";
-        host = "ra-Desktop01";
-    }
-    cmd "motorCommanderG1" {
-        auto_respawn = "true";
-        exec = "motorCommander";
         host = "ra-Desktop01";
     }
     cmd "watchdogG1" {
@@ -29,15 +24,32 @@ group "G1Simulation - no Estimation" {
         exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw stateEstimatorOrientV1 detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
+    cmd "simulatorG1" {
+        auto_respawn = "true";
+        exec = "simulator";
+        host = "ra-Desktop01";
+    }
 }
 
 group "G2Simulation - Estimation from imuRawSim" {
+    cmd "viewerG2" {
+        exec = "viewer";
+        host = "ra-Desktop01";
+    }
     cmd "testsenderG2" {
         exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
     cmd "stateEstimatorOrientV1G2" {
         exec = "stateEstimatorOrientV1 imuRawSim";
+        host = "ra-Desktop01";
+    }
+    cmd "watchdogG2" {
+        exec = "watchdog imuRawSim";
+        host = "ra-Desktop01";
+    }
+    cmd "motorCommanderG2" {
+        exec = "motorCommander";
         host = "ra-Desktop01";
     }
     cmd "simulatorG2" {
@@ -48,27 +60,15 @@ group "G2Simulation - Estimation from imuRawSim" {
         exec = "controllerPDOrient stateVariancesOrientV1";
         host = "ra-Desktop01";
     }
-    cmd "motorCommanderG2" {
-        exec = "motorCommander";
-        host = "ra-Desktop01";
-    }
-    cmd "viewerG2" {
-        exec = "viewer";
-        host = "ra-Desktop01";
-    }
-    cmd "watchdogG2" {
-        exec = "watchdog imuRawSim";
-        host = "ra-Desktop01";
-    }
 }
 
 group "G3TestEstimationFromIMU" {
-    cmd "stateEstimatorOrientV1G3" {
-        exec = "stateEstimatorOrientV1 imuRaw";
+    cmd "watchdogG3" {
+        exec = "watchdog imuRaw";
         host = "ra-Desktop01";
     }
-    cmd "watchdogG3" {
-        exec = "watchdog imuRawSim";
+    cmd "stateEstimatorOrientV1G3" {
+        exec = "stateEstimatorOrientV1 imuRaw";
         host = "ra-Desktop01";
     }
     cmd "imuAcquisitionG3" {

@@ -10,7 +10,7 @@ except ImportError:
 import struct
 
 class features_t(object):
-    __slots__ = ["timestampJetson", "timestampCamera", "featuresNrFound", "featureId", "pixelLocation", "plVariances", "versorDirection", "vdVariances"]
+    __slots__ = ["timestampJetson", "timestampCamera", "featuresNrFound", "featureId", "pixelLocation", "plVariances", "featureDirectionVersor", "featDirVersorVariances"]
 
     def __init__(self):
         self.timestampJetson = 0
@@ -19,8 +19,8 @@ class features_t(object):
         self.featureId = [ 0 for dim0 in range(40) ]
         self.pixelLocation = [ [ 0.0 for dim1 in range(2) ] for dim0 in range(40) ]
         self.plVariances = [ [ 0.0 for dim1 in range(4) ] for dim0 in range(40) ]
-        self.versorDirection = [ [ 0.0 for dim1 in range(3) ] for dim0 in range(40) ]
-        self.vdVariances = [ [ 0.0 for dim1 in range(9) ] for dim0 in range(40) ]
+        self.featureDirectionVersor = [ [ 0.0 for dim1 in range(3) ] for dim0 in range(40) ]
+        self.featDirVersorVariances = [ [ 0.0 for dim1 in range(9) ] for dim0 in range(40) ]
 
     def encode(self):
         buf = BytesIO()
@@ -36,9 +36,9 @@ class features_t(object):
         for i0 in range(40):
             buf.write(struct.pack('>4d', *self.plVariances[i0][:4]))
         for i0 in range(40):
-            buf.write(struct.pack('>3d', *self.versorDirection[i0][:3]))
+            buf.write(struct.pack('>3d', *self.featureDirectionVersor[i0][:3]))
         for i0 in range(40):
-            buf.write(struct.pack('>9d', *self.vdVariances[i0][:9]))
+            buf.write(struct.pack('>9d', *self.featDirVersorVariances[i0][:9]))
 
     def decode(data):
         if hasattr(data, 'read'):
@@ -60,19 +60,19 @@ class features_t(object):
         self.plVariances = []
         for i0 in range(40):
             self.plVariances.append(struct.unpack('>4d', buf.read(32)))
-        self.versorDirection = []
+        self.featureDirectionVersor = []
         for i0 in range(40):
-            self.versorDirection.append(struct.unpack('>3d', buf.read(24)))
-        self.vdVariances = []
+            self.featureDirectionVersor.append(struct.unpack('>3d', buf.read(24)))
+        self.featDirVersorVariances = []
         for i0 in range(40):
-            self.vdVariances.append(struct.unpack('>9d', buf.read(72)))
+            self.featDirVersorVariances.append(struct.unpack('>9d', buf.read(72)))
         return self
     _decode_one = staticmethod(_decode_one)
 
     _hash = None
     def _get_hash_recursive(parents):
         if features_t in parents: return 0
-        tmphash = (0xe10cf85ccb7a5858) & 0xffffffffffffffff
+        tmphash = (0xad4a7e92f3cf8e8f) & 0xffffffffffffffff
         tmphash  = (((tmphash<<1)&0xffffffffffffffff)  + (tmphash>>63)) & 0xffffffffffffffff
         return tmphash
     _get_hash_recursive = staticmethod(_get_hash_recursive)
