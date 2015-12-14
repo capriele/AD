@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3139
+ * Model version                  : 1.3141
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Wed Dec  9 14:17:05 2015
+ * C/C++ source code generated on : Sun Dec 13 22:37:46 2015
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -79,7 +79,7 @@ typedef struct {
 
 /* Parameters (auto storage) */
 struct P_SimulatorDrone_T_ {
-  struct_9HboRnVAFZBDyiRc6cd6aF quadEDT;/* Variable: quadEDT
+  struct_VPQGBSgQ2O0QCnh7txpJVD quadEDT;/* Variable: quadEDT
                                          * Referenced by:
                                          *   '<S1>/sensordataCalib'
                                          *   '<S3>/Constant'

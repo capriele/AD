@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3139
+ * Model version                  : 1.3141
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Wed Dec  9 14:17:05 2015
+ * C/C++ source code generated on : Sun Dec 13 22:37:46 2015
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -921,8 +921,8 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[0] <
-               SimulatorDrone_P->quadEDT.comega2topwm + 50.0) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm + 50.0;
+               SimulatorDrone_P->quadEDT.comega2topwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[0];
     }
@@ -942,8 +942,8 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[1] <
-               SimulatorDrone_P->quadEDT.comega2topwm + 50.0) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm + 50.0;
+               SimulatorDrone_P->quadEDT.comega2topwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[1];
     }
@@ -963,8 +963,8 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[2] <
-               SimulatorDrone_P->quadEDT.comega2topwm + 50.0) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm + 50.0;
+               SimulatorDrone_P->quadEDT.comega2topwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[2];
     }
@@ -984,8 +984,8 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[3] <
-               SimulatorDrone_P->quadEDT.comega2topwm + 50.0) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm + 50.0;
+               SimulatorDrone_P->quadEDT.comega2topwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[3];
     }

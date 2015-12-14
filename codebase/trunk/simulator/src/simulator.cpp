@@ -9,6 +9,10 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
   {
     2.1959176351571146e-6,
     1750.0,
+    0.0003852,
+    330.8,
+    1113.0,
+    1900.0,
     0.04,
 
     { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0165195073635001, 0.0152648883285633,
@@ -56,11 +60,7 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
     0.0,
     -30.0,
     20.0,
-    1.0,
-    0.0003852,
-    330.8,
-    1113.0,
-    1900.0
+    1.0
   },                                   /* Variable: quadEDT
                                         * Referenced by:
                                         *   '<S1>/sensordataCalib'
@@ -563,6 +563,40 @@ int main (int argc, char** argv) {
 
   //Initialization stuff
   //...	
+
+  //@TODO can remove this as set from simulink?
+  SimulatorDrone_U_motorsPWM_datin[0] = ZERORPMPWM;
+  SimulatorDrone_U_motorsPWM_datin[1] = ZERORPMPWM;	
+  SimulatorDrone_U_motorsPWM_datin[2] = ZERORPMPWM;
+  SimulatorDrone_U_motorsPWM_datin[3] = ZERORPMPWM;
+  SimulatorDrone_Y_X = 0.0;
+  SimulatorDrone_Y_Y = 0.0;
+  SimulatorDrone_Y_Z = 0.0;
+  SimulatorDrone_Y_dx = 0.0;
+  SimulatorDrone_Y_dy = 0.0;
+  SimulatorDrone_Y_dz = 0.0;
+  SimulatorDrone_Y_yaw = 0.0;
+  SimulatorDrone_Y_pitch = 0.0;
+  SimulatorDrone_Y_roll = 0.0;
+  SimulatorDrone_Y_quaternions_datout[0] = 1.0;
+  SimulatorDrone_Y_quaternions_datout[1] = 0.0;
+  SimulatorDrone_Y_quaternions_datout[2] = 0.0;
+  SimulatorDrone_Y_quaternions_datout[3] = 0.0;
+
+  SimulatorDrone_Y_p = 0.0;
+  SimulatorDrone_Y_q = 0.0;
+  SimulatorDrone_Y_r = 0.0;
+
+  SimulatorDrone_Y_ddx = 0.0;
+  SimulatorDrone_Y_ddy = 0.0;
+  SimulatorDrone_Y_ddz = 0.0;
+
+  SimulatorDrone_Y_pb = 0.0;
+  SimulatorDrone_Y_qb = 0.0;
+  SimulatorDrone_Y_rb = 0.0;
+
+
+
   /* Pack model data into RTM */
   SimulatorDrone_M->ModelData.defaultParam = &SimulatorDrone_P;
   SimulatorDrone_M->ModelData.blockIO = &SimulatorDrone_B;

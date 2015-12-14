@@ -1,4 +1,4 @@
-group "G1Simulation - no Estimation" {
+group "G1Simulation-noEstim-startRemoteCSepaLast" {
     cmd "controllerPDOrientG1" {
         auto_respawn = "true";
         exec = "controllerPDOrient stateVariancesSim";
@@ -31,7 +31,22 @@ group "G1Simulation - no Estimation" {
     }
 }
 
-group "G2Simulation - Estimation from imuRawSim" {
+group "G3TestEstimationFromIMU" {
+    cmd "watchdogG3" {
+        exec = "watchdog imuRaw";
+        host = "ra-Desktop01";
+    }
+    cmd "stateEstimatorOrientV1G3" {
+        exec = "stateEstimatorOrientV1 imuRaw";
+        host = "ra-Desktop01";
+    }
+    cmd "imuAcquisitionG3" {
+        exec = "imuAcquisition";
+        host = "ra-Desktop01";
+    }
+}
+
+group "G2Simulation-EstimfromimuRawSim-startRemoteCSepaLast" {
     cmd "viewerG2" {
         exec = "viewer";
         host = "ra-Desktop01";
@@ -58,21 +73,6 @@ group "G2Simulation - Estimation from imuRawSim" {
     }
     cmd "controllerPDOrientG2" {
         exec = "controllerPDOrient stateVariancesOrientV1";
-        host = "ra-Desktop01";
-    }
-}
-
-group "G3TestEstimationFromIMU" {
-    cmd "watchdogG3" {
-        exec = "watchdog imuRaw";
-        host = "ra-Desktop01";
-    }
-    cmd "stateEstimatorOrientV1G3" {
-        exec = "stateEstimatorOrientV1 imuRaw";
-        host = "ra-Desktop01";
-    }
-    cmd "imuAcquisitionG3" {
-        exec = "imuAcquisition";
         host = "ra-Desktop01";
     }
 }
