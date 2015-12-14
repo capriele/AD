@@ -1,0 +1,9 @@
+{
+global:
+SimulatorDrone_initialize;
+SimulatorDrone_step;
+
+
+local:
+		*;
+};

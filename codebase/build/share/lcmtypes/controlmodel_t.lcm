@@ -1,0 +1,6 @@
+package agile;
+
+struct controlmode_t {
+	int64_t timestampJetson;
+	int8_t controlmode;
+}

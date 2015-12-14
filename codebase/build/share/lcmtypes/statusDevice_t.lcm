@@ -1,0 +1,7 @@
+package agile;
+
+struct statusDevice_t {
+	int64_t timestampJetson;
+	string deviceName;
+	int8_t status;
+}

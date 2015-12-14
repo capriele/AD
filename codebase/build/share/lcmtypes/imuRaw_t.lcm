@@ -1,0 +1,11 @@
+package agile;
+
+struct imuRaw_t {
+	int64_t timestampArduino;
+	int64_t timestampJetson;
+
+	double accel[3];
+	double gyro[3];
+	double magn[3];
+	double baro;
+}

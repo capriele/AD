@@ -1,0 +1,7 @@
+/home/ra/workspace/code/codebase/libbot2/trunk/bot2-vis/pod-build/src/rwx-viewer/CMakeFiles/bot-rwx-viewer.dir
+/home/ra/workspace/code/codebase/libbot2/trunk/bot2-vis/pod-build/src/wavefront-viewer/CMakeFiles/bot-wavefront-viewer.dir
+/home/ra/workspace/code/codebase/libbot2/trunk/bot2-vis/pod-build/src/bot_vis/CMakeFiles/bot2-vis.dir
+/home/ra/workspace/code/codebase/libbot2/trunk/bot2-vis/pod-build/src/testers/CMakeFiles/gl_drawing_area_tester.dir
+/home/ra/workspace/code/codebase/libbot2/trunk/bot2-vis/pod-build/src/testers/CMakeFiles/gl_image_area_tester.dir
+/home/ra/workspace/code/codebase/libbot2/trunk/bot2-vis/pod-build/src/testers/CMakeFiles/param_widget_tester.dir
+/home/ra/workspace/code/codebase/libbot2/trunk/bot2-vis/pod-build/CMakeFiles/ylBiltMKtztVuCIiKXNbQB2GmsyQJF4V.dir

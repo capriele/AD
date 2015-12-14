@@ -1,0 +1,9 @@
+/home/ra/workspace/code/codebase/build/bin/bot-spy
+/home/ra/workspace/code/codebase/build/bin/bot-lcm-logfilter
+/home/ra/workspace/code/codebase/build/bin/bot-lcm-logsplice
+/home/ra/workspace/code/codebase/build/bin/bot-lcm-who
+/home/ra/workspace/code/codebase/build/bin/bot-lcm-tunnel
+/home/ra/workspace/code/codebase/build/lib/python2.7/dist-packages/bot_log2mat/scan_for_lcmtypes.py
+/home/ra/workspace/code/codebase/build/lib/python2.7/dist-packages/bot_log2mat/__init__.py
+/home/ra/workspace/code/codebase/build/lib/python2.7/dist-packages/bot_log2mat/log_to_mat.py
+/home/ra/workspace/code/codebase/build/bin/bot-log2mat

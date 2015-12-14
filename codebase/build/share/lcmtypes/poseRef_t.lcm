@@ -1,0 +1,8 @@
+package agile;
+
+struct poseRef_t {
+	int64_t timestampJetson;	
+
+	double position[3];
+	double orientEuler[3];
+}

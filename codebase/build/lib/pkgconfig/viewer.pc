@@ -1,0 +1,11 @@
+prefix=/home/ra/workspace/code/codebase/build
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: viewer
+Description: viewer
+Requires: 
+Version: 0.0.1
+Libs: -L${libdir} 
+Cflags: -I${includedir} 

@@ -1,0 +1,6 @@
+package agile;
+
+struct motorsWsRef_t {
+	int64_t timestampJetson;
+	double wsRef[4];
+}

@@ -1,0 +1,119 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.187496374)
+
+newmtl ID107
+Kd 0.247059 0.247059 0.247059
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID124
+Kd 0.0666667 0.0705882 0.0705882
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID14
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+map_Kd quadrotor_model/small_0.jpg
+
+newmtl ID174
+Kd 0.945098 0.0039216 0
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID263
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+map_Kd quadrotor_model/Metal_Brass_Ceiling.jpg
+
+newmtl ID282
+Kd 0.984314 0.956863 1
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID320
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID331
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID336
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+map_Kd quadrotor_model/Metal_Brass_Ceiling_1.jpg
+
+newmtl ID370
+Kd 0.780392 0.705882 0.411765
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID388
+Kd 0.168628 0.168628 0.168628
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl JoinedMaterial_#20
+Kd 1 1 1
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID448
+Kd 0.780392 0.780392 0.780392
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID5
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+map_Kd quadrotor_model/small.jpg
+
+newmtl ID546
+Ka 0.1 0.1 0.1
+Kd 0.6 0.6 0.6
+Ks 0.4 0.4 0.4
+map_Kd quadrotor_model/_37091940-macro-closeup-of-computer-circuit-board-with-cpu-micro-processors-and-vertical-green-concept-copy-sp.jpg
+
+newmtl ID57
+Kd 0.196078 0.196078 0.196078
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID641
+Kd 0.486275 0.0156863 1
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID664
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+map_Kd quadrotor_model/_37091940-macro-closeup-of-computer-circuit-board-with-cpu-micro-processors-and-vertical-green-concept-copy-sp_2.jpg
+
+newmtl ID679
+Kd 0.168628 0.168628 0.180392
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID696
+Kd 0.6 0.6 0.6
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+map_Kd quadrotor_model/camera-lens-icon.jpg
+
+newmtl ID727
+Kd 0.494118 0.498039 0.490196
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4
+
+newmtl ID96
+Kd 0.196078 0.192157 0.2
+Ka 0.1 0.1 0.1
+Ks 0.4 0.4 0.4

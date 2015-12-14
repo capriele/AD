@@ -1,0 +1,6 @@
+package agile;
+
+struct motorsPwms_t {
+	int64_t timestampJetson;
+	int16_t pwms[4];
+}

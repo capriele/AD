@@ -1,0 +1,16 @@
+package agile;
+
+struct features_t {
+	int64_t timestampJetson;
+	int64_t timestampCamera;
+
+	int16_t featuresNrFound;
+	int16_t featureId[40];
+	double pixelLocation[40][2];
+	double plVariances[40][4];
+
+	double versorDirection[40][3];
+	double vdVariances[40][9];
+
+}
+
