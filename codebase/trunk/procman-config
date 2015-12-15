@@ -61,6 +61,21 @@ group "G2Simulation-FullSimOrientCF-startRemoteCSepaLast" {
         host = "ra-Desktop01";
     }
 }
+
+group "G3TestOrientCF-mightstartWatchDogLast" {
+    cmd "stateEstimatorOrientCFG3" {
+        exec = "stateEstimatorOrientCF imuRaw";
+        host = "ra-Desktop01";
+    }
+    cmd "imuAcquisitionG3" {
+        exec = "imuAcquisition imuRaw";
+        host = "ra-Desktop01";
+    }
+    cmd "watchdogG3" {
+        exec = "watchdog imuRaw stateVariancesOrientCF";
+        host = "ra-Desktop01";
+    }
+}
 cmd "viewer" {
     exec = "viewer";
     host = "ra-Desktop01";

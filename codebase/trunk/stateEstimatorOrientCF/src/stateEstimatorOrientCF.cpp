@@ -9,8 +9,8 @@ void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  do
 
 
 
-double gyroAngleUpdate_acc_threshold   = 0.008; //@TODO adjust!
-double gyroAngleUpdate_acc_weight      = 0.001;
+double gyroAngleUpdate_acc_threshold   = 0.008; //@TODO this seems to work for the real IMU, note, for simulated one might use different!
+double gyroAngleUpdate_acc_weight      = 0.008;
 
 
 //Rotation of angular velocity vector from Bodyframe to Worldframe, inverted Wronskian (body rates p-q-r to euler rates yaw pitch roll)
@@ -122,7 +122,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		double dt = (nowCompUpdate-podWorker->stateVariances.timestampJetson)/(1000000.0);//printf("dt: %f\n",dt);
 
 
-		if (dt>10) dt=0.015; //initial timestamp
+		if (dt>10) dt=0.01; //initial timestamp
 		complimentaryfilter(yaw_cur, pitch_cur, roll_cur,dt,imu_trafo,euler_hat);		
 
 		//transform to quaternions and update stateVariances
@@ -190,9 +190,9 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 		 	   	printf("IMU calibration ok! Continuing...\n");
 			   	podWorker->isGotInitialFeatures == 1;
 				
-				podWorker->biases.accel[0] = podWorker->features.featureDirectionVersor[0][0];
-				podWorker->biases.accel[1] = podWorker->features.featureDirectionVersor[0][1];
-				podWorker->biases.accel[2] = (podWorker->features.featureDirectionVersor[0][2]-GRAVITY);
+				podWorker->biases.accel[0] = podWorker->stateVariances.imuBiasAccel[0];
+				podWorker->biases.accel[1] = podWorker->stateVariances.imuBiasAccel[1];
+				podWorker->biases.accel[2] = podWorker->stateVariances.imuBiasAccel[2];
 
 				podWorker->biases.gyro[0] = podWorker->stateVariances.imuBiasGyro[0];
 				podWorker->biases.gyro[1] = podWorker->stateVariances.imuBiasGyro[1];

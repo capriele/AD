@@ -219,24 +219,30 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 			podWorker->stateVariances.imuBiasGyro[0] = podWorker->imuCalib.gyro[0];
 			podWorker->stateVariances.imuBiasGyro[1] = podWorker->imuCalib.gyro[1];	
 			podWorker->stateVariances.imuBiasGyro[2] = podWorker->imuCalib.gyro[2];
+
+			//@TODO ok to also store this here?
+			podWorker->stateVariances.imuBiasAccel[0] = podWorker->imuCalib.accel[0];
+			podWorker->stateVariances.imuBiasAccel[1] = podWorker->imuCalib.accel[1];	
+			podWorker->stateVariances.imuBiasAccel[2] = podWorker->imuCalib.accel[2]-GRAVITY; //@TODO warning: this assumes planar calibration!
+
+
+			podWorker->stateVariances.imuVarianceGyro[0] = podWorker->stateVariances.imuVarianceGyro[0]/(podWorker->nMeasurements-2);
+			podWorker->stateVariances.imuVarianceGyro[1] = podWorker->stateVariances.imuVarianceGyro[1]/(podWorker->nMeasurements-2);
+			podWorker->stateVariances.imuVarianceGyro[2] = podWorker->stateVariances.imuVarianceGyro[2]/(podWorker->nMeasurements-2);
 		
+			//stateEstimatorOrientV1 uses calib reslts as 0-reference vector
 			podWorker->features.featureDirectionVersor[0][0] = podWorker->imuCalib.accel[0];
 			podWorker->features.featureDirectionVersor[0][1] = podWorker->imuCalib.accel[1];
-			podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2]; //@TODO should we store this in imuBiasAccel?
+			podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2]; 
 			
 			podWorker->features.featureDirectionVersor[1][0] = podWorker->imuCalib.magn[0];
 			podWorker->features.featureDirectionVersor[1][1] = podWorker->imuCalib.magn[1];
 			podWorker->features.featureDirectionVersor[1][2] = podWorker->imuCalib.magn[2];
-		
-			
-			podWorker->stateVariances.imuVarianceGyro[0] = podWorker->stateVariances.imuVarianceGyro[0]/(podWorker->nMeasurements-2);
-			podWorker->stateVariances.imuVarianceGyro[1] = podWorker->stateVariances.imuVarianceGyro[1]/(podWorker->nMeasurements-2);
-			podWorker->stateVariances.imuVarianceGyro[2] = podWorker->stateVariances.imuVarianceGyro[2]/(podWorker->nMeasurements-2);
 
 			
-
+			 //ATTENTION: we publish the calibration data over an estimation channel! -> estimator waits for this message on this channel!
 		  	podWorker->lcm.publish ("features", &podWorker->features);
-		  	podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances); //ATTENTION: we publish the calibration data over an estimation channel! -> estimator waits for this message on this channel!
+		  	podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances);
 			podWorker->lcm.publish ("stateVariancesOrientCF", &podWorker->stateVariances);
 		  
 			podWorker->statusCalib = 0;
@@ -244,6 +250,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		}
 		else if (podWorker->statusCalib==0)
 		{
+			//This publishes accelerometer and magnetometervectors as featureDirectionVersors; later this job will be done by vectors pointing to the visual markers
 			podWorker->features.featureDirectionVersor[0][0] = imuRaw.accel[0];
 			podWorker->features.featureDirectionVersor[0][1] = imuRaw.accel[1];
 			podWorker->features.featureDirectionVersor[0][2] = imuRaw.accel[2];
