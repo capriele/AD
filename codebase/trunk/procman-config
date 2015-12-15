@@ -1,4 +1,4 @@
-group "G1Simulation-noEstim-startRemoteCSepaLast" {
+group "G1Simulation-TestOrientCF-startRemoteCSepaLast" {
     cmd "controllerPDOrientG1" {
         auto_respawn = "true";
         exec = "controllerPDOrient stateVariancesSim";
@@ -14,9 +14,13 @@ group "G1Simulation-noEstim-startRemoteCSepaLast" {
         exec = "viewer";
         host = "ra-Desktop01";
     }
+    cmd "stateEstimatorOrientCFG1" {
+        exec = "stateEstimatorOrientCF imuRawSim";
+        host = "ra-Desktop01";
+    }
     cmd "watchdogG1" {
         auto_respawn = "true";
-        exec = "watchdog imuRawSim";
+        exec = "watchdog imuRawSim stateVariancesSim";
         host = "ra-Desktop01";
     }
     cmd "testsenderG1" {
@@ -31,36 +35,21 @@ group "G1Simulation-noEstim-startRemoteCSepaLast" {
     }
 }
 
-group "G3TestEstimationFromIMU" {
-    cmd "watchdogG3" {
-        exec = "watchdog imuRaw";
-        host = "ra-Desktop01";
-    }
-    cmd "stateEstimatorOrientV1G3" {
-        exec = "stateEstimatorOrientV1 imuRaw";
-        host = "ra-Desktop01";
-    }
-    cmd "imuAcquisitionG3" {
-        exec = "imuAcquisition";
-        host = "ra-Desktop01";
-    }
-}
-
-group "G2Simulation-EstimfromimuRawSim-startRemoteCSepaLast" {
+group "G2Simulation-FullSimOrientCF-startRemoteCSepaLast" {
     cmd "viewerG2" {
         exec = "viewer";
         host = "ra-Desktop01";
     }
     cmd "testsenderG2" {
-        exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
+        exec = "testsender imuAcquisitionStatus stateEstimatorOrientV1 imuAcquisitionImuRaw detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
-    cmd "stateEstimatorOrientV1G2" {
-        exec = "stateEstimatorOrientV1 imuRawSim";
+    cmd "stateEstimatorOrientG2" {
+        exec = "stateEstimatorOrientCF imuRawSim";
         host = "ra-Desktop01";
     }
     cmd "watchdogG2" {
-        exec = "watchdog imuRawSim";
+        exec = "watchdog imuRawSim stateVariancesOrientCF";
         host = "ra-Desktop01";
     }
     cmd "motorCommanderG2" {
@@ -72,7 +61,7 @@ group "G2Simulation-EstimfromimuRawSim-startRemoteCSepaLast" {
         host = "ra-Desktop01";
     }
     cmd "controllerPDOrientG2" {
-        exec = "controllerPDOrient stateVariancesOrientV1";
+        exec = "controllerPDOrient stateVariancesOrientCF";
         host = "ra-Desktop01";
     }
 }

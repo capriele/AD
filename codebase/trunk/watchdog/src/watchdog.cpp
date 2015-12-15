@@ -214,12 +214,17 @@ int main (int argc, char** argv) {
   // 1) Create the app
   watchdog_t podWorker = watchdog_t("watchdog",CALLINTERVAL_WATCHDOG);
 
-  if (argc<2) {
-		printf("Please provide imuRaw-Channel that watchdog will use for safety checks!\n");
+  if (argc<3) {
+		printf("Please provide imuRaw-Channel (1rst arg) and stateVariances-Channel (2nd) that watchdog will use for safety checks!\n");
 		return EXIT_FAILURE;
-		};
-
+		}
+else
+{
   podWorker.imuRawChannel = argv[1];
+  podWorker.stateVariancesChannel = argv[2];	
+};
+
+
 
   // 2) Create LCM
   if (!podWorker.lcm.good()) 
@@ -229,9 +234,13 @@ int main (int argc, char** argv) {
 
   podWorker.unsubscribe("statusWatchdog"); //unsubscribed from base-class-autosubscribed channels
   podWorker.unsubscribe("statusDrone");	  //unsubscribed from base-class-autosubscribed channels
-   
-  podWorker.subscribe("stateVariancesSim",CALLINTERVAL_SIMULATOR, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
-  //podWorker.subscribe("stateVariancesOrientV1",CALLINTERVAL_STATEESTIMATORORIENTV1, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
+  
+if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesSim")==0) 
+  podWorker.subscribe(podWorker.stateVariancesChannel.c_str(),CALLINTERVAL_SIMULATOR, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
+else if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesOrientCF")==0) 
+  podWorker.subscribe(podWorker.stateVariancesChannel.c_str(),CALLINTERVAL_STATEESTIMATORORIENTCF, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
+else if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesOrientV1")==0) 
+  podWorker.subscribe(podWorker.stateVariancesChannel.c_str(),CALLINTERVAL_STATEESTIMATORORIENTV1, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
 
   podWorker.subscribe(podWorker.imuRawChannel.c_str(),CALLINTERVAL_IMUACQUISITION*2, &(podWorker.imuRaw), &podBase_t::handleMessage<agile::imuRaw_t>); //@TODO remove callinterval x2
   podWorker.subscribe("controlMode",CALLINTERVAL_REMOTECONTROLLER, &(podWorker.controlMode), &podBase_t::handleMessage<agile::controlMode_t>);

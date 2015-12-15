@@ -87,6 +87,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 					else if (podWorker->controlMode.controlMode == CMODE_PIDORIENT) //increase thrust bias in PDOrient controller
 						{
 						crement(&(podWorker->powerAdjust.tBiasPDO), +STEPSTBIASPDO, MINTBIASPDO, MAXTBIASPDO);
+						printf("thrust-bias for PDOrient: %f\n",podWorker->powerAdjust.tBiasPDO);
 						};
 					 break;
 
@@ -99,6 +100,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 					else if (podWorker->controlMode.controlMode ==  CMODE_PIDORIENT)
 						{
 						crement(&(podWorker->powerAdjust.tBiasPDO), -STEPSTBIASPDO, MINTBIASPDO, MAXTBIASPDO);
+						printf("thrust-bias for PDOrient: %f\n",podWorker->powerAdjust.tBiasPDO);
 						};
 					 break;
 
@@ -148,9 +150,9 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				case ',': podWorker->controllerAdjustmode =  CADJUSTMODE_P; printf("Controlleradjust switched to P-values!\n");  break;
 
 				//thrust-related controller  adjustments
-				case 'i': crement(&(podWorker->powerAdjust.tBiasPDO), +STEPSTBIASPDO, MINTBIASPDO, MAXTBIASPDO); break;
+				case 'i': crement(&(podWorker->powerAdjust.tBiasPDO), +STEPSTBIASPDO, MINTBIASPDO, MAXTBIASPDO); printf("thrust-bias for PDOrient: %f\n",podWorker->powerAdjust.tBiasPDO); break;
 
-				case 'k': crement(&(podWorker->powerAdjust.tBiasPDO), -STEPSTBIASPDO, MINTBIASPDO, MAXTBIASPDO); break;						 
+				case 'k': crement(&(podWorker->powerAdjust.tBiasPDO), -STEPSTBIASPDO, MINTBIASPDO, MAXTBIASPDO); printf("thrust-bias for PDOrient: %f\n",podWorker->powerAdjust.tBiasPDO); break;
 
 				//orient-related controller  adjustments
 				case 'a': crement(&(podWorker->powerAdjust.rBiasPDO), -STEPSRBIASPDO, MINRBIASPDO, MAXRBIASPDO); break;

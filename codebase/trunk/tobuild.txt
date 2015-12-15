@@ -12,3 +12,4 @@ controllerPDOrient
 motorCommander
 stateEstimatorOrientV1
 simulator
+stateEstimatorOrientCF

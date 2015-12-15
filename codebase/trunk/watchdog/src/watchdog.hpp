@@ -41,6 +41,7 @@ public:
   int64_t takeoffMoment;
 
   std::string imuRawChannel;
+  std::string stateVariancesChannel;	
 };
 
 

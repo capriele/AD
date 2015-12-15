@@ -218,7 +218,7 @@ renderer_pose_control_draw (BotViewer *viewer, BotRenderer *renderer) {
 	yaw=-yaw;
 	pitch=-pitch;
 
-	printf("euler X: %f %f %f\n",yaw/3.14*180, pitch/3.14*180, roll/3.14*180); //@TODO remove
+	//printf("euler X: %f %f %f\n",yaw/3.14*180, pitch/3.14*180, roll/3.14*180); //@TODO remove
 
 	Euler2quat(q, &(yaw), &(pitch), &(roll));
 	//---	

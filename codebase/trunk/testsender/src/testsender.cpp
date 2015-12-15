@@ -202,10 +202,10 @@ int main (int argc, char** argv) {
 
   if (argc<2) {printf("Please provide information on what channels to fake!\n"); return -1;};
   
- printf("argc: %d\n",argc);
+ //printf("argc: %d\n",argc);
   for (int argci = 1; argci< argc; argci++)
 	{
-	printf("check arg %d\n",argci);
+	//printf("check arg %d\n",argci);
 
 	if (strcmp(argv[argci], "examplePod") == 0)
 		{

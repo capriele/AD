@@ -93,7 +93,7 @@ framework.hpp provides an abstract base class podBase_t to derive specific POD c
 #define CALLINTERVAL_CONTROLLERSOCORIENT 10
 #define CALLINTERVAL_CONTROLLERSOCPOSE 10
 #define CALLINTERVAL_MOTORCOMMANDER 10
-#define CALLINTERVAL_SIMULATOR 10
+#define CALLINTERVAL_SIMULATOR 5
 
 
 //multi-POD communication, timing

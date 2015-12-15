@@ -9,8 +9,8 @@ void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  do
 
 
 
-double gyroAngleUpdate_acc_threshold   = 0.002; //@TODO adjust!
-double gyroAngleUpdate_acc_weight      = 0.001;
+double gyroAngleUpdate_acc_threshold   = 0.02; //@TODO adjust!
+double gyroAngleUpdate_acc_weight      = 0.02;
 
 
 //Rotation of angular velocity vector from Bodyframe to Worldframe, inverted Wronskian (body rates p-q-r to euler rates yaw pitch roll)
@@ -25,9 +25,9 @@ w_euler[1] = cos(roll_old)*q - sin(roll_old)*r;
 w_euler[2] = p + sin(roll_old)*tan(pitch_old)*q+ cos(roll_old)*tan(pitch_old)*r;
 
 //Integrate gyroscope data
-double roll  = roll_old  + (w_euler[2] ) * dt/2; //@TODO why by half?
-double pitch = pitch_old + (w_euler[1] ) * dt/2;
-double yaw   = yaw_old   + (w_euler[0] ) * dt/2; 
+double roll  = roll_old  + (w_euler[2] ) * dt;
+double pitch = pitch_old + (w_euler[1] ) * dt;
+double yaw   = yaw_old   + (w_euler[0] ) * dt; 
 
   
 //Compensate for drift with accelerometer data if in un-accelerated flight

@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3141
+ * Model version                  : 1.3151
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Sun Dec 13 22:37:46 2015
+ * C/C++ source code generated on : Tue Dec 15 14:42:39 2015
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -63,7 +63,6 @@ typedef struct {
 typedef struct {
   real_T Delay3_DSTATE[12];            /* '<S11>/Delay3' */
   real_T Delay2_DSTATE;                /* '<S11>/Delay2' */
-  real_T Delay1_DSTATE[12];            /* '<S11>/Delay1' */
   real_T DiscreteTimeIntegrator_DSTATE[12];/* '<S11>/Discrete-Time Integrator' */
   real_T Delay3_DSTATE_b[3];           /* '<S6>/Delay3' */
   real_T Delay2_DSTATE_m[8];           /* '<S5>/Delay2' */
@@ -74,7 +73,6 @@ typedef struct {
   real_T LastUAtTimeB[3];              /* '<S5>/Derivative' */
   uint32_T RandSeed[12];               /* '<S10>/Random Number' */
   int8_T DiscreteTimeIntegrator_PrevRese;/* '<S11>/Discrete-Time Integrator' */
-  uint8_T DiscreteTimeIntegrator_IC_LOADI;/* '<S11>/Discrete-Time Integrator' */
 } DW_SimulatorDrone_T;
 
 /* Parameters (auto storage) */
@@ -127,14 +125,8 @@ struct P_SimulatorDrone_T_ {
   real_T Delay2_InitialCondition;      /* Expression: 0
                                         * Referenced by: '<S11>/Delay2'
                                         */
-  real_T Constant14_Value[3];          /* Expression: [0;0;0]
-                                        * Referenced by: '<S11>/Constant14'
-                                        */
-  real_T Delay1_InitialCondition[12];  /* Expression: [0 0 0 0 0 0 0 0 0 0 0 0]
-                                        * Referenced by: '<S11>/Delay1'
-                                        */
-  real_T Constant15_Value[7];          /* Expression: [0;0;0;0;0;0;0]
-                                        * Referenced by: '<S11>/Constant15'
+  real_T Constant16_Value[12];         /* Expression: [0;0;0;0;0;0;0;0;0;0;0;0]
+                                        * Referenced by: '<S11>/Constant16'
                                         */
   real_T DiscreteTimeIntegrator_gainval;/* Computed Parameter: DiscreteTimeIntegrator_gainval
                                          * Referenced by: '<S11>/Discrete-Time Integrator'
@@ -151,7 +143,7 @@ struct P_SimulatorDrone_T_ {
   real_T Assumestakeoffwaslevel_Bias[8];/* Expression: [0 0 quad.g 0 0 0 0 0]
                                          * Referenced by: '<S5>/Assumes takeoff was level'
                                          */
-  real_T Delay2_InitialCondition_p;    /* Expression: 0
+  real_T Delay2_InitialCondition_p[8]; /* Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
                                         * Referenced by: '<S5>/Delay2'
                                         */
   real_T RandomNumber_Mean;            /* Expression: 0
@@ -195,9 +187,6 @@ struct P_SimulatorDrone_T_ {
                                         */
   uint32_T Delay2_DelayLength;         /* Computed Parameter: Delay2_DelayLength
                                         * Referenced by: '<S11>/Delay2'
-                                        */
-  uint32_T Delay1_DelayLength;         /* Computed Parameter: Delay1_DelayLength
-                                        * Referenced by: '<S11>/Delay1'
                                         */
   uint32_T Delay3_DelayLength_p;       /* Computed Parameter: Delay3_DelayLength_p
                                         * Referenced by: '<S6>/Delay3'

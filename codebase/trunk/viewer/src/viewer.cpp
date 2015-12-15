@@ -31,7 +31,8 @@ int main (int argc, char* argv[]) {
 	// Setup renderers 
 	bot_viewer_add_stock_renderer (viewer, BOT_VIEWER_STOCK_RENDERER_GRID, 1);
 	add_pose_renderer_to_viewer (viewer, 1, lcm,"Pose - simulated","stateVariancesSim");
-	add_pose_renderer_to_viewer (viewer, 1, lcm,"Pose - estimated","stateVariancesOrientV1");
+	add_pose_renderer_to_viewer (viewer, 1, lcm,"Pose - estimatedV1","stateVariancesOrientV1");
+	add_pose_renderer_to_viewer (viewer, 1, lcm,"Pose - estimatedCF","stateVariancesOrientCF");
 	
 	// Run the main loop
 	gtk_main ();

@@ -222,7 +222,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		
 			podWorker->features.featureDirectionVersor[0][0] = podWorker->imuCalib.accel[0];
 			podWorker->features.featureDirectionVersor[0][1] = podWorker->imuCalib.accel[1];
-			podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2];
+			podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2]; //@TODO should we store this in imuBiasAccel?
 			
 			podWorker->features.featureDirectionVersor[1][0] = podWorker->imuCalib.magn[0];
 			podWorker->features.featureDirectionVersor[1][1] = podWorker->imuCalib.magn[1];
@@ -236,7 +236,8 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 			
 
 		  	podWorker->lcm.publish ("features", &podWorker->features);
-		  	podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances);
+		  	podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances); //ATTENTION: we publish the calibration data over an estimation channel! -> estimator waits for this message on this channel!
+			podWorker->lcm.publish ("stateVariancesOrientCF", &podWorker->stateVariances);
 		  
 			podWorker->statusCalib = 0;
 

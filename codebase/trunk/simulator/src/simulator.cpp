@@ -146,20 +146,10 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
                                         * Referenced by: '<S11>/Delay2'
                                         */
 
-  /*  Expression: [0;0;0]
-   * Referenced by: '<S11>/Constant14'
-   */
-  { 0.0, 0.0, 0.0 },
-
-  /*  Expression: [0 0 0 0 0 0 0 0 0 0 0 0]
-   * Referenced by: '<S11>/Delay1'
+  /*  Expression: [0;0;0;0;0;0;0;0;0;0;0;0]
+   * Referenced by: '<S11>/Constant16'
    */
   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
-
-  /*  Expression: [0;0;0;0;0;0;0]
-   * Referenced by: '<S11>/Constant15'
-   */
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
   0.005,                               /* Computed Parameter: DiscreteTimeIntegrator_gainval
                                         * Referenced by: '<S11>/Discrete-Time Integrator'
                                         */
@@ -177,9 +167,11 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
    * Referenced by: '<S5>/Assumes takeoff was level'
    */
   { 0.0, 0.0, 9.81, 0.0, 0.0, 0.0, 0.0, 0.0 },
-  0.0,                                 /* Expression: 0
-                                        * Referenced by: '<S5>/Delay2'
-                                        */
+
+  /*  Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
+   * Referenced by: '<S5>/Delay2'
+   */
+  { 0.0, 0.0, -9.81, 0.0, 0.0, 0.0, 0.0, 101270.95 },
   0.0,                                 /* Expression: 0
                                         * Referenced by: '<S10>/Random Number'
                                         */
@@ -241,9 +233,6 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
                                         */
   1U,                                  /* Computed Parameter: Delay2_DelayLength
                                         * Referenced by: '<S11>/Delay2'
-                                        */
-  1U,                                  /* Computed Parameter: Delay1_DelayLength
-                                        * Referenced by: '<S11>/Delay1'
                                         */
   1U,                                  /* Computed Parameter: Delay3_DelayLength_p
                                         * Referenced by: '<S6>/Delay3'
@@ -633,6 +622,7 @@ int main (int argc, char** argv) {
 
   //Create message listener thread to listen to subscribed channels and stored received messages	
   std::thread listenerThread(listen,&podWorker);
+
 
   // Create mainloop, add loop functions, run
   GMainLoop* mainloop = g_main_loop_new (NULL, FALSE);
