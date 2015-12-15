@@ -26,7 +26,11 @@ public:
   simulator_t (string podName, int64_t callInterval) : podBase_t(podName,callInterval)
 	{	
 	//Pod-specific initialization
-	//...	
+	//...
+	this->motorsPwms.pwms[0] = 0.0;
+	this->motorsPwms.pwms[1] = 0.0;	
+	this->motorsPwms.pwms[2] = 0.0;	
+	this->motorsPwms.pwms[3] = 0.0;		
 	}
 
   //Pod-specifc members for storing values (if some values in the computation-cycle or statusUpdate-cycle are needed over more than 1 function call)

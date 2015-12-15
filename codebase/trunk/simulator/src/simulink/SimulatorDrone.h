@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3151
+ * Model version                  : 1.3154
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Dec 15 14:42:39 2015
+ * C/C++ source code generated on : Tue Dec 15 16:40:04 2015
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -73,6 +73,7 @@ typedef struct {
   real_T LastUAtTimeB[3];              /* '<S5>/Derivative' */
   uint32_T RandSeed[12];               /* '<S10>/Random Number' */
   int8_T DiscreteTimeIntegrator_PrevRese;/* '<S11>/Discrete-Time Integrator' */
+  uint8_T DiscreteTimeIntegrator_IC_LOADI;/* '<S11>/Discrete-Time Integrator' */
 } DW_SimulatorDrone_T;
 
 /* Parameters (auto storage) */
@@ -92,6 +93,7 @@ struct P_SimulatorDrone_T_ {
                                          *   '<S5>/Saturation'
                                          *   '<S6>/VelocityToOpticalFlow_Gain'
                                          *   '<S7>/noiseWeights'
+                                         *   '<S15>/Constant'
                                          */
   struct_KIBNvBSKeP9vvISqfeQYGC quad;  /* Variable: quad
                                         * Referenced by:
@@ -125,8 +127,8 @@ struct P_SimulatorDrone_T_ {
   real_T Delay2_InitialCondition;      /* Expression: 0
                                         * Referenced by: '<S11>/Delay2'
                                         */
-  real_T Constant16_Value[12];         /* Expression: [0;0;0;0;0;0;0;0;0;0;0;0]
-                                        * Referenced by: '<S11>/Constant16'
+  real_T Constant14_Value[12];         /* Expression: [0 0 -0.05 0 0 0 0 0 0 0 0 0]
+                                        * Referenced by: '<S11>/Constant14'
                                         */
   real_T DiscreteTimeIntegrator_gainval;/* Computed Parameter: DiscreteTimeIntegrator_gainval
                                          * Referenced by: '<S11>/Discrete-Time Integrator'
@@ -287,8 +289,9 @@ extern void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const
  * '<S12>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/MATLAB Function'
  * '<S13>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/Compare To Constant'
  * '<S14>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/Compare To Constant1'
- * '<S15>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/MATLAB Function'
- * '<S16>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/statetoout'
+ * '<S15>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/Compare To Constant2'
+ * '<S16>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/MATLAB Function'
+ * '<S17>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/statetoout'
  */
 #endif                                 /* RTW_HEADER_SimulatorDrone_h_ */
 

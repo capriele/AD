@@ -9,8 +9,8 @@ void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  do
 
 
 
-double gyroAngleUpdate_acc_threshold   = 0.02; //@TODO adjust!
-double gyroAngleUpdate_acc_weight      = 0.02;
+double gyroAngleUpdate_acc_threshold   = 0.008; //@TODO adjust!
+double gyroAngleUpdate_acc_weight      = 0.001;
 
 
 //Rotation of angular velocity vector from Bodyframe to Worldframe, inverted Wronskian (body rates p-q-r to euler rates yaw pitch roll)

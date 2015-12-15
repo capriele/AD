@@ -1,26 +1,7 @@
 group "G1Simulation-TestOrientCF-startRemoteCSepaLast" {
-    cmd "controllerPDOrientG1" {
-        auto_respawn = "true";
-        exec = "controllerPDOrient stateVariancesSim";
-        host = "ra-Desktop01";
-    }
-    cmd "motorCommanderG1" {
-        auto_respawn = "true";
-        exec = "motorCommander";
-        host = "ra-Desktop01";
-    }
     cmd "viewerG1" {
         auto_respawn = "true";
         exec = "viewer";
-        host = "ra-Desktop01";
-    }
-    cmd "stateEstimatorOrientCFG1" {
-        exec = "stateEstimatorOrientCF imuRawSim";
-        host = "ra-Desktop01";
-    }
-    cmd "watchdogG1" {
-        auto_respawn = "true";
-        exec = "watchdog imuRawSim stateVariancesSim";
         host = "ra-Desktop01";
     }
     cmd "testsenderG1" {
@@ -28,42 +9,60 @@ group "G1Simulation-TestOrientCF-startRemoteCSepaLast" {
         exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw stateEstimatorOrientV1 detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
+    cmd "controllerPDOrientG1" {
+        auto_respawn = "true";
+        exec = "controllerPDOrient stateVariancesSim";
+        host = "ra-Desktop01";
+    }
+    cmd "watchdogG1" {
+        auto_respawn = "true";
+        exec = "watchdog imuRawSim stateVariancesSim";
+        host = "ra-Desktop01";
+    }
     cmd "simulatorG1" {
         auto_respawn = "true";
         exec = "simulator";
         host = "ra-Desktop01";
     }
+    cmd "motorCommanderG1" {
+        auto_respawn = "true";
+        exec = "motorCommander";
+        host = "ra-Desktop01";
+    }
+    cmd "stateEstimatorOrientCFG1" {
+        exec = "stateEstimatorOrientCF imuRawSim";
+        host = "ra-Desktop01";
+    }
 }
 
 group "G2Simulation-FullSimOrientCF-startRemoteCSepaLast" {
-    cmd "viewerG2" {
-        exec = "viewer";
+    cmd "simulatorG2" {
+        exec = "simulator";
         host = "ra-Desktop01";
     }
     cmd "testsenderG2" {
         exec = "testsender imuAcquisitionStatus stateEstimatorOrientV1 imuAcquisitionImuRaw detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
-    cmd "stateEstimatorOrientG2" {
-        exec = "stateEstimatorOrientCF imuRawSim";
+    cmd "controllerPDOrientG2" {
+        exec = "controllerPDOrient stateVariancesOrientCF";
         host = "ra-Desktop01";
     }
     cmd "watchdogG2" {
         exec = "watchdog imuRawSim stateVariancesOrientCF";
         host = "ra-Desktop01";
     }
+    cmd "stateEstimatorOrientG2" {
+        exec = "stateEstimatorOrientCF imuRawSim";
+        host = "ra-Desktop01";
+    }
     cmd "motorCommanderG2" {
         exec = "motorCommander";
         host = "ra-Desktop01";
     }
-    cmd "simulatorG2" {
-        exec = "simulator";
-        host = "ra-Desktop01";
-    }
-    cmd "controllerPDOrientG2" {
-        exec = "controllerPDOrient stateVariancesOrientCF";
-        host = "ra-Desktop01";
-    }
 }
-
+cmd "viewer" {
+    exec = "viewer";
+    host = "ra-Desktop01";
+}
 

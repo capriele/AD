@@ -76,6 +76,7 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
                                         *   '<S5>/Saturation'
                                         *   '<S6>/VelocityToOpticalFlow_Gain'
                                         *   '<S7>/noiseWeights'
+                                        *   '<S15>/Constant'
                                         */
 
   {
@@ -146,10 +147,10 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
                                         * Referenced by: '<S11>/Delay2'
                                         */
 
-  /*  Expression: [0;0;0;0;0;0;0;0;0;0;0;0]
-   * Referenced by: '<S11>/Constant16'
+  /*  Expression: [0 0 -0.05 0 0 0 0 0 0 0 0 0]
+   * Referenced by: '<S11>/Constant14'
    */
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+  { 0.0, 0.0, -0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
   0.005,                               /* Computed Parameter: DiscreteTimeIntegrator_gainval
                                         * Referenced by: '<S11>/Discrete-Time Integrator'
                                         */
