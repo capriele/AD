@@ -43,6 +43,7 @@ framework.hpp provides an abstract base class podBase_t to derive specific POD c
 #define COMEGA2TOPWM 1113 
 
 
+#define ALPHAT 2.2e-6
 
 #define TAKEOFFINTERVAL 1000	// time that drone is in takeoff mode after starting flight before transitioning to full flight mode [milliseconds]
 
@@ -82,6 +83,7 @@ framework.hpp provides an abstract base class podBase_t to derive specific POD c
 
 #define CALLINTERVAL_IMUACQUISITION 8
 #define CALLINTERVAL_STATEESTIMATORORIENTV1 10
+#define CALLINTERVAL_STATEESTIMATORORIENTCF 10
 #define CALLINTERVAL_DETECTORVIS 20
 #define CALLINTERVAL_POSEESTIMVIS 20
 #define CALLINTERVAL_REMOTECONTROLLER 20
@@ -126,7 +128,7 @@ int64_t GetTimeStamp() {
 GEOMETRY
 */
 
-void quat2Euler(double* q, double *yaw, double *pitch, double *roll)
+static void quat2Euler(double* q, double *yaw, double *pitch, double *roll)
 {
 *roll = atan2(2*(q[0]*q[1]+q[2]*q[3]),(1-2*(pow(q[1],2)+pow(q[2],2))));
 *pitch = asin(2*(q[0]*q[2] - q[3]*q[1] ) );
