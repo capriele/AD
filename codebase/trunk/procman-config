@@ -1,9 +1,4 @@
 group "G1Simulation-TestOrientCF-startRemoteCSepaLast" {
-    cmd "viewerG1" {
-        auto_respawn = "true";
-        exec = "viewer";
-        host = "ra-Desktop01";
-    }
     cmd "testsenderG1" {
         auto_respawn = "true";
         exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw stateEstimatorOrientV1 detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
