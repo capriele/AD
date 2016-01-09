@@ -1,0 +1,31 @@
+SAVING THE CONTROLLER
+-------------------
+controllerLookup_t * controllerLookup;
+FILE* controllerFileHandle;
+
+controllerFileHandle = fopen(filename, "wb")
+fwrite(controllerLookup, sizeof(controllerLookup_t), 1, controllerFileHandle);
+fclose(controllerFileHandle);
+
+
+
+
+
+
+POD loads controller during its initialization procedure
+-------------------
+controllerLookup_t * controllerLookup;
+FILE* controllerFileHandle;
+
+controllerFileHandle = fopen(filename, "rb");
+fread(controllerLookup, sizeof(controllerLookup_t), 1, controllerFileHandle);
+
+
+
+POD looks up controller policy during flight
+-------------------
+double orientState[6]; //contains yaw,pitch, roll and body-angular rates p,q,r (see orientation-controller/quadrotordynamics.pdf)
+double zetas[3];       // squared motor speeds, aka plant input, aka controller outputs
+
+getResultsControllerSOCOrient(orientState,controllerLookup,zetas);
+

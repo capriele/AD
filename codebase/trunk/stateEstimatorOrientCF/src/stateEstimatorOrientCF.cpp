@@ -206,7 +206,7 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 
 				podWorker->stateVariances.position[0] = 0.0;
 				podWorker->stateVariances.position[1] = 0.0;		
-				podWorker->stateVariances.position[2] = 0.0;
+				podWorker->stateVariances.position[2] = 0.0; 
 
 				podWorker->stateVariances.veloPositionBody[0] = 0.0;								
 				podWorker->stateVariances.veloPositionBody[1] = 0.0;								

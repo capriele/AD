@@ -23,6 +23,7 @@ public:
   agile::powerAdjust_t       powerAdjust;
 
   agile::motorsWsRef_t       motorsWsRefPDOrient;
+  agile::motorsWsRef_t       motorsWsRefPDPose;
 
   bool isWriteToArduino;	//flag is motorcommander tries to write to arduino or not
 

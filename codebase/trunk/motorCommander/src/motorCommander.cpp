@@ -44,8 +44,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		break;
 	  case CMODE_PIDPOSE:
 		//@TODO add PID pose controller
-		printf("no PID pose controller available, uses PD-orient!\n");
-		podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDOrient);
+		podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDPose);
 		break;
 	  case CMODE_SOC:
 		//@TODO add SOC controller
@@ -222,7 +221,8 @@ int main (int argc, char** argv) {
 
   // 3) Subscribe this POD to channels
   podWorker.subscribe("powerAdjust", CALLINTERVAL_REMOTECONTROLLER,	 &(podWorker.powerAdjust), 	&podBase_t::handleMessage<agile::powerAdjust_t>);
-  podWorker.subscribe("motorsWsRefPDOrient", CALLINTERVAL_CONTROLLERPDORIENT, 	 &(podWorker.motorsWsRefPDOrient), 	&podBase_t::handleMessage<agile::motorsWsRef_t>);	
+  podWorker.subscribe("motorsWsRefPDOrient", CALLINTERVAL_CONTROLLERPDORIENT, 	 &(podWorker.motorsWsRefPDOrient), 	&podBase_t::handleMessage<agile::motorsWsRef_t>);
+  podWorker.subscribe("motorsWsRefPDPose", CALLINTERVAL_CONTROLLERPDPOSE, 	 &(podWorker.motorsWsRefPDPose), 	&podBase_t::handleMessage<agile::motorsWsRef_t>);		
   //podWorker.subscribe("statusDrone", CALLINTERVAL_WATCHDOG, &(podWorker.statusDrone), &podBase_t::handleMessage<agile::statusDrone_t>); //is autosubscribed via base class constructor!
   podWorker.subscribe("controlMode",CALLINTERVAL_REMOTECONTROLLER, &(podWorker.controlMode), &podBase_t::handleMessage<agile::controlMode_t>);    
  		//@TODO subscribe to more controllers

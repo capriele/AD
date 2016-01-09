@@ -19,19 +19,19 @@
 #define MAXTBIASPDO 1
 #define STEPSTBIASPDO 0.05
 
-//yaw act bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
+//yaw  bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITYBIASPDO 0.0
 #define MINYBIASPDO -10.0
 #define MAXYBIASPDO 10.0
 #define STEPSYBIASPDO 0.1
 
-//pitch act bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
+//pitch bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITPBIASPDO 0
 #define MINPBIASPDO -3.0
 #define MAXPBIASPDO 3.0
 #define STEPSPBIASPDO 0.1
 
-//roll act bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
+//roll bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITRBIASPDO 0
 #define MINRBIASPDO -3.0
 #define MAXRBIASPDO 3.0
@@ -74,11 +74,14 @@ public:
 	controllerAdjustmode = CADJUSTMODE_NULL;
 
 	powerAdjust.powerGain 	= INITPOWERGAIN;
+
+	//Biases for PDOrientController
 	powerAdjust.tBiasPDO 	= INITBIASPDO;
 	powerAdjust.yBiasPDO    = INITYBIASPDO;
 	powerAdjust.pBiasPDO    = INITPBIASPDO;
 	powerAdjust.rBiasPDO    = INITRBIASPDO;
 
+	//Adjustments of PD-gains in PDOrientController
 	powerAdjust.pyAdjustPDO = 1.0;
 	powerAdjust.dyAdjustPDO = 1.0;
 	powerAdjust.ppAdjustPDO = 1.0;
@@ -88,9 +91,16 @@ public:
 	powerAdjust.ptAdjustPDO = 1.0;
 	powerAdjust.dtAdjustPDO = 1.0;
 
+	//Adjustments of PD-gains in position loop of PDPose-controller (inner orientation loop gains come from PDOrientcontroller!)
+	powerAdjust.pXYAdjustPDPOS = 1.0;
+	powerAdjust.dXYAdjustPDPOS = 1.0;
+	powerAdjust.pZAdjustPDPOS  = 1.0;
+	powerAdjust.dZAdjustPDPOS  = 1.0;
+
+	//Initial reference pose
 	poseRef.position[0] = 0.0;
 	poseRef.position[1] = 0.0;
-	poseRef.position[2] = 0.0;
+	poseRef.position[2] = -1;
 	poseRef.orientEuler[0] = 0.0;
 	poseRef.orientEuler[1] = 0.0;
 	poseRef.orientEuler[2] = 0.0;

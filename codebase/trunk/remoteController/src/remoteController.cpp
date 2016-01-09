@@ -12,6 +12,7 @@ void crement(double* var, double step, double min, double max)
 	*var += step;
 	if (*var > max) {*var = max;};
 	if (*var < min) {*var = min;};
+	printf("%f (%f..%f)\n",*var,min,max);
 };
 
 
@@ -52,7 +53,13 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				{
 				case ',': podWorker->controllerAdjustmode =  CADJUSTMODE_P; printf("Controlleradjust switched to P-values!\n");  break;
 				case '.': podWorker->controllerAdjustmode =  CADJUSTMODE_D; printf("Controlleradjust switched to D-values!\n");  break;
-				case '/': podWorker->controllerAdjustmode =  CADJUSTMODE_BIAS; printf("Controlleradjust switched to Bias-values!\n");  break;
+				case '/':
+					if (podWorker->controlMode.controlMode == CMODE_PIDORIENT)
+					{
+						podWorker->controllerAdjustmode =  CADJUSTMODE_BIAS;
+						printf("Controlleradjust switched to Bias-values!\n");
+					};
+					break;
 
 
 				//control mode cases
@@ -135,7 +142,8 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 					}
 			} //endif flymode
 
-		else if (podWorker->controllerAdjustmode == CADJUSTMODE_BIAS)		
+		//CONTROLLER PDORIENT ADJUSTMODE BIAS
+		else if ((podWorker->controlMode.controlMode == CMODE_PIDORIENT) && (podWorker->controllerAdjustmode == CADJUSTMODE_BIAS))
 			{
 			switch (ch)
 				{
@@ -146,8 +154,8 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 					break;
 
 				case 'm': podWorker->controllerAdjustmode =  CADJUSTMODE_NULL; printf("Controlleradjust mode turned off!\n"); break;				
-				case '.': podWorker->controllerAdjustmode =  CADJUSTMODE_D; printf("Controlleradjust switched to D-values!\n");  break;
-				case ',': podWorker->controllerAdjustmode =  CADJUSTMODE_P; printf("Controlleradjust switched to P-values!\n");  break;
+				case '.': podWorker->controllerAdjustmode =  CADJUSTMODE_D;    printf("Controlleradjust switched to D-values!\n");  break;
+				case ',': podWorker->controllerAdjustmode =  CADJUSTMODE_P;    printf("Controlleradjust switched to P-values!\n");  break;
 
 				//thrust-related controller  adjustments
 				case 'i': crement(&(podWorker->powerAdjust.tBiasPDO), +STEPSTBIASPDO, MINTBIASPDO, MAXTBIASPDO); printf("thrust-bias for PDOrient: %f\n",podWorker->powerAdjust.tBiasPDO); break;
@@ -175,8 +183,8 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				}
 			} //endif Bias-controladjuster	
 
-
-		else if (podWorker->controllerAdjustmode == CADJUSTMODE_P)		
+		//CONTROLLER PDORIENT ADJUSTMODE P-value
+		else if ((podWorker->controlMode.controlMode == CMODE_PIDORIENT) && (podWorker->controllerAdjustmode == CADJUSTMODE_P))
 			{
 			switch (ch)
 				{
@@ -215,7 +223,8 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				}
 			} //endif P-controladjuster	
 
-		else if (podWorker->controllerAdjustmode == CADJUSTMODE_D)		
+		//CONTROLLER PDORIENT ADJUSTMODE D-value
+		else if ((podWorker->controlMode.controlMode == CMODE_PIDORIENT) && (podWorker->controllerAdjustmode == CADJUSTMODE_D))
 			{
 			switch (ch)
 				{
@@ -252,7 +261,84 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 					break;
 	
 				}
-			} //endif D-controladjuster			
+			} //endif D-controladjuster	
+
+
+
+
+
+
+
+
+		//CONTROLLER PDPOSE ADJUSTMODE P-value
+		else if ((podWorker->controlMode.controlMode == CMODE_PIDPOSE) && (podWorker->controllerAdjustmode == CADJUSTMODE_P))
+			{
+			switch (ch)
+				{
+				//control mode cases
+				case 'e': 
+					podWorker->controlMode.controlMode =  CMODE_FATAL;					
+					podWorker->resetPitchRollReference();						
+					break;
+
+				case 'm': podWorker->controllerAdjustmode =  CADJUSTMODE_NULL; printf("Controlleradjust mode turned off!\n"); break;				
+				case '.': podWorker->controllerAdjustmode =  CADJUSTMODE_D; printf("Controlleradjust switched to D-values!\n");  break;
+
+				//position-related controller  adjustments
+				case 'a': crement(&(podWorker->powerAdjust.pXYAdjustPDPOS), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+				case 'd': crement(&(podWorker->powerAdjust.pXYAdjustPDPOS), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+
+				case 'i': crement(&(podWorker->powerAdjust.pZAdjustPDPOS), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+				case 'k': crement(&(podWorker->powerAdjust.pZAdjustPDPOS), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;						 
+
+			
+				//power adjustment to happen in motor commander
+				case '+':
+					crement(&(podWorker->powerAdjust.powerGain), +STEPSPOWERGAIN, MINPOWERGAIN, MAXPOWERGAIN);
+					printf("powerGain in Poweradjuster: %f\n",podWorker->powerAdjust.powerGain);
+					break;
+				case '-':
+					crement(&(podWorker->powerAdjust.powerGain), -STEPSPOWERGAIN, MINPOWERGAIN, MAXPOWERGAIN);
+					printf("powerGain in Poweradjuster: %f\n",podWorker->powerAdjust.powerGain);	
+					break;
+	
+				}
+			} //endif P-controladjuster	
+
+		//CONTROLLER PDPOSE ADJUSTMODE P-value
+		else if ((podWorker->controlMode.controlMode == CMODE_PIDPOSE) && (podWorker->controllerAdjustmode == CADJUSTMODE_D))
+			{
+			switch (ch)
+				{
+				//control mode cases
+				case 'e': 
+					podWorker->controlMode.controlMode =  CMODE_FATAL;					
+					podWorker->resetPitchRollReference();						
+					break;
+
+				case 'm': podWorker->controllerAdjustmode =  CADJUSTMODE_NULL; printf("Controlleradjust mode turned off!\n"); break;				
+				case '.': podWorker->controllerAdjustmode =  CADJUSTMODE_D; printf("Controlleradjust switched to P-values!\n");  break;
+
+				//position-related controller  adjustments
+				case 'a': crement(&(podWorker->powerAdjust.dXYAdjustPDPOS), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+				case 'd': crement(&(podWorker->powerAdjust.dXYAdjustPDPOS), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+
+				case 'i': crement(&(podWorker->powerAdjust.dZAdjustPDPOS), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+				case 'k': crement(&(podWorker->powerAdjust.dZAdjustPDPOS), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;						 
+
+			
+				//power adjustment to happen in motor commander
+				case '+':
+					crement(&(podWorker->powerAdjust.powerGain), +STEPSPOWERGAIN, MINPOWERGAIN, MAXPOWERGAIN);
+					printf("powerGain in Poweradjuster: %f\n",podWorker->powerAdjust.powerGain);
+					break;
+				case '-':
+					crement(&(podWorker->powerAdjust.powerGain), -STEPSPOWERGAIN, MINPOWERGAIN, MAXPOWERGAIN);
+					printf("powerGain in Poweradjuster: %f\n",podWorker->powerAdjust.powerGain);	
+					break;
+	
+				}
+			} //endif D-controladjuster		
 
 		} //end if keyboard isHit
 

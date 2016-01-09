@@ -20,4 +20,10 @@ struct powerAdjust_t {
 	double dtAdjustPDO;
 
 
+	double pXYAdjustPDPOS;
+	double dXYAdjustPDPOS;
+	double pZAdjustPDPOS;
+	double dZAdjustPDPOS;
+
+
 }
