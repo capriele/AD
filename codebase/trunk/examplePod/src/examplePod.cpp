@@ -20,9 +20,13 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
   	  /* Computations */	
 	  /*---example that does not really compute anything---*/
 
+	  //displays data from channel "testdata"
+	  printf(" data: %f\n",podWorker->testdata.position[2]);	
+
 	  // statusDrone - computation via stateMachine 
 	  agile::statusDrone_t statusDrone_old = podWorker->statusDrone; 	    
- 	  podWorker->statusDrone = agile::statusDrone_t ();	  
+ 	  podWorker->statusDrone = agile::statusDrone_t ();
+	  
 	  	
 	  switch(statusDrone_old.status)
 	  {   
