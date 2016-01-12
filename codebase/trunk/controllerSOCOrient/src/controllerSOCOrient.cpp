@@ -19,28 +19,31 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
    	  
   	  /* Computations */
 
-	  //PD control state error to torque-equivalent about bodyframe axis
+	  //compute euler angle estimate from quaternion estimates
 	  double yaw_hat, pitch_hat, roll_hat;
 	  quat2Euler(podWorker->stateVariances.orient,&(yaw_hat),&(pitch_hat),&(roll_hat));	  
 
-	  double totalThrust_usergain = podWorker->powerAdjust.tBiasPDO/(QUADMASS*GRAVITY/cos(pitch_hat)/cos(roll_hat)/ALPHAT);
-
-	  double zetas[3]; //squared motor speeds, output of Alex controller
+	  double torquesRefs[3]; //output of Alex orientation-controller: torques about body-axes x,y,z (see Dropbox (MIT)\AgileDrones\writeups_docs\architecture\controlarchitecture\orientation_model/quadrotordynamics.pdf)
 	
-	  double orientState[6];
-	  orientState[0] = yaw_hat;
+	  double orientState[6]; //orientation-related state: euler angles yaw pitch roll + angular rates about body-axes x,y,z
+	  orientState[0] = yaw_hat; //@TODO replace this by error (angle_hat - angle_ref) if we want to enable the user to control the angles for non-zero references
 	  orientState[1] = pitch_hat;
 	  orientState[2] = roll_hat;
 	  orientState[3] = podWorker->stateVariances.veloOrientBody[0];
 	  orientState[4] = podWorker->stateVariances.veloOrientBody[1];
 	  orientState[5] = podWorker->stateVariances.veloOrientBody[2];
 	
-	  getResultsControllerSOCOrient(orientState,podWorker.controllerLookup,zetas);
+	  //get optimal torque references from Alex controller
+	  getResultsControllerSOCOrient(orientState,podWorker.controllerLookup,torquesRefs);
 	   
-	  podWorker->motorsWsRef.wsRef[0] = sqrt(totalThrust_usergain*zetas[0]);
-	  podWorker->motorsWsRef.wsRef[1] = sqrt(totalThrust_usergain*zetas[1]);
-	  podWorker->motorsWsRef.wsRef[2] = sqrt(totalThrust_usergain*zetas[2]);
-	  podWorker->motorsWsRef.wsRef[3] = sqrt(totalThrust_usergain*(QUADMASS*GRAVITY/cos(pitch_hat)/cos(roll_hat)/ALPHAT-zetas[0]-zetas[1]-zetas[2]));
+	  //compute total thrust as function of user-requested thrust
+	  double totalThrust = - QUADMASS*GRAVITY - podWorker->powerAdjust.tBiasPDO;
+	
+ 	  //convert [totalthrust;body torque references] into the four motor speeds
+	  podWorker->motorsWsRef.wsRef[0] = sqrt(-THRUST2OMEGA2*(ATOTALTHRUST*totalThrust + ATAUYAW*torquesRefs[2] - ATAUPR*torquesRefs[1] - ATAUPR*torquesRefs[0));
+	  podWorker->motorsWsRef.wsRef[1] = sqrt(-THRUST2OMEGA2*(ATOTALTHRUST*totalThrust - ATAUYAW*torquesRefs[2] - ATAUPR*torquesRefs[1] + ATAUPR*torquesRefs[0]));
+	  podWorker->motorsWsRef.wsRef[2] = sqrt(-THRUST2OMEGA2*(ATOTALTHRUST*totalThrust + ATAUYAW*torquesRefs[2] + ATAUPR*torquesRefs[1] + ATAUPR*torquesRefs[0]));
+	  podWorker->motorsWsRef.wsRef[3] = sqrt(-THRUST2OMEGA2*(ATOTALTHRUST*totalThrust - ATAUYAW*torquesRefs[2] + ATAUPR*torquesRefs[1] - ATAUPR*torquesRefs[0]));
 	
 
 	  podWorker->motorsWsRef.timestampJetson = GetTimeStamp();  
@@ -129,11 +132,15 @@ int main (int argc, char** argv) {
     return 1;
 
   // 3) Subscribe this POD to channels
-  //@TODO add config.file or GUI that sets which channel to subscribe to
-  podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_SIMULATOR, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
-  //podWorker.subscribe("stateVariancesSim", CALLINTERVAL_SIMULATOR, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
-  //podWorker.subscribe("stateVariancesOrientV1", CALLINTERVAL_SIMULATOR, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>); 
+  
+  //channel that provides state-estimates
+  if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesOrientV1")==0)
+    podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_STATEESTIMATORORIENTV1, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
+  else if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesOrientCF")==0)
+     podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_STATEESTIMATORORIENTCF, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
+  else podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_SIMULATOR, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
 
+  //other channels
   podWorker.subscribe("poseRef",  CALLINTERVAL_REMOTECONTROLLER, &(podWorker.poseRef), &podBase_t::handleMessage<agile::poseRef_t>);
   podWorker.subscribe("powerAdjust",  CALLINTERVAL_REMOTECONTROLLER, &(podWorker.powerAdjust), &podBase_t::handleMessage<agile::powerAdjust_t>);	
 

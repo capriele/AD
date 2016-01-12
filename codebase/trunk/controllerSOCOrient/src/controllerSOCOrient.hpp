@@ -4,24 +4,7 @@
 #include "../../framework/framework.hpp"
 
 //Controller parameters
-#define Py 0.08
-#define Pp 0.4
-#define Pr 0.4
-
-#define Dy 0.06
-#define Dp 0.05
-#define Dr 0.05
-
-#define Pz 4
-#define Dz 3
-
-//Geometry and Thrust coefficients for PDcontroller (transforming ref Torque into omega), from controlHelperParams.Q2Ts
-//F1 = aTotalThrust*TotalThrust + aTauyaw*TauYaw - aTauPR*TauPitch - aTauPR*TauRoll
-#define ATOTALTHRUST 0.25
-#define ATAUYAW 35.2669
-#define ATAUPR 2.1427
-
-#define THRUST2OMEGA2 455390
+#include "../../controllerPDOrient/src/controllerPDOrientParams.hpp"
 
 class controllerSOCOrient_t : public podBase_t {
   

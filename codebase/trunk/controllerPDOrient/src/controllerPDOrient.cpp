@@ -19,7 +19,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
    	  
   	  /* Computations */
 
-	  //PD control state error to torque-equivalent about bodyframe axis
+	  //compute euler angle estimate from quaternion estimates
 	  double yaw_hat, pitch_hat, roll_hat;
 	  quat2Euler(podWorker->stateVariances.orient,&(yaw_hat),&(pitch_hat),&(roll_hat));	  
 
