@@ -9,8 +9,8 @@ void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  do
 
 
 
-double gyroAngleUpdate_acc_threshold   = 0.008; //@TODO this seems to work for the real IMU, note, for simulated one might use different!
-double gyroAngleUpdate_acc_weight      = 0.008;
+double gyroAngleUpdate_acc_threshold   = sqrt(3*pow(0.003,2)); //@TODO this seems to work for the real IMU, note, for simulated one might use different!
+double gyroAngleUpdate_acc_weight      = 0.01;
 
 
 //Rotation of angular velocity vector from Bodyframe to Worldframe, inverted Wronskian (body rates p-q-r to euler rates yaw pitch roll)
@@ -71,41 +71,51 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 
 		// Correct new measurements from bias
 
-		double imu_orig[6];
+		double imuOrig[6];
 
-		imu_orig[0] = podWorker->imudata.accel[0] - podWorker->biases.accel[0];
-		imu_orig[1] = podWorker->imudata.accel[1] - podWorker->biases.accel[1];
-		imu_orig[2] = podWorker->imudata.accel[2] - podWorker->biases.accel[2]; //printf("%f %f\n",podWorker->imudata.accel[2],podWorker->biases.accel[2]);
-		imu_orig[3] = podWorker->imudata.gyro[0] - podWorker->biases.gyro[0];
-		imu_orig[4] = podWorker->imudata.gyro[1] - podWorker->biases.gyro[1];
-		imu_orig[5] = podWorker->imudata.gyro[2] - podWorker->biases.gyro[2];
+		imuOrig[0] = podWorker->imudata.accel[0] - podWorker->biases.accel[0];
+		imuOrig[1] = podWorker->imudata.accel[1] - podWorker->biases.accel[1];
+		imuOrig[2] = podWorker->imudata.accel[2] - podWorker->biases.accel[2]; //printf("%f %f\n",podWorker->imudata.accel[2],podWorker->biases.accel[2]);
+		imuOrig[3] = podWorker->imudata.gyro[0] - podWorker->biases.gyro[0];
+		imuOrig[4] = podWorker->imudata.gyro[1] - podWorker->biases.gyro[1];
+		imuOrig[5] = podWorker->imudata.gyro[2] - podWorker->biases.gyro[2];
+
+		//Apply IIR filter to Accel
+		double imuFiltered[6];
+		podWorker->imuFiltered[0] = IIRIMU*podWorker->imuFiltered[0] + (1.0-IIRIMU)*imuOrig[0];
+		podWorker->imuFiltered[1] = IIRIMU*podWorker->imuFiltered[1] + (1.0-IIRIMU)*imuOrig[1];
+		podWorker->imuFiltered[2] = IIRIMU*podWorker->imuFiltered[2] + (1.0-IIRIMU)*imuOrig[2];
+		podWorker->imuFiltered[3] = imuOrig[3];
+		podWorker->imuFiltered[4] = imuOrig[4];
+		podWorker->imuFiltered[5] = imuOrig[5];
+
 
 		//Rotate measurements from IMU system to body-frame (assuming it is first 90deg yaw, then 180 to take vectorin IMUsyste to represent in bodyframe sys!
 
 		//accels
-		double imu_trafo[6];
+		double imuTrafo[6];
 
 		if (strcmp(podWorker->imuRawChannel.c_str(),"imuRaw")==0)
 		{
-			imu_trafo[0] = -imu_orig[1];
-			imu_trafo[1] = -imu_orig[0];
-			imu_trafo[2] = -imu_orig[2];
+			imuTrafo[0] = -podWorker->imuFiltered[1];
+			imuTrafo[1] = -podWorker->imuFiltered[0];
+			imuTrafo[2] = -podWorker->imuFiltered[2];
 		
 			//rot
-			imu_trafo[3] = -imu_orig[4];
-			imu_trafo[4] = -imu_orig[3];
-			imu_trafo[5] = -imu_orig[5];
+			imuTrafo[3] = -podWorker->imuFiltered[4];
+			imuTrafo[4] = -podWorker->imuFiltered[3];
+			imuTrafo[5] = -podWorker->imuFiltered[5];
 		}
 		else
 		{
-			imu_trafo[0] = imu_orig[0];
-			imu_trafo[1] = imu_orig[1];
-			imu_trafo[2] = imu_orig[2];
+			imuTrafo[0] = podWorker->imuFiltered[0];
+			imuTrafo[1] = podWorker->imuFiltered[1];
+			imuTrafo[2] = podWorker->imuFiltered[2];
 		
 			//rot
-			imu_trafo[3] = imu_orig[3];
-			imu_trafo[4] = imu_orig[4];
-			imu_trafo[5] = imu_orig[5];
+			imuTrafo[3] = podWorker->imuFiltered[3];
+			imuTrafo[4] = podWorker->imuFiltered[4];
+			imuTrafo[5] = podWorker->imuFiltered[5];
 		}
 
 		
@@ -123,14 +133,14 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 
 
 		if (dt>10) dt=0.01; //initial timestamp
-		complimentaryfilter(yaw_cur, pitch_cur, roll_cur,dt,imu_trafo,euler_hat);		
+		complimentaryfilter(yaw_cur, pitch_cur, roll_cur,dt,imuTrafo,euler_hat);		
 
 		//transform to quaternions and update stateVariances
 		
 		Euler2quat(podWorker->stateVariances.orient, &(euler_hat[0]), &(euler_hat[1]), &(euler_hat[2]));
-		podWorker->stateVariances.veloOrientBody[0] = imu_trafo[3];
-		podWorker->stateVariances.veloOrientBody[1] = imu_trafo[4];
-		podWorker->stateVariances.veloOrientBody[2] = imu_trafo[5];
+		podWorker->stateVariances.veloOrientBody[0] = imuTrafo[3];
+		podWorker->stateVariances.veloOrientBody[1] = imuTrafo[4];
+		podWorker->stateVariances.veloOrientBody[2] = imuTrafo[5];
 
 		podWorker->stateVariances.timestampJetson = nowCompUpdate;
 
@@ -197,7 +207,22 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 				podWorker->biases.gyro[0] = podWorker->stateVariances.imuBiasGyro[0];
 				podWorker->biases.gyro[1] = podWorker->stateVariances.imuBiasGyro[1];
 				podWorker->biases.gyro[2] = podWorker->stateVariances.imuBiasGyro[2];
-				
+
+				 //initial values for IIR-IMU filter 
+				podWorker->imuFiltered[0] = podWorker->biases.accel[0];
+				podWorker->imuFiltered[1] = podWorker->biases.accel[1];				
+				podWorker->imuFiltered[2] = podWorker->biases.accel[2]-GRAVITY;				
+				podWorker->imuFiltered[0] = podWorker->biases.gyro[0];				
+				podWorker->imuFiltered[1] = podWorker->biases.gyro[1];
+				podWorker->imuFiltered[2] = podWorker->biases.gyro[2];								
+				/*
+				podWorker->imuRawLast[0] = podWorker->biases.accel[0];
+				podWorker->imuRawLast[1] = podWorker->biases.accel[1];				
+				podWorker->imuRawLast[2] = podWorker->biases.accel[2]-GRAVITY;				
+				podWorker->imuRawLast[0] = podWorker->biases.gyro[0];				
+				podWorker->imuRawLast[1] = podWorker->biases.gyro[1];
+				podWorker->imuRawLast[2] = podWorker->biases.gyro[2];	
+				*/
 				//set estimates to intial value
 				podWorker->stateVariances.orient[0] = 1.0;
 				podWorker->stateVariances.orient[1] = 0.0;				
@@ -227,7 +252,7 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 			}
 			else if (strcmp(podWorker->imuRawChannel.c_str(),"imuRawSim")==0)
 				{
-				printf("IMU calibration ok! Continuing...it's only simulated!\n");
+				printf("IMU calibration ok! Continuing...it's only simulated anyway!\n");
 			   	podWorker->isGotInitialFeatures == 1;
 				
 				podWorker->biases.accel[0] = 0.0;
@@ -237,7 +262,23 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 				podWorker->biases.gyro[0] = 0.0;
 				podWorker->biases.gyro[1] = 0.0;
 				podWorker->biases.gyro[2] = 0.0;
+
 				
+				//initial values for IIR-IMU filter 
+				podWorker->imuFiltered[0] = 0.0;
+				podWorker->imuFiltered[1] = 0.0;				
+				podWorker->imuFiltered[2] = -GRAVITY;				
+				podWorker->imuFiltered[0] = 0.0;				
+				podWorker->imuFiltered[1] = 0.0;
+				podWorker->imuFiltered[2] = 0.0;
+				/*
+				podWorker->imuRawLast[0] = 0.0;
+				podWorker->imuRawLast[1] = 0.0;				
+				podWorker->imuRawLast[2] = -GRAVITY;				
+				podWorker->imuRawLast[0] = 0.0;				
+				podWorker->imuRawLast[1] = 0.0;
+				podWorker->imuRawLast[2] = 0.0;	
+				*/
 				//set estimates to intial value
 				podWorker->stateVariances.orient[0] = 1.0;
 				podWorker->stateVariances.orient[1] = 0.0;				

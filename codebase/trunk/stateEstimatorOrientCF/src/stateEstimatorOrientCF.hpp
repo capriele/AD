@@ -5,6 +5,8 @@
 #include <math.h>
 
 
+#define IIRIMU 0.9
+
 class stateEstimatorOrientCF_t : public podBase_t {
   
 public: 
@@ -32,6 +34,8 @@ public:
    agile::stateVariances_t       stateVariances;
    std::string imuRawChannel;
    agile::imuRaw_t	 	biases;
+   //double imuRawLast[6];
+   double imuFiltered[6];
 };
 
 
