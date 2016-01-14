@@ -68,20 +68,26 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 					podWorker->resetPitchRollReference();
 					printf("Emergency issued!\n");  						
 					break;
-				case '7':
+				case '6':
 					podWorker->controlMode.controlMode = CMODE_PIDORIENT;					
 					podWorker->resetPitchRollReference();
-					printf("PIDOrient controller started, with ref. orient reset!\n");  						
+					printf("PIDOrient controller enabled, with ref. orient reset!\n");  						
+					break;
+				case '7':
+					podWorker->controlMode.controlMode =  CMODE_PIDPOSE;
+					podWorker->resetPitchRollReference();	
+					printf("PIDPosition controller enabled, with ref. orient reset!\n");					
 					break;
 				case '8':
-					podWorker->controlMode.controlMode =  CMODE_PIDPOSE;
-					printf("PIDPosition controller started, with ref. orient reset!\n");
+					podWorker->controlMode.controlMode =  CMODE_SOCORIENT;
 					podWorker->resetPitchRollReference();
+					printf("SOCOrient controller enabled, with ref. orient reset!\n");
 					break;
+
 				case '9':
-					podWorker->controlMode.controlMode =  CMODE_SOC;
+					podWorker->controlMode.controlMode =  CMODE_SOCPOSE;
 					podWorker->resetPitchRollReference();
-					printf("SOC controller started, with ref. orient reset!\n");
+					printf("SOCPOse controller enabled, with ref. orient reset!\n");
 					break;
 
 

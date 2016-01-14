@@ -1,4 +1,4 @@
-group "G1Simulation-TestOrientCF-startRemoteCSepaLast" {
+group "G1Simulation-TestOrientCF-startRemoteControllerSeparatelyLast" {
     cmd "simulatorG1" {
         auto_respawn = "true";
         exec = "simulator";
@@ -6,12 +6,16 @@ group "G1Simulation-TestOrientCF-startRemoteCSepaLast" {
     }
     cmd "testsenderG1" {
         auto_respawn = "true";
-        exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw stateEstimatorOrientV1 detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
+        exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw stateEstimatorOrientV1 detectorVis controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
     cmd "controllerPDOrientG1" {
         auto_respawn = "true";
         exec = "controllerPDOrient stateVariancesSim";
+        host = "ra-Desktop01";
+    }
+    cmd "controllerPDPoseG1" {
+        exec = "controllerPDPose stateVariancesSim";
         host = "ra-Desktop01";
     }
     cmd "watchdogG1" {
@@ -30,7 +34,7 @@ group "G1Simulation-TestOrientCF-startRemoteCSepaLast" {
     }
 }
 
-group "G2Simulation-FullSimOrientCF-startRemoteCSepaLast" {
+group "G2Simulation-FullSimOrientCF-startRemoteControllerSeparatelyLast" {
     cmd "stateEstimatorOrientG2" {
         exec = "stateEstimatorOrientCF imuRawSim";
         host = "ra-Desktop01";
@@ -39,8 +43,12 @@ group "G2Simulation-FullSimOrientCF-startRemoteCSepaLast" {
         exec = "simulator";
         host = "ra-Desktop01";
     }
+    cmd "controllerPDPoseG2" {
+        exec = "controllerPDPose stateVariancesSim";
+        host = "ra-Desktop01";
+    }
     cmd "testsenderG2" {
-        exec = "testsender imuAcquisitionStatus stateEstimatorOrientV1 imuAcquisitionImuRaw detectorVis controllerPDPose controllerSOCPose controllerSOCOrient";
+        exec = "testsender imuAcquisitionStatus stateEstimatorOrientV1 imuAcquisitionImuRaw detectorVis controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
     cmd "controllerPDOrientG2" {
@@ -57,7 +65,7 @@ group "G2Simulation-FullSimOrientCF-startRemoteCSepaLast" {
     }
 }
 
-group "G3TestOrientCF-mightstartWatchDogLast" {
+group "G3TestOrientCF-mightrestartWatchDogLast" {
     cmd "stateEstimatorOrientCFG3" {
         exec = "stateEstimatorOrientCF imuRaw";
         host = "ra-Desktop01";

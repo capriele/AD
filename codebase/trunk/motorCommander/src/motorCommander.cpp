@@ -46,9 +46,14 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		//@TODO add PID pose controller
 		podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDPose);
 		break;
-	  case CMODE_SOC:
-		//@TODO add SOC controller
-		printf("no SOC controller available, uses PD-orient!\n");
+	  case CMODE_SOCORIENT:
+		//@TODO add SOCOrient controller
+		printf("no SOCOrient controller available, uses PD-orient!\n");
+		podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDOrient);
+		break;
+	  case CMODE_SOCPOSE:
+		//@TODO add SOCPose controller
+		printf("no SOCPose controller available, uses PD-orient!\n");
 		podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDOrient);
 		break;
 	  } 	  
