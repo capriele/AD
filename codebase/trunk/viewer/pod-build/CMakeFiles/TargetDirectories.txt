@@ -1,3 +1,0 @@
-/home/ra/workspace/AgileDrones/codebase/trunk/viewer/pod-build/CMakeFiles/DT2NfmgBBMVodNV29coUATlmnL8GEJgt.dir
-/home/ra/workspace/AgileDrones/codebase/trunk/viewer/pod-build/src/renderers/CMakeFiles/renderers.dir
-/home/ra/workspace/AgileDrones/codebase/trunk/viewer/pod-build/src/CMakeFiles/viewer.dir

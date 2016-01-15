@@ -1,5 +1,0 @@
-/home/ra/workspace/AgileDrones/codebase/build/include/renderers/renderer_pose.h
-/home/ra/workspace/AgileDrones/codebase/build/lib/librenderers.so
-/home/ra/workspace/AgileDrones/codebase/build/lib/pkgconfig/renderers.pc
-/home/ra/workspace/AgileDrones/codebase/build/lib/pkgconfig/viewer.pc
-/home/ra/workspace/AgileDrones/codebase/build/bin/viewer
