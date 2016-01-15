@@ -1,7 +1,0 @@
-package agile;
-
-struct powerlimit_t {
-	int64_t timestampJetson;	
-
-	double limitPercent;
-}

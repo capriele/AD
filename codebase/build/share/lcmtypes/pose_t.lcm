@@ -1,9 +1,0 @@
-package agile;
-
-struct pose_t {
-	int64_t timestampJetson;	
-
-	double position[3];
-	double orient[4];
-	double variances[6][6];
-}

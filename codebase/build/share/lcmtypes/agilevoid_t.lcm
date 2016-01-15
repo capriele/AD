@@ -1,5 +1,0 @@
-package agile;
-
-struct agilevoid_t {
-int64_t test;
-}

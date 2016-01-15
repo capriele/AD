@@ -1,6 +1,0 @@
-package agile;
-
-struct statusDrone_t {
-	int64_t timestampJetson;
-	int16_t status;
-}

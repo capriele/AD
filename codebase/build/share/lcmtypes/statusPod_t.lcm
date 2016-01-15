@@ -1,7 +1,0 @@
-package agile;
-
-struct statusPod_t {
-	int64_t timestampJetson;
-	string podName;
-	int16_t status;
-}
