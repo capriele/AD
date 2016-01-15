@@ -71,7 +71,7 @@ void loop() {
       pwms[3] = t[4]-t[3];
       pwms[4] = t[6]-t[5];
       
-      // Serial.print(pwms[0]);Serial.print("\t");Serial.print(pwms[1]);Serial.print("\t");Serial.print(pwms[2]);Serial.print("\t");Serial.print(pwms[3]);Serial.print("\t");Serial.println(pwms[4]);
+       Serial.print(pwms[0]);Serial.print("\t");Serial.print(pwms[1]);Serial.print("\t");Serial.print(pwms[2]);Serial.print("\t");Serial.print(pwms[3]);Serial.print("\t");Serial.println(pwms[4]);
   
       delay(2);   //delay sincronize signals from serial with signals from receiver
       
@@ -137,6 +137,8 @@ void loop() {
       motor[2].write(throttle[2]);
       throttle[3] = map(pwms[3], 1000, 2000, 40, 140);
       motor[3].write(throttle[3]);
+    
+     Serial.print(throttle[0]);Serial.print("\t");Serial.print(throttle[1]);Serial.print("\t");Serial.print(throttle[2]);Serial.print("\t");Serial.println(throttle[3]);
     
   }
 }
