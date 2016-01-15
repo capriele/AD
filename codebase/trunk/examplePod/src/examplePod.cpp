@@ -120,7 +120,7 @@ int main (int argc, char** argv) {
   // 3) Subscribe this POD to channels
   podWorker.subscribe("testdata", 	CALLINTERVAL_TESTSENDER,  &(podWorker.testdata), 	&podBase_t::handleMessage<agile::pose_t>);
   podWorker.subscribe("statusTestsender",CALLINTERVAL_TESTSENDER, &(podWorker.statusTestsender), &podBase_t::handleMessage<agile::statusPod_t>);
-  //podWorker.subscribe("statusWatchdog",  CALLINTERVAL_WATCHDOG, &(podWorker.statusWatchdog),   &podBase_t::handleMessage<agile::statusPod_t>); // IMPORTANT -> POD is autosubscribed to this via constructor of Pod-base-class!
+  //podWorker.subscribe("statusWatchdog",  CALLINTERVAL_WATCHDOG, &(podWorker.statusWatchdog),   &podBase_t::handleMessage<agile::statusPod_t>); // IMPORTANT -> POD is autosubscribed to this (and statusDrone) via constructor of Pod-base-class!
 
   //podWorker.unsubscribe("statusTestsender"); //this is an example how to unsubscribe!
 
