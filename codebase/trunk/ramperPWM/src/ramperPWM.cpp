@@ -163,7 +163,7 @@ int main (int argc, char** argv) {
   /* General Infrastructure: setup (maintain this structure!)  */  
 
   // 1) Create the app
-  ramperPWM_t podWorker = ramperPWM_t("ramperPWM",CALLINTERVAL_RAMPERPWM); 	//provide your PODname here!  
+  ramperPWM_t podWorker = ramperPWM_t("ramperPWM",CALLINTERVAL_MOTORCOMMANDER); 	//provide your PODname here!  
   //Unsubscribe from autosubscribed channels
   podWorker.unsubscribe("statusWatchdog");
   podWorker.unsubscribe("statusDrone");
