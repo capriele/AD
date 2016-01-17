@@ -31,6 +31,7 @@ enum controlMode_t {CMODE_FATAL=-3,CMODE_CRITICAL,CMODE_NULL, CMODE_PIDORIENT, C
 enum statusDrone_t {DRONE_FATAL=-3, DRONE_CRITICAL, DRONE_WAITPODS, DRONE_IDLE, DRONE_TAKEOFF, DRONE_FLY};
 enum statusPod_t   {POD_FATAL=-3, POD_CRITICAL, POD_INITING, POD_OK};
 enum controllerAdjustmode_t   {CADJUSTMODE_NULL=0, CADJUSTMODE_P, CADJUSTMODE_D,CADJUSTMODE_BIAS};
+enum messageStatus_t   {MSGS_DEAD=-2, MSGS_LATE, MSGS_OK};
 
 using namespace std;
 
@@ -208,9 +209,10 @@ public:
   input: callInterval (of POD)
   output: boolean result of check
   */
-  bool checkMessagesUptodate()
+  messageStatus_t checkMessagesUptodate()
 	  {
 		bool allUptodate = true;
+		bool someMsgDeadlyLate = false;
 		int64_t currentTimestamp = GetTimeStamp();
 		int64_t updateDelta;
 
@@ -222,11 +224,19 @@ public:
 		  if (this->statusDrone.status == DRONE_WAITPODS) updateDelta = 0; //drone still waiting for all PODs to be up an running
 		  else		   updateDelta = currentTimestamp - iterator->second.timestampJetsonLastReceived;
 
-		   allUptodate = (updateDelta <  MAXAGEMSGS_X*iterator->second.receiveIntervalExpected*MS2US) ;	
-		   if (!allUptodate) printf("message -%s- delayed in POD -%s- at time %" PRId64"\n",iterator->first.c_str(),this->podName.c_str(), currentTimestamp);	
+		   allUptodate = (updateDelta <  MAXAGEMSGS_X*iterator->second.receiveIntervalExpected*MS2US) ;
+		   
+		   if (!allUptodate) 
+			{
+			printf("message -%s- delayed in POD -%s- at time %" PRId64"\n",iterator->first.c_str(),this->podName.c_str(), currentTimestamp);	
+			someMsgDeadlyLate = updateDelta >  DEADMSGDELAY_X*MAXAGEMSGS_X*iterator->second.receiveIntervalExpected*MS2US;
+			if (someMsgDeadlyLate) 	printf("message deadly delayed\n");			
+			}
 		    ++iterator;		    
 		}		
-	  return allUptodate;
+	  if (allUptodate) return MSGS_OK;
+	  else if (!someMsgDeadlyLate) return MSGS_LATE;
+	  else return MSGS_DEAD;
 	  };
 
 

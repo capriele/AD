@@ -13,12 +13,13 @@ public:
   //Pod-specific members to store received messages
   
   agile::stateVariances_t      stateVariances;
-  agile::imuRaw_t     imuRaw;
+  agile::imuRaw_t     	       imuRaw;
 
   agile::controlMode_t controlMode;
 
 
   agile::statusPod_t  statusImuAcquisition;
+  agile::statusPod_t  statusStateEstimatorOrientCF;
   agile::statusPod_t  statusStateEstimatorOrientV1;
   agile::statusPod_t  statusDetectorVis;
   agile::statusPod_t  statusRemoteController;

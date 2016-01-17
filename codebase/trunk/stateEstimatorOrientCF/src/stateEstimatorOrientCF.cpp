@@ -181,10 +181,14 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 						podWorker->computationInterval);
 		podWorker->statusPod.status = POD_FATAL;
  	  }
-	  else if (!podWorker->checkMessagesUptodate())
-	  {
+	   else if ( (podWorker->checkMessagesUptodate() == MSGS_LATE) )
+		{
 		podWorker->statusPod.status = POD_CRITICAL;
-	  }
+		}
+	   else if ( (podWorker->checkMessagesUptodate() == MSGS_DEAD) )
+		{
+		podWorker->statusPod.status = POD_FATAL;
+		}
 	  else
 	  {
 		if(podWorker->isGotInitialFeatures == -1){

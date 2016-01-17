@@ -37,11 +37,11 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
    	  //compute safety variables //@TODO replace this hardcoded mess: cycle through subscribed messages, check if .status available and then check that for ok/...
 	  agile::statusDrone_t statusDrone_old = podWorker->statusDrone;
 
-	  bool isSomePodCritical = ( (podWorker->statusPod.status==POD_CRITICAL) || (podWorker->statusImuAcquisition.status==POD_CRITICAL) || (podWorker->statusStateEstimatorOrientV1.status==POD_CRITICAL) || (podWorker->statusDetectorVis.status==POD_CRITICAL) || (podWorker->statusRemoteController.status==POD_CRITICAL) || (podWorker->statusControllerPDPose.status==POD_CRITICAL) || (podWorker->statusControllerPDOrient.status==POD_CRITICAL) || (podWorker->statusControllerSOCOrient.status==POD_CRITICAL) || (podWorker->statusControllerSOCPose.status==POD_CRITICAL) || (podWorker->statusMotorCommander.status==POD_CRITICAL) );
+	  bool isSomePodCritical = ( (podWorker->statusPod.status==POD_CRITICAL) || (podWorker->statusImuAcquisition.status==POD_CRITICAL) || (podWorker->statusStateEstimatorOrientV1.status==POD_CRITICAL) || (podWorker->statusStateEstimatorOrientCF.status==POD_CRITICAL) || (podWorker->statusDetectorVis.status==POD_CRITICAL) || (podWorker->statusRemoteController.status==POD_CRITICAL) || (podWorker->statusControllerPDPose.status==POD_CRITICAL) || (podWorker->statusControllerPDOrient.status==POD_CRITICAL) || (podWorker->statusControllerSOCOrient.status==POD_CRITICAL) || (podWorker->statusControllerSOCPose.status==POD_CRITICAL) || (podWorker->statusMotorCommander.status==POD_CRITICAL) );
 
-	  bool isSomePodFatal = ( (podWorker->statusPod.status==POD_FATAL) ||  (podWorker->statusImuAcquisition.status==POD_FATAL) || (podWorker->statusStateEstimatorOrientV1.status==POD_FATAL) || (podWorker->statusDetectorVis.status==POD_FATAL) || (podWorker->statusRemoteController.status==POD_FATAL) || (podWorker->statusControllerPDPose.status==POD_FATAL) || (podWorker->statusControllerPDOrient.status==POD_FATAL) || (podWorker->statusControllerSOCOrient.status==POD_FATAL) || (podWorker->statusControllerSOCPose.status==POD_FATAL) || (podWorker->statusMotorCommander.status==POD_FATAL) );
+	  bool isSomePodFatal = ( (podWorker->statusPod.status==POD_FATAL) ||  (podWorker->statusImuAcquisition.status==POD_FATAL) || (podWorker->statusStateEstimatorOrientV1.status==POD_FATAL) || (podWorker->statusStateEstimatorOrientV1.status==POD_FATAL) || (podWorker->statusDetectorVis.status==POD_FATAL) || (podWorker->statusRemoteController.status==POD_FATAL) || (podWorker->statusControllerPDPose.status==POD_FATAL) || (podWorker->statusControllerPDOrient.status==POD_FATAL) || (podWorker->statusControllerSOCOrient.status==POD_FATAL) || (podWorker->statusControllerSOCPose.status==POD_FATAL) || (podWorker->statusMotorCommander.status==POD_FATAL) );
 
-          bool isAllPodsOK = ( (podWorker->statusPod.status==POD_OK) &&  (podWorker->statusImuAcquisition.status==POD_OK) && (podWorker->statusStateEstimatorOrientV1.status==POD_OK) && (podWorker->statusDetectorVis.status==POD_OK) && (podWorker->statusRemoteController.status==POD_OK) && (podWorker->statusControllerPDPose.status==POD_OK) && (podWorker->statusControllerPDOrient.status==POD_OK) && (podWorker->statusControllerSOCOrient.status==POD_OK) && (podWorker->statusControllerSOCPose.status==POD_OK) && (podWorker->statusMotorCommander.status==POD_OK) );
+          bool isAllPodsOK = ( (podWorker->statusPod.status==POD_OK) &&  (podWorker->statusImuAcquisition.status==POD_OK) && (podWorker->statusStateEstimatorOrientV1.status==POD_OK) && (podWorker->statusStateEstimatorOrientCF.status==POD_OK) && (podWorker->statusDetectorVis.status==POD_OK) && (podWorker->statusRemoteController.status==POD_OK) && (podWorker->statusControllerPDPose.status==POD_OK) && (podWorker->statusControllerPDOrient.status==POD_OK) && (podWorker->statusControllerSOCOrient.status==POD_OK) && (podWorker->statusControllerSOCPose.status==POD_OK) && (podWorker->statusMotorCommander.status==POD_OK) );
 
           
 	  double yaw = 0.0;
@@ -180,9 +180,13 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 		printf("watchdog: delay occured of % " PRId64 "us!\n",podWorker->computationInterval);
 		podWorker->statusPod.status = POD_FATAL;
 		}
-	   else if ( (!podWorker->checkMessagesUptodate()) )
+	   else if ( (podWorker->checkMessagesUptodate() == MSGS_LATE) )
 		{
 		podWorker->statusPod.status = POD_CRITICAL;
+		}
+	   else if ( (podWorker->checkMessagesUptodate() == MSGS_DEAD) )
+		{
+		podWorker->statusPod.status = POD_FATAL;
 		}
 	   else
 		{
@@ -247,6 +251,7 @@ else if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesOrientV1"
 
   podWorker.subscribe("statusImuAcquisition",CALLINTERVAL_IMUACQUISITION,&(podWorker.statusImuAcquisition), &podBase_t::handleMessage<agile::statusPod_t>);
   podWorker.subscribe("statusStateEstimatorOrientV1",CALLINTERVAL_STATEESTIMATORORIENTV1,&(podWorker.statusStateEstimatorOrientV1), &podBase_t::handleMessage<agile::statusPod_t>);
+  podWorker.subscribe("statusStateEstimatorOrientCF",CALLINTERVAL_STATEESTIMATORORIENTCF,&(podWorker.statusStateEstimatorOrientCF), &podBase_t::handleMessage<agile::statusPod_t>);
   podWorker.subscribe("statusDetectorVis",CALLINTERVAL_DETECTORVIS,&(podWorker.statusDetectorVis), &podBase_t::handleMessage<agile::statusPod_t>);
   podWorker.subscribe("statusRemoteController",CALLINTERVAL_REMOTECONTROLLER,&(podWorker.statusRemoteController), &podBase_t::handleMessage<agile::statusPod_t>);
   podWorker.subscribe("statusControllerPDPose",CALLINTERVAL_CONTROLLERPDPOSE,&(podWorker.statusControllerPDPose), &podBase_t::handleMessage<agile::statusPod_t>);

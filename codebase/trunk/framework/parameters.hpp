@@ -80,6 +80,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 //multi-POD communication, timing
 #define MAXAGEMSGS_X 1.9  	 // stored message from a subscribed channel is considered out of date if age of last stored message is older than MAXAGEMSGS_X-times the expected receive interval of that message
 #define MS2US 1000		 // conversion us to ms
+#define DEADMSGDELAY_X 2	 // factor when delayed message is interpreted as sender POD probably being dead
 
 
 //SENSOR STUFF
