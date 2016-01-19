@@ -75,8 +75,8 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
                                         *   '<S5>/gyro_r_Gain'
                                         *   '<S5>/Saturation'
                                         *   '<S6>/VelocityToOpticalFlow_Gain'
+                                        *   '<S11>/Constant15'
                                         *   '<S7>/noiseWeights'
-                                        *   '<S15>/Constant'
                                         */
 
   {
@@ -143,9 +143,12 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
   0.0,                                 /* Expression: 0
                                         * Referenced by: '<S11>/Delay3'
                                         */
-  0.0,                                 /* Expression: 0
-                                        * Referenced by: '<S11>/Delay2'
-                                        */
+
+  /*  Expression: [0 0 0 0 0 0 0 0 0 0 0 0 200 -200 200 -200]
+   * Referenced by: '<S11>/Delay1'
+   */
+  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 200.0, -200.0,
+    200.0, -200.0 },
 
   /*  Expression: [0 0 -0.05 0 0 0 0 0 0 0 0 0]
    * Referenced by: '<S11>/Constant14'
@@ -232,8 +235,8 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
   1U,                                  /* Computed Parameter: Delay3_DelayLength
                                         * Referenced by: '<S11>/Delay3'
                                         */
-  1U,                                  /* Computed Parameter: Delay2_DelayLength
-                                        * Referenced by: '<S11>/Delay2'
+  1U,                                  /* Computed Parameter: Delay1_DelayLength
+                                        * Referenced by: '<S11>/Delay1'
                                         */
   1U,                                  /* Computed Parameter: Delay3_DelayLength_p
                                         * Referenced by: '<S6>/Delay3'
@@ -596,6 +599,7 @@ int main (int argc, char** argv) {
   SimulatorDrone_M->ModelData.defaultParam = &SimulatorDrone_P;
   SimulatorDrone_M->ModelData.blockIO = &SimulatorDrone_B;
   SimulatorDrone_M->ModelData.dwork = &SimulatorDrone_DW;
+
   /* Initialize model */
   SimulatorDrone_initialize(SimulatorDrone_M, SimulatorDrone_U_motorsPWM_datin,
     &SimulatorDrone_Y_X, &SimulatorDrone_Y_Y, &SimulatorDrone_Y_Z,

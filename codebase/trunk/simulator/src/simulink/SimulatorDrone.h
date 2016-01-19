@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3176
+ * Model version                  : 1.3219
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Jan 19 11:37:42 2016
+ * C/C++ source code generated on : Tue Jan 19 17:08:11 2016
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -53,19 +53,19 @@
 
 /* Block signals (auto storage) */
 typedef struct {
-  real_T DiscreteTimeIntegrator[12];   /* '<S11>/Discrete-Time Integrator' */
+  real_T DiscreteTimeIntegrator[16];   /* '<S11>/Discrete-Time Integrator' */
   real_T VelocityToOpticalFlow_Gain[3];/* '<S6>/VelocityToOpticalFlow_Gain' */
-  real_T dx[12];                       /* '<S11>/MATLAB Function' */
+  real_T dx[16];                       /* '<S11>/MATLAB Function' */
   real_T y[3];                         /* '<S5>/trafo_Body2World_trans' */
 } B_SimulatorDrone_T;
 
 /* Block states (auto storage) for system '<Root>' */
 typedef struct {
-  real_T Delay3_DSTATE[12];            /* '<S11>/Delay3' */
-  real_T Delay2_DSTATE;                /* '<S11>/Delay2' */
-  real_T DiscreteTimeIntegrator_DSTATE[12];/* '<S11>/Discrete-Time Integrator' */
+  real_T Delay3_DSTATE[16];            /* '<S11>/Delay3' */
+  real_T Delay1_DSTATE[16];            /* '<S11>/Delay1' */
+  real_T DiscreteTimeIntegrator_DSTATE[16];/* '<S11>/Discrete-Time Integrator' */
   real_T Delay3_DSTATE_b[3];           /* '<S6>/Delay3' */
-  real_T Delay2_DSTATE_m[8];           /* '<S5>/Delay2' */
+  real_T Delay2_DSTATE[8];             /* '<S5>/Delay2' */
   real_T NextOutput[12];               /* '<S10>/Random Number' */
   real_T TimeStampA;                   /* '<S5>/Derivative' */
   real_T LastUAtTimeA[3];              /* '<S5>/Derivative' */
@@ -92,8 +92,8 @@ struct P_SimulatorDrone_T_ {
                                         *   '<S5>/gyro_r_Gain'
                                         *   '<S5>/Saturation'
                                         *   '<S6>/VelocityToOpticalFlow_Gain'
+                                        *   '<S11>/Constant15'
                                         *   '<S7>/noiseWeights'
-                                        *   '<S15>/Constant'
                                         */
   struct_KIBNvBSKeP9vvISqfeQYGC quad;  /* Variable: quad
                                         * Referenced by:
@@ -124,8 +124,8 @@ struct P_SimulatorDrone_T_ {
   real_T Delay3_InitialCondition;      /* Expression: 0
                                         * Referenced by: '<S11>/Delay3'
                                         */
-  real_T Delay2_InitialCondition;      /* Expression: 0
-                                        * Referenced by: '<S11>/Delay2'
+  real_T Delay1_InitialCondition[16];  /* Expression: [0 0 0 0 0 0 0 0 0 0 0 0 200 -200 200 -200]
+                                        * Referenced by: '<S11>/Delay1'
                                         */
   real_T Constant14_Value[12];         /* Expression: [0 0 -0.05 0 0 0 0 0 0 0 0 0]
                                         * Referenced by: '<S11>/Constant14'
@@ -145,7 +145,7 @@ struct P_SimulatorDrone_T_ {
   real_T Assumestakeoffwaslevel_Bias[8];/* Expression: [0 0 quad.g 0 0 0 0 0]
                                          * Referenced by: '<S5>/Assumes takeoff was level'
                                          */
-  real_T Delay2_InitialCondition_p[8]; /* Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
+  real_T Delay2_InitialCondition[8];   /* Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
                                         * Referenced by: '<S5>/Delay2'
                                         */
   real_T RandomNumber_Mean;            /* Expression: 0
@@ -187,13 +187,13 @@ struct P_SimulatorDrone_T_ {
   uint32_T Delay3_DelayLength;         /* Computed Parameter: Delay3_DelayLength
                                         * Referenced by: '<S11>/Delay3'
                                         */
-  uint32_T Delay2_DelayLength;         /* Computed Parameter: Delay2_DelayLength
-                                        * Referenced by: '<S11>/Delay2'
+  uint32_T Delay1_DelayLength;         /* Computed Parameter: Delay1_DelayLength
+                                        * Referenced by: '<S11>/Delay1'
                                         */
   uint32_T Delay3_DelayLength_p;       /* Computed Parameter: Delay3_DelayLength_p
                                         * Referenced by: '<S6>/Delay3'
                                         */
-  uint32_T Delay2_DelayLength_p;       /* Expression: quadEDT.sensordelay
+  uint32_T Delay2_DelayLength;         /* Expression: quadEDT.sensordelay
                                         * Referenced by: '<S5>/Delay2'
                                         */
 };
@@ -289,9 +289,8 @@ extern void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const
  * '<S12>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/MATLAB Function'
  * '<S13>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/Compare To Constant'
  * '<S14>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/Compare To Constant1'
- * '<S15>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/Compare To Constant2'
- * '<S16>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/MATLAB Function'
- * '<S17>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/statetoout'
+ * '<S15>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/MATLAB Function'
+ * '<S16>'  : 'sim_quadrotor/SimulatorDrone/Drone_Dynamics/Dynamics/statetoout'
  */
 #endif                                 /* RTW_HEADER_SimulatorDrone_h_ */
 

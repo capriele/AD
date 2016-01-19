@@ -4,12 +4,12 @@
 
 //Controller parameters
 #define Py 0.08
-#define Pp 0.4
-#define Pr 0.4
+#define Pp 0.35
+#define Pr 0.35
 
 #define Dy 0.06
-#define Dp 0.05
-#define Dr 0.05
+#define Dp 0.07
+#define Dr 0.07
 
 
 //Geometry and Thrust coefficients for PDcontroller (transforming ref Torque into omega), from controlHelperParams.Q2Ts //@TODO Compute from params in params.hpp file not from matlab computation!
