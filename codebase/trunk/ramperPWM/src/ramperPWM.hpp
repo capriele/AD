@@ -2,6 +2,9 @@
 #define RAMPERPWM_H
 
 #include "../../framework/framework.hpp"
+#include "../../framework/paramsRamperPWM.hpp"
+
+
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>

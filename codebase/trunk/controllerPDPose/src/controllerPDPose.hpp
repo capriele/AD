@@ -4,14 +4,10 @@
 #include "../../framework/framework.hpp"
 
 //PDOrient-Controller parameters
-#include "../../controllerPDOrient/src/controllerPDOrientParams.hpp"
+#include "../../framework/paramsControllerPDOrient.hpp"
 
 //Position-loop Controller Parameters
-#define Pxy 0.03
-#define Dxy 0.05
-
-#define Pz 0 //@TODO put 4 here once there is an altitde estimate
-#define Dz 0 //@TODO put 3 here once there is an altitde estimate
+#include "../../framework/paramsControllerPDPose.hpp"
 
 
 class controllerPDPose_t : public podBase_t {

@@ -2,6 +2,7 @@
 #define MOTORCOMMANDER_H
 
 #include "../../framework/framework.hpp"
+#include "../../framework/paramsMotorCommander.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +40,7 @@ public:
 	//...	
 	this->fd = 0;
 	this->writeToArdStatus = 0;
-	this->portname = "/dev/ttyUSB0"; /* The IMU-Arduino is on /dev/ttyUSB0 */
+	this->portname = USBPORTMOTORS;
 	this->isWriteToArduino = false; 	
 	}
 

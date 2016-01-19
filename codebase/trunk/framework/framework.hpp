@@ -23,7 +23,7 @@ framework.hpp provides an abstract base class podBase_t to derive specific POD c
 #include <lcm/lcm-cpp.hpp>
 
 /* GENERAL PARAMETERS, potentially needed in multiple PODs */ 
- #include "parameters.hpp"
+ #include "params.hpp"
 
 /* MODES, FLAGS, ... */
 

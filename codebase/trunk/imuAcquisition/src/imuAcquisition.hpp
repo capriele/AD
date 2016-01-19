@@ -2,7 +2,7 @@
 #define IMUACQUISITION_H
 
 #include "../../framework/framework.hpp"
-
+#include "../../framework/paramsImuAcquisition.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +41,7 @@ public:
 	{	
 	//Pod-specific initialization
 	this->fd = 0;
-	this->portname = "/dev/ttyUSB0";
+	this->portname = USBPORTNAME_IMU;
 	this->statusCalib = -2;
 	this->starttimeCalib = 0;
 

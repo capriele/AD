@@ -4,7 +4,7 @@
 #include "../../framework/framework.hpp"
 
 //Controller parameters
-#include "../../controllerPDOrient/src/controllerPDOrientParams.hpp"
+#include "../../framework/paramsControllerPDOrient.hpp"
 
 class controllerSOCOrient_t : public podBase_t {
   
