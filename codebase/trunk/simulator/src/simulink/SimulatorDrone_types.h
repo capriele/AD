@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3154
+ * Model version                  : 1.3176
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Dec 15 16:40:04 2015
+ * C/C++ source code generated on : Tue Jan 19 11:37:42 2016
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -36,15 +36,15 @@ typedef struct {
 
 #endif
 
-#ifndef _DEFINED_TYPEDEF_FOR_struct_VPQGBSgQ2O0QCnh7txpJVD_
-#define _DEFINED_TYPEDEF_FOR_struct_VPQGBSgQ2O0QCnh7txpJVD_
+#ifndef _DEFINED_TYPEDEF_FOR_struct_95VAVvBkBJA0GNbz7i38n_
+#define _DEFINED_TYPEDEF_FOR_struct_95VAVvBkBJA0GNbz7i38n_
 
 typedef struct {
   real_T w2ToThrust_gain;
   real_T maxomega;
-  real_T aomega2topwm;
-  real_T bomega2topwm;
-  real_T comega2topwm;
+  real_T aomega2pwm;
+  real_T bomega2pwm;
+  real_T comega2pwm;
   real_T maxpwm;
   real_T motorTimeConstant;
   real_T noiseStatesSensed_std[12];
@@ -80,7 +80,7 @@ typedef struct {
   real_T motorFailure_m3;
   real_T motorFailure_m4;
   real_T motorUnknownGain_gain;
-} struct_VPQGBSgQ2O0QCnh7txpJVD;
+} struct_95VAVvBkBJA0GNbz7i38n;
 
 #endif
 

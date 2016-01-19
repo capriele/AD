@@ -15,16 +15,13 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 #define ZERORPMPWM 1000		//PWM value for no rotation of motors (0 RPM)
 #define MAXPWM 1900		//PWM max value
 #define IDLERPMPWM 1100		//PWM value to see motors spinning slowly
-/*
-#define AOMEGA2TOPWM 0.000275   //pwm = AOMEGA2TOPWM*(w)^2+COMEGA2TOPWM 
-#define COMEGA2TOPWM 1062 
-*/
-#define AOMEGA2TOPWM 0.0003852   //pwm = AOMEGA2TOPWM*(w-BOMEGA2TOPWM)^2+COMEGA2TOPWM
-#define BOMEGA2TOPWM 330.8 
-#define COMEGA2TOPWM 1113 
 
 
-#define ALPHAT 2.2e-6
+#define AW2PWM 2.6673e-4   //omega = sqrt((pwm-BPWM2W)/APWM2W)+CPWM2W :: pwm = AW2PWM*(w-CW2PWM)^2+BW2PWM
+#define BW2PWM 1009.0 
+#define CW2PWM -200.2 
+
+#define THRUST2OMEGA2 455390 // THRUST2OMEGA2=1/ALPHAT with ALPHAT 2.2e-6 //Thrust = ALPHAT*w^2 (w=rotational speed of motor in rad/s)
 
 #define TAKEOFFINTERVAL 1000	// time that drone is in takeoff mode after starting flight before transitioning to full flight mode [milliseconds]
 
@@ -56,7 +53,6 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 
 
 //CALLINTERVALS PODS: inverse rate at which glib mainloops of PODS are run [ms]
-#define MAXPODDELAY_X 1.8 	 // POD computation interval can take at max MAXPODDELAY_X-times the POD's callinterval before timeout (error) is issued
 
 #define CALLINTERVAL_DEFAULT 10
 #define CALLINTERVAL_EXAMPLEPOD 10
@@ -78,6 +74,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 
 
 //multi-POD communication, timing
+#define MAXPODDELAY_X 1.8 	 // POD computation interval can take at max MAXPODDELAY_X-times the POD's callinterval before timeout (error) is issued
 #define MAXAGEMSGS_X 1.9  	 // stored message from a subscribed channel is considered out of date if age of last stored message is older than MAXAGEMSGS_X-times the expected receive interval of that message
 #define MS2US 1000		 // conversion us to ms
 #define DEADMSGDELAY_X 2	 // factor when delayed message is interpreted as sender POD probably being dead

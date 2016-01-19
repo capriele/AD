@@ -135,13 +135,13 @@ quad.verbose = 0;
 quadEDT.w2ToThrust_gain = quad.Ct*quad.rho*quad.A*quad.r^2;
 
 quadEDT.maxomega = 1750;
-%Motors PWM pwm = AOMEGA2TOPWM*(w-BOMEGA2TOPWM)^2+COMEGA2TOPWM
-quadEDT.aomega2topwm = 0.0003852;
-quadEDT.bomega2topwm = 330.8;
-quadEDT.comega2topwm = 1113;
-quadEDT.maxpwm       = 1900;
+%Motors PWM pwm = aomega2pwm*(w-comega2pwm)^2+bomega2pwm
+quadEDT.aomega2pwm = 2.6673e-4;
+quadEDT.bomega2pwm = 1009.0;
+quadEDT.comega2pwm = -200.2;
+quadEDT.maxpwm = 1900;
 
-quadEDT.motorTimeConstant = 0.04;
+quadEDT.motorTimeConstant = 0.06;
 
 %% Sensors
 %Noise on all states from simulation

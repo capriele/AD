@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3154
+ * Model version                  : 1.3176
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Dec 15 16:40:04 2015
+ * C/C++ source code generated on : Tue Jan 19 11:37:42 2016
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -908,19 +908,19 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[0] <
-               SimulatorDrone_P->quadEDT.comega2topwm) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
+               SimulatorDrone_P->quadEDT.bomega2pwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.bomega2pwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[0];
     }
 
     /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
      *  Constant: '<S3>/Constant'
-     *  Constant: '<S3>/Constant2'
+     *  Constant: '<S3>/Constant1'
      *  Saturate: '<S3>/pwmSaturation'
      */
-    rtb_y[0] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.comega2topwm) /
-      SimulatorDrone_P->quadEDT.aomega2topwm;
+    rtb_y[0] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.bomega2pwm) /
+      SimulatorDrone_P->quadEDT.aomega2pwm;
 
     /* Saturate: '<S3>/pwmSaturation' incorporates:
      *  Inport: '<Root>/motorsPWM_datin'
@@ -929,19 +929,19 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[1] <
-               SimulatorDrone_P->quadEDT.comega2topwm) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
+               SimulatorDrone_P->quadEDT.bomega2pwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.bomega2pwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[1];
     }
 
     /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
      *  Constant: '<S3>/Constant'
-     *  Constant: '<S3>/Constant2'
+     *  Constant: '<S3>/Constant1'
      *  Saturate: '<S3>/pwmSaturation'
      */
-    rtb_y[1] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.comega2topwm) /
-      SimulatorDrone_P->quadEDT.aomega2topwm;
+    rtb_y[1] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.bomega2pwm) /
+      SimulatorDrone_P->quadEDT.aomega2pwm;
 
     /* Saturate: '<S3>/pwmSaturation' incorporates:
      *  Inport: '<Root>/motorsPWM_datin'
@@ -950,19 +950,19 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[2] <
-               SimulatorDrone_P->quadEDT.comega2topwm) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
+               SimulatorDrone_P->quadEDT.bomega2pwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.bomega2pwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[2];
     }
 
     /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
      *  Constant: '<S3>/Constant'
-     *  Constant: '<S3>/Constant2'
+     *  Constant: '<S3>/Constant1'
      *  Saturate: '<S3>/pwmSaturation'
      */
-    rtb_y[2] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.comega2topwm) /
-      SimulatorDrone_P->quadEDT.aomega2topwm;
+    rtb_y[2] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.bomega2pwm) /
+      SimulatorDrone_P->quadEDT.aomega2pwm;
 
     /* Saturate: '<S3>/pwmSaturation' incorporates:
      *  Inport: '<Root>/motorsPWM_datin'
@@ -971,8 +971,8 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     {
       rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.maxpwm;
     } else if (SimulatorDrone_U_motorsPWM_datin[3] <
-               SimulatorDrone_P->quadEDT.comega2topwm) {
-      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.comega2topwm;
+               SimulatorDrone_P->quadEDT.bomega2pwm) {
+      rtb_sincos_o1_idx_0 = SimulatorDrone_P->quadEDT.bomega2pwm;
     } else {
       rtb_sincos_o1_idx_0 = SimulatorDrone_U_motorsPWM_datin[3];
     }
@@ -983,16 +983,16 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
      *  Constant: '<S3>/Constant2'
      *  Saturate: '<S3>/pwmSaturation'
      */
-    rtb_y[3] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.comega2topwm) /
-      SimulatorDrone_P->quadEDT.aomega2topwm;
+    rtb_y[3] = (rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.bomega2pwm) /
+      SimulatorDrone_P->quadEDT.aomega2pwm;
     rtb_y[0] = sqrt(rtb_y[0]);
     rtb_y[1] = sqrt(rtb_y[1]);
     rtb_y[2] = sqrt(rtb_y[2]);
     rtb_y[3] = sqrt(rtb_y[3]);
-    rtb_y[0] += SimulatorDrone_P->quadEDT.bomega2topwm;
-    rtb_y[1] += SimulatorDrone_P->quadEDT.bomega2topwm;
-    rtb_y[2] += SimulatorDrone_P->quadEDT.bomega2topwm;
-    rtb_y[3] += SimulatorDrone_P->quadEDT.bomega2topwm;
+    rtb_y[0] += SimulatorDrone_P->quadEDT.comega2pwm;
+    rtb_y[1] += SimulatorDrone_P->quadEDT.comega2pwm;
+    rtb_y[2] += SimulatorDrone_P->quadEDT.comega2pwm;
+    rtb_y[3] += SimulatorDrone_P->quadEDT.comega2pwm;
 
     /* Gain: '<S3>/Directions' incorporates:
      *  Saturate: '<S3>/omegaSaturation'

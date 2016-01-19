@@ -9,11 +9,11 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
   {
     2.1959176351571146e-6,
     1750.0,
-    0.0003852,
-    330.8,
-    1113.0,
+    0.00026673,
+    1009.0,
+    -200.2,
     1900.0,
-    0.04,
+    0.06,
 
     { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0165195073635001, 0.0152648883285633,
       0.0215786550496705, 0.000652733165165932, 0.000721701528439517,
@@ -317,6 +317,7 @@ static real_T SimulatorDrone_Y_altitude_sonar;
 
 /* '<Root>/prs' */
 static real_T SimulatorDrone_Y_prs;
+
 
 /*
  * Associating rt_OneStep with a real-time clock or interrupt service routine

@@ -8,7 +8,7 @@ struct timeval tv;
 int16_t omegaToPwm(double omega)
 {
   //int pwm = (int)(AOMEGA2TOPWM*pow(omega,2)+COMEGA2TOPWM);
-  int pwm = ((int)((AOMEGA2TOPWM*pow((omega-BOMEGA2TOPWM),2)+COMEGA2TOPWM)/3)+0.5)*3; //@TODO put matching pwm discretization here //NOTE: +0.5 to make cast as semi-rounding procedure
+   int pwm = ((int)((AW2PWM*pow((omega-CW2PWM),2)+BW2PWM)/PWMDISCRSTEP)+0.5)*PWMDISCRSTEP;
 
   //PWM saturation	
   if (pwm>MAXPWM)     pwm = MAXPWM;

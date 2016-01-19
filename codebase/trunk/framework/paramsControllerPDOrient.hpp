@@ -12,13 +12,11 @@
 #define Dr 0.05
 
 
-//Geometry and Thrust coefficients for PDcontroller (transforming ref Torque into omega), from controlHelperParams.Q2Ts
+//Geometry and Thrust coefficients for PDcontroller (transforming ref Torque into omega), from controlHelperParams.Q2Ts //@TODO Compute from params in params.hpp file not from matlab computation!
 //F1 = aTotalThrust*TotalThrust + aTauyaw*TauYaw - aTauPR*TauPitch - aTauPR*TauRoll
 #define ATOTALTHRUST 0.25
 #define ATAUYAW 35.2669
 #define ATAUPR 2.1427
-
-#define THRUST2OMEGA2 455390
 
 
 #endif

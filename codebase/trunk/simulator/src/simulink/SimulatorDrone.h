@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3154
+ * Model version                  : 1.3176
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Dec 15 16:40:04 2015
+ * C/C++ source code generated on : Tue Jan 19 11:37:42 2016
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -78,23 +78,23 @@ typedef struct {
 
 /* Parameters (auto storage) */
 struct P_SimulatorDrone_T_ {
-  struct_VPQGBSgQ2O0QCnh7txpJVD quadEDT;/* Variable: quadEDT
-                                         * Referenced by:
-                                         *   '<S1>/sensordataCalib'
-                                         *   '<S3>/Constant'
-                                         *   '<S3>/Constant1'
-                                         *   '<S3>/Constant2'
-                                         *   '<S3>/omegaSaturation'
-                                         *   '<S3>/pwmSaturation'
-                                         *   '<S5>/accel_gain'
-                                         *   '<S5>/altToprs_gain'
-                                         *   '<S5>/gyro_pq_gain'
-                                         *   '<S5>/gyro_r_Gain'
-                                         *   '<S5>/Saturation'
-                                         *   '<S6>/VelocityToOpticalFlow_Gain'
-                                         *   '<S7>/noiseWeights'
-                                         *   '<S15>/Constant'
-                                         */
+  struct_95VAVvBkBJA0GNbz7i38n quadEDT;/* Variable: quadEDT
+                                        * Referenced by:
+                                        *   '<S1>/sensordataCalib'
+                                        *   '<S3>/Constant'
+                                        *   '<S3>/Constant1'
+                                        *   '<S3>/Constant2'
+                                        *   '<S3>/omegaSaturation'
+                                        *   '<S3>/pwmSaturation'
+                                        *   '<S5>/accel_gain'
+                                        *   '<S5>/altToprs_gain'
+                                        *   '<S5>/gyro_pq_gain'
+                                        *   '<S5>/gyro_r_Gain'
+                                        *   '<S5>/Saturation'
+                                        *   '<S6>/VelocityToOpticalFlow_Gain'
+                                        *   '<S7>/noiseWeights'
+                                        *   '<S15>/Constant'
+                                        */
   struct_KIBNvBSKeP9vvISqfeQYGC quad;  /* Variable: quad
                                         * Referenced by:
                                         *   '<S11>/Constant'
