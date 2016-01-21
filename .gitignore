@@ -31,4 +31,7 @@ simulation/MIT_MatlabToolbox/trunk/matlab/Simulation/SimulatorDrone_ert_shrlib_r
 simulation/MIT_MatlabToolbox/trunk/matlab/Simulation/slprj/
 codebase/trunk/simulator/src/simulink/ert_main.c
 CMakeFiles/
+CMakeCache.txt
+codebase_lowlevel/vision/recording/Makefile
+codebase_lowlevel/vision/locator/camera
 *.*.autosave
