@@ -144,19 +144,26 @@ static P_SimulatorDrone_T SimulatorDrone_P = {
                                         * Referenced by: '<S11>/Delay3'
                                         */
 
-  /*  Expression: [0 0 0 0 0 0 0 0 0 0 0 0 200 -200 200 -200]
+  /*  Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
    * Referenced by: '<S11>/Delay1'
    */
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 200.0, -200.0,
-    200.0, -200.0 },
+  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
 
-  /*  Expression: [0 0 -0.05 0 0 0 0 0 0 0 0 0]
+  /*  Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
    * Referenced by: '<S11>/Constant14'
    */
-  { 0.0, 0.0, -0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
-  0.005,                               /* Computed Parameter: DiscreteTimeIntegrator_gainval
-                                        * Referenced by: '<S11>/Discrete-Time Integrator'
+  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+  0.005,                               /* Computed Parameter: IntPosestates_gainval
+                                        * Referenced by: '<S11>/IntPosestates'
                                         */
+  0.005,                               /* Computed Parameter: IntMotors_gainval
+                                        * Referenced by: '<S11>/IntMotors'
+                                        */
+
+  /*  Expression: [10 -10 10 -10]
+   * Referenced by: '<S11>/IntMotors'
+   */
+  { 10.0, -10.0, 10.0, -10.0 },
   0.5,                                 /* Expression: 0.5
                                         * Referenced by: '<S4>/1//2'
                                         */
@@ -320,8 +327,6 @@ static real_T SimulatorDrone_Y_altitude_sonar;
 
 /* '<Root>/prs' */
 static real_T SimulatorDrone_Y_prs;
-
-
 /*
  * Associating rt_OneStep with a real-time clock or interrupt service routine
  * is what makes the generated code "real-time".  The function rt_OneStep is

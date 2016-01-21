@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3219
+ * Model version                  : 1.3236
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Jan 19 17:08:11 2016
+ * C/C++ source code generated on : Thu Jan 21 14:45:11 2016
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -383,11 +383,12 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     real_T R[9];
     static const int8_T b[3] = { 0, 0, 1 };
 
+    real_T rtb_RandomNumber[12];
     real_T rtb_sys[16];
     real_T rtb_u[3];
     real_T rtb_Product;
     real_T rtb_Add_p[8];
-    real_T rtb_RandomNumber[12];
+    real_T rtb_TmpSignalConversionAtSFunct[16];
     int32_T i;
     real_T tmp[3];
     real_T tmp_0[9];
@@ -405,7 +406,6 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     real_T rtb_acc_Word_idx_1;
     real_T rtb_sincos_o1_idx_2;
     real_T rtb_acc_Word_idx_2;
-    real_T tmp_7;
     real_T rtb_y_idx_0;
     real_T rtb_y_idx_1;
     real_T rtb_y_idx_2;
@@ -413,57 +413,53 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     /* Clock: '<S11>/Clock' */
     rtb_Clock = SimulatorDrone_M->Timing.t[0];
 
+    /* Delay: '<S11>/Delay1' */
+    memcpy(&rtb_RandomNumber[0], &SimulatorDrone_DW->Delay1_DSTATE[0], 12U *
+           sizeof(real_T));
+
     /* Logic: '<S11>/Logical Operator' incorporates:
      *  Constant: '<S13>/Constant'
      *  Constant: '<S14>/Constant'
-     *  Delay: '<S11>/Delay1'
      *  Delay: '<S11>/Delay3'
      *  RelationalOperator: '<S13>/Compare'
      *  RelationalOperator: '<S14>/Compare'
      */
-    rtb_LogicalOperator = ((SimulatorDrone_DW->Delay3_DSTATE[8] >=
-      SimulatorDrone_P->CompareToConstant1_const) &&
-      (SimulatorDrone_DW->Delay1_DSTATE[2] >=
-       SimulatorDrone_P->CompareToConstant_const));
+    rtb_LogicalOperator = ((SimulatorDrone_DW->Delay3_DSTATE[8] >
+      SimulatorDrone_P->CompareToConstant1_const) && (rtb_RandomNumber[2] >=
+      SimulatorDrone_P->CompareToConstant_const));
+    for (i = 0; i < 12; i++) {
+      /* DiscreteIntegrator: '<S11>/IntPosestates' incorporates:
+       *  Constant: '<S11>/Constant14'
+       */
+      if (rtb_LogicalOperator ||
+          (SimulatorDrone_DW->IntPosestates_PrevResetState != 0)) {
+        SimulatorDrone_DW->IntPosestates_DSTATE[i] =
+          SimulatorDrone_P->Constant14_Value[i];
+      }
 
-    /* DiscreteIntegrator: '<S11>/Discrete-Time Integrator' incorporates:
-     *  Constant: '<S11>/Constant14'
-     *  Delay: '<S11>/Delay1'
+      SimulatorDrone_B->IntPosestates[i] =
+        SimulatorDrone_DW->IntPosestates_DSTATE[i];
+
+      /* End of DiscreteIntegrator: '<S11>/IntPosestates' */
+
+      /* SignalConversion: '<S16>/TmpSignal ConversionAt SFunction Inport2' incorporates:
+       *  MATLAB Function: '<S11>/statetoout'
+       */
+      rtb_TmpSignalConversionAtSFunct[i] = SimulatorDrone_B->IntPosestates[i];
+    }
+
+    /* SignalConversion: '<S16>/TmpSignal ConversionAt SFunction Inport2' incorporates:
+     *  DiscreteIntegrator: '<S11>/IntMotors'
+     *  MATLAB Function: '<S11>/statetoout'
      */
-    if (SimulatorDrone_DW->DiscreteTimeIntegrator_IC_LOADI != 0) {
-      memcpy(&SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[0],
-             &SimulatorDrone_P->Constant14_Value[0], 12U * sizeof(real_T));
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[12] =
-        SimulatorDrone_DW->Delay1_DSTATE[12];
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[13] =
-        SimulatorDrone_DW->Delay1_DSTATE[13];
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[14] =
-        SimulatorDrone_DW->Delay1_DSTATE[14];
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[15] =
-        SimulatorDrone_DW->Delay1_DSTATE[15];
-    }
+    rtb_TmpSignalConversionAtSFunct[12] = SimulatorDrone_DW->IntMotors_DSTATE[0];
+    rtb_TmpSignalConversionAtSFunct[13] = SimulatorDrone_DW->IntMotors_DSTATE[1];
+    rtb_TmpSignalConversionAtSFunct[14] = SimulatorDrone_DW->IntMotors_DSTATE[2];
+    rtb_TmpSignalConversionAtSFunct[15] = SimulatorDrone_DW->IntMotors_DSTATE[3];
 
-    if (rtb_LogicalOperator ||
-        (SimulatorDrone_DW->DiscreteTimeIntegrator_PrevRese != 0)) {
-      memcpy(&SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[0],
-             &SimulatorDrone_P->Constant14_Value[0], 12U * sizeof(real_T));
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[12] =
-        SimulatorDrone_DW->Delay1_DSTATE[12];
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[13] =
-        SimulatorDrone_DW->Delay1_DSTATE[13];
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[14] =
-        SimulatorDrone_DW->Delay1_DSTATE[14];
-      SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[15] =
-        SimulatorDrone_DW->Delay1_DSTATE[15];
-    }
-
-    memcpy(&SimulatorDrone_B->DiscreteTimeIntegrator[0],
-           &SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[0], sizeof(real_T) <<
-           4U);
-
-    /* End of DiscreteIntegrator: '<S11>/Discrete-Time Integrator' */
-
-    /* MATLAB Function: '<S11>/statetoout' */
+    /* MATLAB Function: '<S11>/statetoout' incorporates:
+     *  DiscreteIntegrator: '<S11>/IntMotors'
+     */
     /* MATLAB Function 'SimulatorDrone/Drone_Dynamics/Dynamics/statetoout': '<S16>:1' */
     /* ============================================================== */
     /*  mdlOutputs */
@@ -508,56 +504,56 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     /* sys = [x(1:6); iW*x(7:9);  iW*x(10:12)]; */
     /* sys = x; */
     /*  End of mdlOutputs. */
-    tmp_0[0] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[4]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    tmp_0[3] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) - cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    tmp_0[6] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) + sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    tmp_0[1] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[4]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    tmp_0[4] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) + cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    tmp_0[7] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) - sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    tmp_0[2] = -sin(SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    tmp_0[5] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    tmp_0[8] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
+    tmp_0[0] = cos(rtb_TmpSignalConversionAtSFunct[4]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    tmp_0[3] = sin(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]) - cos
+      (rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    tmp_0[6] = cos(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]) + sin
+      (rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    tmp_0[1] = cos(rtb_TmpSignalConversionAtSFunct[4]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    tmp_0[4] = sin(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]) + cos
+      (rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    tmp_0[7] = cos(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]) - sin
+      (rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    tmp_0[2] = -sin(rtb_TmpSignalConversionAtSFunct[4]);
+    tmp_0[5] = sin(rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[4]);
+    tmp_0[8] = cos(rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[4]);
     SimulatorDrone_inv_a(tmp_0, tmp_1);
     for (i_0 = 0; i_0 < 3; i_0++) {
-      tmp_2[i_0] = tmp_1[i_0 + 6] * SimulatorDrone_B->DiscreteTimeIntegrator[8]
-        + (tmp_1[i_0 + 3] * SimulatorDrone_B->DiscreteTimeIntegrator[7] +
-           tmp_1[i_0] * SimulatorDrone_B->DiscreteTimeIntegrator[6]);
+      tmp_2[i_0] = tmp_1[i_0 + 6] * rtb_TmpSignalConversionAtSFunct[8] +
+        (tmp_1[i_0 + 3] * rtb_TmpSignalConversionAtSFunct[7] + tmp_1[i_0] *
+         rtb_TmpSignalConversionAtSFunct[6]);
     }
 
     for (i_0 = 0; i_0 < 6; i_0++) {
-      rtb_sys[i_0] = SimulatorDrone_B->DiscreteTimeIntegrator[i_0];
+      rtb_sys[i_0] = rtb_TmpSignalConversionAtSFunct[i_0];
     }
 
     rtb_sys[6] = tmp_2[0];
     rtb_sys[7] = tmp_2[1];
     rtb_sys[8] = tmp_2[2];
-    rtb_sys[9] = SimulatorDrone_B->DiscreteTimeIntegrator[9];
-    rtb_sys[10] = SimulatorDrone_B->DiscreteTimeIntegrator[10];
-    rtb_sys[11] = SimulatorDrone_B->DiscreteTimeIntegrator[11];
-    rtb_sys[12] = SimulatorDrone_B->DiscreteTimeIntegrator[12];
-    rtb_sys[13] = SimulatorDrone_B->DiscreteTimeIntegrator[13];
-    rtb_sys[14] = SimulatorDrone_B->DiscreteTimeIntegrator[14];
-    rtb_sys[15] = SimulatorDrone_B->DiscreteTimeIntegrator[15];
+    rtb_sys[9] = rtb_TmpSignalConversionAtSFunct[9];
+    rtb_sys[10] = rtb_TmpSignalConversionAtSFunct[10];
+    rtb_sys[11] = rtb_TmpSignalConversionAtSFunct[11];
+    rtb_sys[12] = SimulatorDrone_DW->IntMotors_DSTATE[0];
+    rtb_sys[13] = SimulatorDrone_DW->IntMotors_DSTATE[1];
+    rtb_sys[14] = SimulatorDrone_DW->IntMotors_DSTATE[2];
+    rtb_sys[15] = SimulatorDrone_DW->IntMotors_DSTATE[3];
 
     /* Outport: '<Root>/X' */
     *SimulatorDrone_Y_X = rtb_sys[0];
@@ -627,17 +623,17 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     /* Outport: '<Root>/p' incorporates:
      *  MATLAB Function: '<S11>/statetoout'
      */
-    *SimulatorDrone_Y_p = SimulatorDrone_B->DiscreteTimeIntegrator[9];
+    *SimulatorDrone_Y_p = rtb_TmpSignalConversionAtSFunct[9];
 
     /* Outport: '<Root>/q' incorporates:
      *  MATLAB Function: '<S11>/statetoout'
      */
-    *SimulatorDrone_Y_q = SimulatorDrone_B->DiscreteTimeIntegrator[10];
+    *SimulatorDrone_Y_q = rtb_TmpSignalConversionAtSFunct[10];
 
     /* Outport: '<Root>/r' incorporates:
      *  MATLAB Function: '<S11>/statetoout'
      */
-    *SimulatorDrone_Y_r = SimulatorDrone_B->DiscreteTimeIntegrator[11];
+    *SimulatorDrone_Y_r = rtb_TmpSignalConversionAtSFunct[11];
 
     /* Outport: '<Root>/opticalFlow_datout' incorporates:
      *  Delay: '<S6>/Delay3'
@@ -823,7 +819,7 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
      *  Constant: '<S5>/gravity'
      *  MATLAB Function: '<S5>/trafo_World2Body_trans'
      */
-    tmp_7 = SimulatorDrone_P->gravity_Value[0] + rtb_acc_Word_idx_0;
+    rtb_Product = SimulatorDrone_P->gravity_Value[0] + rtb_acc_Word_idx_0;
     rtb_sincos_o1_idx_1 = SimulatorDrone_P->gravity_Value[1] +
       rtb_acc_Word_idx_1;
     rtb_sincos_o1_idx_0 = SimulatorDrone_P->gravity_Value[2] +
@@ -834,7 +830,7 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
      */
     for (i_0 = 0; i_0 < 3; i_0++) {
       tmp_5[i_0] = tmp_4[i_0 + 6] * rtb_sincos_o1_idx_0 + (tmp_4[i_0 + 3] *
-        rtb_sincos_o1_idx_1 + tmp_4[i_0] * tmp_7);
+        rtb_sincos_o1_idx_1 + tmp_4[i_0] * rtb_Product);
     }
 
     /* SignalConversion: '<S5>/TmpSignal ConversionAtDelay2Inport1' incorporates:
@@ -887,14 +883,14 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
      *  MATLAB Function: '<S11>/statetoout'
      */
     rtb_acc_Word_idx_2 = SimulatorDrone_P->Gain1_Gain[1] *
-      SimulatorDrone_B->DiscreteTimeIntegrator[10] * rtb_Product;
+      rtb_TmpSignalConversionAtSFunct[10] * rtb_Product;
 
     /* Product: '<S6>/Product' incorporates:
      *  Gain: '<S6>/Gain1'
      *  MATLAB Function: '<S11>/statetoout'
      */
     rtb_Product *= SimulatorDrone_P->Gain1_Gain[0] *
-      SimulatorDrone_B->DiscreteTimeIntegrator[9];
+      rtb_TmpSignalConversionAtSFunct[9];
 
     /* Gain: '<S6>/VelocityToOpticalFlow_Gain' incorporates:
      *  MATLAB Function: '<S11>/statetoout'
@@ -1003,6 +999,24 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     rtb_y = sqrt((rtb_sincos_o1_idx_0 - SimulatorDrone_P->quadEDT.bomega2pwm) /
                  SimulatorDrone_P->quadEDT.aomega2pwm) +
       SimulatorDrone_P->quadEDT.comega2pwm;
+    for (i = 0; i < 12; i++) {
+      /* SignalConversion: '<S15>/TmpSignal ConversionAt SFunction Inport2' incorporates:
+       *  MATLAB Function: '<S11>/MATLAB Function'
+       */
+      rtb_TmpSignalConversionAtSFunct[i] = SimulatorDrone_B->IntPosestates[i];
+
+      /* MATLAB Function: '<S11>/MATLAB Function' */
+      rtb_RandomNumber[i] = 0.0;
+    }
+
+    /* SignalConversion: '<S15>/TmpSignal ConversionAt SFunction Inport2' incorporates:
+     *  DiscreteIntegrator: '<S11>/IntMotors'
+     *  MATLAB Function: '<S11>/MATLAB Function'
+     */
+    rtb_TmpSignalConversionAtSFunct[12] = SimulatorDrone_DW->IntMotors_DSTATE[0];
+    rtb_TmpSignalConversionAtSFunct[13] = SimulatorDrone_DW->IntMotors_DSTATE[1];
+    rtb_TmpSignalConversionAtSFunct[14] = SimulatorDrone_DW->IntMotors_DSTATE[2];
+    rtb_TmpSignalConversionAtSFunct[15] = SimulatorDrone_DW->IntMotors_DSTATE[3];
 
     /* MATLAB Function: '<S11>/MATLAB Function' incorporates:
      *  Constant: '<S11>/Constant1'
@@ -1019,6 +1033,7 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
      *  Constant: '<S11>/Constant7'
      *  Constant: '<S11>/Constant8'
      *  Constant: '<S11>/Constant9'
+     *  DiscreteIntegrator: '<S11>/IntMotors'
      *  Gain: '<S3>/Directions'
      *  Saturate: '<S3>/omegaSaturation'
      */
@@ -1068,8 +1083,6 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     rtb_Product = 0.70710678118654757 * SimulatorDrone_P->quad.d;
 
     /* '<S15>:1:45' */
-    memset(&rtb_RandomNumber[0], 0, 12U * sizeof(real_T));
-
     /* '<S15>:1:47' */
     D[0] = rtb_Product;
     D[1] = -rtb_Product;
@@ -1116,35 +1129,35 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     /*  rotz(phi)*roty(the)*rotx(psi) */
     /* BBF > Inertial rotation matrix */
     /* '<S15>:1:78' */
-    R[0] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[4]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    R[3] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) - cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    R[6] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) + sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    R[1] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[4]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    R[4] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) + cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    R[7] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]) - sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[3]);
-    R[2] = -sin(SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    R[5] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    R[8] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
+    R[0] = cos(rtb_TmpSignalConversionAtSFunct[4]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    R[3] = sin(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]) - cos
+      (rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    R[6] = cos(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]) + sin
+      (rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    R[1] = cos(rtb_TmpSignalConversionAtSFunct[4]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    R[4] = sin(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]) + cos
+      (rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    R[7] = cos(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]) * sin
+      (rtb_TmpSignalConversionAtSFunct[3]) - sin
+      (rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[3]);
+    R[2] = -sin(rtb_TmpSignalConversionAtSFunct[4]);
+    R[5] = sin(rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[4]);
+    R[8] = cos(rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[4]);
 
     /* Manual Construction */
     /*      Q3 = [cos(phi) -sin(phi) 0;sin(phi) cos(phi) 0;0 0 1];   % RZ %Rotation mappings */
@@ -1155,7 +1168,7 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     /*     RZ * RY * RX */
     /* inverted Wronskian (body rates p-q-r to euler rates yaw pitch roll) */
     /* '<S15>:1:90' */
-    rtb_acc_Word_idx_1 = cos(SimulatorDrone_B->DiscreteTimeIntegrator[4]);
+    rtb_acc_Word_idx_1 = cos(rtb_TmpSignalConversionAtSFunct[4]);
 
     /* ROTOR MODEL */
     /* '<S15>:1:95' */
@@ -1166,21 +1179,19 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
       /* '<S15>:1:98' */
       SimulatorDrone_inv(R, tmp_0);
       for (i_0 = 0; i_0 < 3; i_0++) {
-        tmp_2[i_0] = tmp_0[i_0 + 6] * SimulatorDrone_B->DiscreteTimeIntegrator[8]
-          + (tmp_0[i_0 + 3] * SimulatorDrone_B->DiscreteTimeIntegrator[7] +
-             tmp_0[i_0] * SimulatorDrone_B->DiscreteTimeIntegrator[6]);
+        tmp_2[i_0] = tmp_0[i_0 + 6] * rtb_TmpSignalConversionAtSFunct[8] +
+          (tmp_0[i_0 + 3] * rtb_TmpSignalConversionAtSFunct[7] + tmp_0[i_0] *
+           rtb_TmpSignalConversionAtSFunct[6]);
       }
 
-      rtb_u[0] = (D[i * 3 + 2] * SimulatorDrone_B->DiscreteTimeIntegrator[10] -
-                  D[i * 3 + 1] * SimulatorDrone_B->DiscreteTimeIntegrator[11]) +
-        tmp_2[0];
-      rtb_u[1] = (D[i * 3] * SimulatorDrone_B->DiscreteTimeIntegrator[11] - D[i *
-                  3 + 2] * SimulatorDrone_B->DiscreteTimeIntegrator[9]) + tmp_2
-        [1];
+      rtb_u[0] = (D[i * 3 + 2] * rtb_TmpSignalConversionAtSFunct[10] - D[i * 3 +
+                  1] * rtb_TmpSignalConversionAtSFunct[11]) + tmp_2[0];
+      rtb_u[1] = (D[i * 3] * rtb_TmpSignalConversionAtSFunct[11] - D[i * 3 + 2] *
+                  rtb_TmpSignalConversionAtSFunct[9]) + tmp_2[1];
 
       /* '<S15>:1:99' */
       rtb_Product = sqrt(rtb_u[0] * rtb_u[0] + rtb_u[1] * rtb_u[1]) / (fabs
-        (SimulatorDrone_B->DiscreteTimeIntegrator[i + 12]) * rtb_sincos_o1_idx_0);
+        (rtb_TmpSignalConversionAtSFunct[i + 12]) * rtb_sincos_o1_idx_0);
 
       /* Magnitude of mu, planar components */
       /* '<S15>:1:100' */
@@ -1197,33 +1208,32 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
       /* '<S15>:1:108' */
       /* sign(w) * (4/3)*((Ct/sigma)*(2*mu*gamma/3/a)/(1+3*e/2/r) + li)/(1+mu^2/2)]; %Lattitudinal flapping (note sign) */
       /* '<S15>:1:110' */
-      tmp_7 = ((2.6666666666666665 * SimulatorDrone_P->quad.theta0 + 2.0 *
-                SimulatorDrone_P->quad.theta1) * rtb_Product - ((D[i * 3 + 1] *
-                 SimulatorDrone_B->DiscreteTimeIntegrator[9] - D[i * 3] *
-                 SimulatorDrone_B->DiscreteTimeIntegrator[10]) + tmp_2[2]) /
-               (fabs(SimulatorDrone_B->DiscreteTimeIntegrator[i + 12]) *
-                rtb_sincos_o1_idx_0) * 2.0 * rtb_Product) / (1.0 - rtb_Product *
-        rtb_Product / 2.0);
+      rtb_Product = ((2.6666666666666665 * SimulatorDrone_P->quad.theta0 + 2.0 *
+                      SimulatorDrone_P->quad.theta1) * rtb_Product - ((D[i * 3 +
+        1] * rtb_TmpSignalConversionAtSFunct[9] - D[i * 3] *
+        rtb_TmpSignalConversionAtSFunct[10]) + tmp_2[2]) / (fabs
+        (rtb_TmpSignalConversionAtSFunct[i + 12]) * rtb_sincos_o1_idx_0) * 2.0 *
+                     rtb_Product) / (1.0 - rtb_Product * rtb_Product / 2.0);
 
       /* Rotate the beta flapping angles to longitudinal and lateral coordinates. */
       /* '<S15>:1:111' */
-      a1s[i] = (cos(rtb_acc_Word_idx_2) * tmp_7 + sin(rtb_acc_Word_idx_2) * 0.0)
-        - 16.0 / rtb_sincos_o1_idx_1 / fabs
-        (SimulatorDrone_B->DiscreteTimeIntegrator[i + 12]) *
-        SimulatorDrone_B->DiscreteTimeIntegrator[10];
+      a1s[i] = (cos(rtb_acc_Word_idx_2) * rtb_Product + sin(rtb_acc_Word_idx_2) *
+                0.0) - 16.0 / rtb_sincos_o1_idx_1 / fabs
+        (rtb_TmpSignalConversionAtSFunct[i + 12]) *
+        rtb_TmpSignalConversionAtSFunct[10];
 
       /* '<S15>:1:112' */
-      b1s[i] = (-sin(rtb_acc_Word_idx_2) * tmp_7 + cos(rtb_acc_Word_idx_2) * 0.0)
-        - 16.0 / rtb_sincos_o1_idx_1 / fabs
-        (SimulatorDrone_B->DiscreteTimeIntegrator[i + 12]) *
-        SimulatorDrone_B->DiscreteTimeIntegrator[9];
+      b1s[i] = (-sin(rtb_acc_Word_idx_2) * rtb_Product + cos(rtb_acc_Word_idx_2)
+                * 0.0) - 16.0 / rtb_sincos_o1_idx_1 / fabs
+        (rtb_TmpSignalConversionAtSFunct[i + 12]) *
+        rtb_TmpSignalConversionAtSFunct[9];
 
       /* Forces and torques */
       /* '<S15>:1:115' */
       rtb_Product = SimulatorDrone_P->quad.Ct * rtb_sincos_o1_idx_2 *
         rtb_acc_Word_idx_0 * (rtb_sincos_o1_idx_0 * rtb_sincos_o1_idx_0) *
-        (SimulatorDrone_B->DiscreteTimeIntegrator[i + 12] *
-         SimulatorDrone_B->DiscreteTimeIntegrator[i + 12]);
+        (rtb_TmpSignalConversionAtSFunct[i + 12] *
+         rtb_TmpSignalConversionAtSFunct[i + 12]);
       i_0 = 1 + i;
       rtb_RandomNumber[3 * (i_0 - 1)] = -cos(b1s[i]) * sin(a1s[i]) * rtb_Product;
       rtb_RandomNumber[1 + 3 * (i_0 - 1)] = rtb_Product * sin(b1s[i]);
@@ -1234,8 +1244,8 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
       /* '<S15>:1:116' */
       rtb_Product = -SimulatorDrone_P->quad.Cq * rtb_sincos_o1_idx_2 *
         rtb_acc_Word_idx_0 * rt_powd_snf(rtb_sincos_o1_idx_0, 3.0) *
-        SimulatorDrone_B->DiscreteTimeIntegrator[i + 12] * fabs
-        (SimulatorDrone_B->DiscreteTimeIntegrator[i + 12]);
+        rtb_TmpSignalConversionAtSFunct[i + 12] * fabs
+        (rtb_TmpSignalConversionAtSFunct[i + 12]);
       i_0 = 1 + i;
       Q[3 * (i_0 - 1)] = rtb_Product * 0.0;
       Q[1 + 3 * (i_0 - 1)] = rtb_Product * 0.0;
@@ -1263,10 +1273,9 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     /* '<S15>:1:126' */
     for (i_0 = 0; i_0 < 3; i_0++) {
       rtb_u[i_0] = SimulatorDrone_P->quad.J[i_0 + 6] *
-        SimulatorDrone_B->DiscreteTimeIntegrator[11] + (SimulatorDrone_P->
-        quad.J[i_0 + 3] * SimulatorDrone_B->DiscreteTimeIntegrator[10] +
-        SimulatorDrone_P->quad.J[i_0] * SimulatorDrone_B->
-        DiscreteTimeIntegrator[9]);
+        rtb_TmpSignalConversionAtSFunct[11] + (SimulatorDrone_P->quad.J[i_0 + 3]
+        * rtb_TmpSignalConversionAtSFunct[10] + SimulatorDrone_P->quad.J[i_0] *
+        rtb_TmpSignalConversionAtSFunct[9]);
     }
 
     /* row sum of torques */
@@ -1281,37 +1290,34 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     SimulatorDrone_sum(tau, tmp_5);
     SimulatorDrone_sum(Q, tmp);
     tmp_6[0] = 0.0;
-    tmp_6[3] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]);
-    tmp_6[6] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]);
+    tmp_6[3] = sin(rtb_TmpSignalConversionAtSFunct[5]);
+    tmp_6[6] = cos(rtb_TmpSignalConversionAtSFunct[5]);
     tmp_6[1] = 0.0;
-    tmp_6[4] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    tmp_6[7] = -sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * cos
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    tmp_6[2] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    tmp_6[5] = sin(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
-    tmp_6[8] = cos(SimulatorDrone_B->DiscreteTimeIntegrator[5]) * sin
-      (SimulatorDrone_B->DiscreteTimeIntegrator[4]);
+    tmp_6[4] = cos(rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[4]);
+    tmp_6[7] = -sin(rtb_TmpSignalConversionAtSFunct[5]) * cos
+      (rtb_TmpSignalConversionAtSFunct[4]);
+    tmp_6[2] = cos(rtb_TmpSignalConversionAtSFunct[4]);
+    tmp_6[5] = sin(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]);
+    tmp_6[8] = cos(rtb_TmpSignalConversionAtSFunct[5]) * sin
+      (rtb_TmpSignalConversionAtSFunct[4]);
     for (i_0 = 0; i_0 < 3; i_0++) {
       tmp_1[3 * i_0] = tmp_6[3 * i_0] / rtb_acc_Word_idx_1;
       tmp_1[1 + 3 * i_0] = tmp_6[3 * i_0 + 1] / rtb_acc_Word_idx_1;
       tmp_1[2 + 3 * i_0] = tmp_6[3 * i_0 + 2] / rtb_acc_Word_idx_1;
     }
 
-    tmp_7 = (-(SimulatorDrone_B->DiscreteTimeIntegrator[10] * rtb_u[2] -
-               SimulatorDrone_B->DiscreteTimeIntegrator[11] * rtb_u[1]) + tmp_5
-             [0]) + tmp[0];
-    rtb_sincos_o1_idx_1 = (-(SimulatorDrone_B->DiscreteTimeIntegrator[11] *
-      rtb_u[0] - SimulatorDrone_B->DiscreteTimeIntegrator[9] * rtb_u[2]) +
-      tmp_5[1]) + tmp[1];
-    rtb_sincos_o1_idx_0 = (-(SimulatorDrone_B->DiscreteTimeIntegrator[9] *
-      rtb_u[1] - SimulatorDrone_B->DiscreteTimeIntegrator[10] * rtb_u[0]) +
-      tmp_5[2]) + tmp[2];
+    rtb_sincos_o1_idx_0 = (-(rtb_TmpSignalConversionAtSFunct[10] * rtb_u[2] -
+      rtb_TmpSignalConversionAtSFunct[11] * rtb_u[1]) + tmp_5[0]) + tmp[0];
+    rtb_sincos_o1_idx_1 = (-(rtb_TmpSignalConversionAtSFunct[11] * rtb_u[0] -
+      rtb_TmpSignalConversionAtSFunct[9] * rtb_u[2]) + tmp_5[1]) + tmp[1];
+    rtb_sincos_o1_idx_2 = (-(rtb_TmpSignalConversionAtSFunct[9] * rtb_u[1] -
+      rtb_TmpSignalConversionAtSFunct[10] * rtb_u[0]) + tmp_5[2]) + tmp[2];
     for (i_0 = 0; i_0 < 3; i_0++) {
-      tmp_5[i_0] = tmp_1[i_0 + 6] * SimulatorDrone_B->DiscreteTimeIntegrator[11]
-        + (tmp_1[i_0 + 3] * SimulatorDrone_B->DiscreteTimeIntegrator[10] +
-           tmp_1[i_0] * SimulatorDrone_B->DiscreteTimeIntegrator[9]);
+      tmp_5[i_0] = tmp_1[i_0 + 6] * rtb_TmpSignalConversionAtSFunct[11] +
+        (tmp_1[i_0 + 3] * rtb_TmpSignalConversionAtSFunct[10] + tmp_1[i_0] *
+         rtb_TmpSignalConversionAtSFunct[9]);
     }
 
     for (i_0 = 0; i_0 < 3; i_0++) {
@@ -1321,13 +1327,13 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     }
 
     for (i_0 = 0; i_0 < 3; i_0++) {
-      tmp_2[i_0] = tmp_0[i_0 + 6] * rtb_sincos_o1_idx_0 + (tmp_0[i_0 + 3] *
-        rtb_sincos_o1_idx_1 + tmp_0[i_0] * tmp_7);
+      tmp_2[i_0] = tmp_0[i_0 + 6] * rtb_sincos_o1_idx_2 + (tmp_0[i_0 + 3] *
+        rtb_sincos_o1_idx_1 + tmp_0[i_0] * rtb_sincos_o1_idx_0);
     }
 
-    SimulatorDrone_B->dx[0] = SimulatorDrone_B->DiscreteTimeIntegrator[6];
-    SimulatorDrone_B->dx[1] = SimulatorDrone_B->DiscreteTimeIntegrator[7];
-    SimulatorDrone_B->dx[2] = SimulatorDrone_B->DiscreteTimeIntegrator[8];
+    SimulatorDrone_B->dx[0] = rtb_TmpSignalConversionAtSFunct[6];
+    SimulatorDrone_B->dx[1] = rtb_TmpSignalConversionAtSFunct[7];
+    SimulatorDrone_B->dx[2] = rtb_TmpSignalConversionAtSFunct[8];
     SimulatorDrone_B->dx[3] = tmp_5[0];
     SimulatorDrone_B->dx[4] = tmp_5[1];
     SimulatorDrone_B->dx[5] = tmp_5[2];
@@ -1346,8 +1352,7 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     }
 
     SimulatorDrone_B->dx[12] = (SimulatorDrone_P->Directions_Gain[0] *
-      rtb_y_idx_0 - SimulatorDrone_B->DiscreteTimeIntegrator[12]) *
-      rtb_acc_Word_idx_2;
+      rtb_y_idx_0 - SimulatorDrone_DW->IntMotors_DSTATE[0]) * rtb_acc_Word_idx_2;
     if (rtb_y_idx_1 > SimulatorDrone_P->quadEDT.maxomega) {
       rtb_y_idx_1 = SimulatorDrone_P->quadEDT.maxomega;
     } else {
@@ -1357,8 +1362,7 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     }
 
     SimulatorDrone_B->dx[13] = (SimulatorDrone_P->Directions_Gain[1] *
-      rtb_y_idx_1 - SimulatorDrone_B->DiscreteTimeIntegrator[13]) *
-      rtb_acc_Word_idx_2;
+      rtb_y_idx_1 - SimulatorDrone_DW->IntMotors_DSTATE[1]) * rtb_acc_Word_idx_2;
     if (rtb_y_idx_2 > SimulatorDrone_P->quadEDT.maxomega) {
       rtb_y_idx_2 = SimulatorDrone_P->quadEDT.maxomega;
     } else {
@@ -1368,8 +1372,7 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     }
 
     SimulatorDrone_B->dx[14] = (SimulatorDrone_P->Directions_Gain[2] *
-      rtb_y_idx_2 - SimulatorDrone_B->DiscreteTimeIntegrator[14]) *
-      rtb_acc_Word_idx_2;
+      rtb_y_idx_2 - SimulatorDrone_DW->IntMotors_DSTATE[2]) * rtb_acc_Word_idx_2;
     if (rtb_y > SimulatorDrone_P->quadEDT.maxomega) {
       rtb_y = SimulatorDrone_P->quadEDT.maxomega;
     } else {
@@ -1379,37 +1382,42 @@ void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M,
     }
 
     SimulatorDrone_B->dx[15] = (SimulatorDrone_P->Directions_Gain[3] * rtb_y -
-      SimulatorDrone_B->DiscreteTimeIntegrator[15]) * rtb_acc_Word_idx_2;
-
-    /* End of MATLAB Function: '<S11>/MATLAB Function' */
+      SimulatorDrone_DW->IntMotors_DSTATE[3]) * rtb_acc_Word_idx_2;
   }
 
   {
     real_T (*lastU)[3];
     int32_T i;
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < 12; i++) {
       /* Update for Delay: '<S11>/Delay3' */
       SimulatorDrone_DW->Delay3_DSTATE[i] = SimulatorDrone_B->dx[i];
 
       /* Update for Delay: '<S11>/Delay1' */
-      SimulatorDrone_DW->Delay1_DSTATE[i] =
-        SimulatorDrone_B->DiscreteTimeIntegrator[i];
+      SimulatorDrone_DW->Delay1_DSTATE[i] = SimulatorDrone_B->IntPosestates[i];
     }
 
-    /* Update for DiscreteIntegrator: '<S11>/Discrete-Time Integrator' */
-    SimulatorDrone_DW->DiscreteTimeIntegrator_IC_LOADI = 0U;
+    /* Update for DiscreteIntegrator: '<S11>/IntPosestates' */
     if (!rtb_LogicalOperator) {
-      for (i = 0; i < 16; i++) {
-        SimulatorDrone_DW->DiscreteTimeIntegrator_DSTATE[i] +=
-          SimulatorDrone_P->DiscreteTimeIntegrator_gainval *
-          SimulatorDrone_B->dx[i];
+      for (i = 0; i < 12; i++) {
+        SimulatorDrone_DW->IntPosestates_DSTATE[i] +=
+          SimulatorDrone_P->IntPosestates_gainval * SimulatorDrone_B->dx[i];
       }
     }
 
-    SimulatorDrone_DW->DiscreteTimeIntegrator_PrevRese = (int8_T)
+    SimulatorDrone_DW->IntPosestates_PrevResetState = (int8_T)
       rtb_LogicalOperator;
 
-    /* End of Update for DiscreteIntegrator: '<S11>/Discrete-Time Integrator' */
+    /* End of Update for DiscreteIntegrator: '<S11>/IntPosestates' */
+
+    /* Update for DiscreteIntegrator: '<S11>/IntMotors' */
+    SimulatorDrone_DW->IntMotors_DSTATE[0] +=
+      SimulatorDrone_P->IntMotors_gainval * SimulatorDrone_B->dx[12];
+    SimulatorDrone_DW->IntMotors_DSTATE[1] +=
+      SimulatorDrone_P->IntMotors_gainval * SimulatorDrone_B->dx[13];
+    SimulatorDrone_DW->IntMotors_DSTATE[2] +=
+      SimulatorDrone_P->IntMotors_gainval * SimulatorDrone_B->dx[14];
+    SimulatorDrone_DW->IntMotors_DSTATE[3] +=
+      SimulatorDrone_P->IntMotors_gainval * SimulatorDrone_B->dx[15];
 
     /* Update for Delay: '<S6>/Delay3' */
     SimulatorDrone_DW->Delay3_DSTATE_b[0] =
@@ -1567,7 +1575,7 @@ void SimulatorDrone_initialize(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M
     int32_T t;
     real_T y1;
     int32_T i;
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < 12; i++) {
       /* InitializeConditions for Delay: '<S11>/Delay3' */
       SimulatorDrone_DW->Delay3_DSTATE[i] =
         SimulatorDrone_P->Delay3_InitialCondition;
@@ -1575,11 +1583,22 @@ void SimulatorDrone_initialize(RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M
       /* InitializeConditions for Delay: '<S11>/Delay1' */
       SimulatorDrone_DW->Delay1_DSTATE[i] =
         SimulatorDrone_P->Delay1_InitialCondition[i];
+
+      /* InitializeConditions for DiscreteIntegrator: '<S11>/IntPosestates' incorporates:
+       *  Start for Constant: '<S11>/Constant14'
+       */
+      SimulatorDrone_DW->IntPosestates_DSTATE[i] =
+        SimulatorDrone_P->Constant14_Value[i];
     }
 
-    /* InitializeConditions for DiscreteIntegrator: '<S11>/Discrete-Time Integrator' */
-    SimulatorDrone_DW->DiscreteTimeIntegrator_IC_LOADI = 1U;
-    SimulatorDrone_DW->DiscreteTimeIntegrator_PrevRese = 0;
+    /* InitializeConditions for DiscreteIntegrator: '<S11>/IntPosestates' */
+    SimulatorDrone_DW->IntPosestates_PrevResetState = 0;
+
+    /* InitializeConditions for DiscreteIntegrator: '<S11>/IntMotors' */
+    SimulatorDrone_DW->IntMotors_DSTATE[0] = SimulatorDrone_P->IntMotors_IC[0];
+    SimulatorDrone_DW->IntMotors_DSTATE[1] = SimulatorDrone_P->IntMotors_IC[1];
+    SimulatorDrone_DW->IntMotors_DSTATE[2] = SimulatorDrone_P->IntMotors_IC[2];
+    SimulatorDrone_DW->IntMotors_DSTATE[3] = SimulatorDrone_P->IntMotors_IC[3];
 
     /* InitializeConditions for Delay: '<S6>/Delay3' */
     SimulatorDrone_DW->Delay3_DSTATE_b[0] =

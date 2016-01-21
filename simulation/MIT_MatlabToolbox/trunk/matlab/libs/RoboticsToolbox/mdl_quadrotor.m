@@ -208,4 +208,6 @@ quadEDT.motorFailure_m2             = 0;
 quadEDT.motorFailure_m3             = -30;
 quadEDT.motorFailure_m4             = 20;
 
+
+
 quadEDT.motorUnknownGain_gain       = 1; %amplifies the TF from motors_datin (command 0-500) to acutal rotor speed (rad/s) used in the simulation; use as "model uncertainty"

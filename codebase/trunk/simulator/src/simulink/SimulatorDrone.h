@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3219
+ * Model version                  : 1.3236
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Tue Jan 19 17:08:11 2016
+ * C/C++ source code generated on : Thu Jan 21 14:45:11 2016
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -53,7 +53,7 @@
 
 /* Block signals (auto storage) */
 typedef struct {
-  real_T DiscreteTimeIntegrator[16];   /* '<S11>/Discrete-Time Integrator' */
+  real_T IntPosestates[12];            /* '<S11>/IntPosestates' */
   real_T VelocityToOpticalFlow_Gain[3];/* '<S6>/VelocityToOpticalFlow_Gain' */
   real_T dx[16];                       /* '<S11>/MATLAB Function' */
   real_T y[3];                         /* '<S5>/trafo_Body2World_trans' */
@@ -61,9 +61,10 @@ typedef struct {
 
 /* Block states (auto storage) for system '<Root>' */
 typedef struct {
-  real_T Delay3_DSTATE[16];            /* '<S11>/Delay3' */
-  real_T Delay1_DSTATE[16];            /* '<S11>/Delay1' */
-  real_T DiscreteTimeIntegrator_DSTATE[16];/* '<S11>/Discrete-Time Integrator' */
+  real_T Delay3_DSTATE[12];            /* '<S11>/Delay3' */
+  real_T Delay1_DSTATE[12];            /* '<S11>/Delay1' */
+  real_T IntPosestates_DSTATE[12];     /* '<S11>/IntPosestates' */
+  real_T IntMotors_DSTATE[4];          /* '<S11>/IntMotors' */
   real_T Delay3_DSTATE_b[3];           /* '<S6>/Delay3' */
   real_T Delay2_DSTATE[8];             /* '<S5>/Delay2' */
   real_T NextOutput[12];               /* '<S10>/Random Number' */
@@ -72,8 +73,7 @@ typedef struct {
   real_T TimeStampB;                   /* '<S5>/Derivative' */
   real_T LastUAtTimeB[3];              /* '<S5>/Derivative' */
   uint32_T RandSeed[12];               /* '<S10>/Random Number' */
-  int8_T DiscreteTimeIntegrator_PrevRese;/* '<S11>/Discrete-Time Integrator' */
-  uint8_T DiscreteTimeIntegrator_IC_LOADI;/* '<S11>/Discrete-Time Integrator' */
+  int8_T IntPosestates_PrevResetState; /* '<S11>/IntPosestates' */
 } DW_SimulatorDrone_T;
 
 /* Parameters (auto storage) */
@@ -124,15 +124,21 @@ struct P_SimulatorDrone_T_ {
   real_T Delay3_InitialCondition;      /* Expression: 0
                                         * Referenced by: '<S11>/Delay3'
                                         */
-  real_T Delay1_InitialCondition[16];  /* Expression: [0 0 0 0 0 0 0 0 0 0 0 0 200 -200 200 -200]
+  real_T Delay1_InitialCondition[12];  /* Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
                                         * Referenced by: '<S11>/Delay1'
                                         */
-  real_T Constant14_Value[12];         /* Expression: [0 0 -0.05 0 0 0 0 0 0 0 0 0]
+  real_T Constant14_Value[12];         /* Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
                                         * Referenced by: '<S11>/Constant14'
                                         */
-  real_T DiscreteTimeIntegrator_gainval;/* Computed Parameter: DiscreteTimeIntegrator_gainval
-                                         * Referenced by: '<S11>/Discrete-Time Integrator'
-                                         */
+  real_T IntPosestates_gainval;        /* Computed Parameter: IntPosestates_gainval
+                                        * Referenced by: '<S11>/IntPosestates'
+                                        */
+  real_T IntMotors_gainval;            /* Computed Parameter: IntMotors_gainval
+                                        * Referenced by: '<S11>/IntMotors'
+                                        */
+  real_T IntMotors_IC[4];              /* Expression: [10 -10 10 -10]
+                                        * Referenced by: '<S11>/IntMotors'
+                                        */
   real_T u_Gain;                       /* Expression: 0.5
                                         * Referenced by: '<S4>/1//2'
                                         */

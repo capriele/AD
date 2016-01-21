@@ -122,7 +122,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				case 'j': podWorker->poseRef.orientEuler[2] -=  STEPSPITCHROLL; break;
 				case 'l': podWorker->poseRef.orientEuler[2] +=  STEPSPITCHROLL; break;
 				case 'i': podWorker->poseRef.orientEuler[1] -=  STEPSPITCHROLL; break;
-				case 'st': podWorker->poseRef.orientEuler[1] +=  STEPSPITCHROLL; break;
+				case 'k': podWorker->poseRef.orientEuler[1] +=  STEPSPITCHROLL; break;
 				case 'a': podWorker->poseRef.orientEuler[0] -=  STEPSYAW; break;
 				case 'd': podWorker->poseRef.orientEuler[0] +=  STEPSYAW; break;
 			
@@ -138,7 +138,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				} //end switch
 
 				//When pitch roll was controlled, set controlMode to orient control of pitch roll reference angle exists
-				if ( (podWorker->controlMode.controlMode > CMODE_NULL) && ((ch=='j')||(ch=='l')||(ch=='i')||(ch=='st')) )
+				if ( (podWorker->controlMode.controlMode > CMODE_NULL) && ((ch=='j')||(ch=='l')||(ch=='i')||(ch=='k')) )
 					{
 					if (    (podWorker->controlMode.controlMode !=  CMODE_PIDORIENT) &&  ((abs(podWorker->poseRef.orientEuler[1])>EPSREMOTE) || (abs(podWorker->poseRef.orientEuler[2])>EPSREMOTE))    )
 						{
@@ -172,7 +172,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				case 'j': crement(&(podWorker->powerAdjust.rBiasPDO), -STEPSRBIASPDO, MINRBIASPDO, MAXRBIASPDO); break;
 				case 'l': crement(&(podWorker->powerAdjust.rBiasPDO), +STEPSRBIASPDO, MINRBIASPDO, MAXRBIASPDO); break;
 				case 'i': crement(&(podWorker->powerAdjust.pBiasPDO), -STEPSPBIASPDO, MINPBIASPDO, MAXPBIASPDO); break;
-				case 'st': crement(&(podWorker->powerAdjust.pBiasPDO), +STEPSPBIASPDO, MINPBIASPDO, MAXPBIASPDO); break;
+				case 'k': crement(&(podWorker->powerAdjust.pBiasPDO), +STEPSPBIASPDO, MINPBIASPDO, MAXPBIASPDO); break;
 				case 'a': crement(&(podWorker->powerAdjust.yBiasPDO), -STEPSYBIASPDO, MINYBIASPDO, MAXYBIASPDO); break;
 				case 'd': crement(&(podWorker->powerAdjust.yBiasPDO), +STEPSYBIASPDO, MINYBIASPDO, MAXYBIASPDO); break;
 			
@@ -212,7 +212,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				case 'j': crement(&(podWorker->powerAdjust.prAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'l': crement(&(podWorker->powerAdjust.prAdjustPDO), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'i': crement(&(podWorker->powerAdjust.ppAdjustPDO), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
-				case 'st': crement(&(podWorker->powerAdjust.ppAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+				case 'k': crement(&(podWorker->powerAdjust.ppAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'a': crement(&(podWorker->powerAdjust.pyAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'd': crement(&(podWorker->powerAdjust.pyAdjustPDO), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 			
@@ -252,7 +252,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				case 'j': crement(&(podWorker->powerAdjust.drAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'l': crement(&(podWorker->powerAdjust.drAdjustPDO), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'i': crement(&(podWorker->powerAdjust.dpAdjustPDO), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
-				case 'st': crement(&(podWorker->powerAdjust.dpAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
+				case 'k': crement(&(podWorker->powerAdjust.dpAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'a': crement(&(podWorker->powerAdjust.dyAdjustPDO), -STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 				case 'd': crement(&(podWorker->powerAdjust.dyAdjustPDO), +STEPSPDGAINADJUST, MINPDGAINADJUST, MAXPDGAINADJUST); break;
 			

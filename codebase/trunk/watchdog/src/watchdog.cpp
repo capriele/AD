@@ -281,7 +281,8 @@ else if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesOrientV1"
   guint timerComputations = g_timeout_add (podWorker.callInterval, podBase_t::gtimerfuncComputations, (gpointer)&podWorker);  
   guint timerStatusPod =    g_timeout_add (podWorker.callInterval, podBase_t::gtimerfuncStatusPod,    (gpointer)&podWorker);	
 
-  printf("Initializing...DONE \n");	  
+  printf("Initializing...DONE \n"); 
+  printf("Drone waiting for all PODs to be ok ... \n");	  	  
 
   g_main_loop_run (mainloop);
 
