@@ -30,4 +30,5 @@ codebase/libbot2/trunk/bot2-procman/python/src/bot_procman/build_prefix.py
 simulation/MIT_MatlabToolbox/trunk/matlab/Simulation/SimulatorDrone_ert_shrlib_rtw/
 simulation/MIT_MatlabToolbox/trunk/matlab/Simulation/slprj/
 codebase/trunk/simulator/src/simulink/ert_main.c
+CMakeFiles/
 *.*.autosave
