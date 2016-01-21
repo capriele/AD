@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
     else if (argc>=3)
 	{
 	isStoreResult = atoi(argv[1]);
-	isDraw = atoi(argv[1]);
+	isDraw = atoi(argv[2]);
 	cout<<"store results: "<<isStoreResult<<" :: draw: "<<isDraw<<endl;
 	};
 
@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
 	{
 	isImgFromFile = true;
 	frame_max = 504; 	//@TODO make flexible
-	string imagesPath = argv[2];
+	string imagesPath = argv[3];
 	cout<<"Pull images from: "<<imagesPath<<endl;
 	}
    else cout<<"Camera needs to be plug in!"<<endl<<endl;
@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
     double dHeight = 1024; //get the height of frames of the video
     Size frameSize(static_cast<int>(dWidth), static_cast<int>(dHeight));
 
-    if (!isStoreResult)	
+    if (isStoreResult)	
 	{
     	VideoWriter video ;
     	video.open("/home/ubuntu/video2.avi",-1, 20, frameSize, true); //initialize the VideoWriter object 
