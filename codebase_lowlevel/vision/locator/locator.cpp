@@ -158,48 +158,94 @@ int main(int argc, char** argv) {
     distCoeffs.at<double>(4) = -5.7843596847939704e-001;
     Mat rvec(3, 1, cv::DataType<double>::type);
     Mat tvec(3, 1, cv::DataType<double>::type);
-
+    pgr2cv::VideoCapture cap;
 
     Mat src, gray_src, gray,drawing;
     int thresh_up = 123;//90
     int thresh_low = 0;//0
     int frame_trackbar=1;
     int frame;
+    int frame_max = 1; 
 
-    pgr2cv::VideoCapture cap;
-    cap.open(0);
+    //Check if from camera or from file (if file, provide folder as call argument)
+    bool isImgFromFile = false;
+    bool isStoreResult = false;
+    bool isDraw = false;
+	
+
+    if (argc<3)	
+	{
+	cout<<"Please provide flag if want to write result to disk and if want to draw or not (e.g. './locator 0 1')!"<<endl;
+	return -1;
+	}
+
+    else if (argc>=3)
+	{
+	isStoreResult = atoi(argv[1]);
+	isDraw = atoi(argv[1]);
+	cout<<"store results: "<<isStoreResult<<" :: draw: "<<isDraw<<endl;
+	};
+
+    if (argc>=4)
+	{
+	isImgFromFile = true;
+	frame_max = 504; 	//@TODO make flexible
+	string imagesPath = argv[2];
+	cout<<"Pull images from: "<<imagesPath<<endl;
+	}
+   else cout<<"Camera needs to be plug in!"<<endl<<endl;
+
+
+    //Camera handler
+    if (!isImgFromFile)
+	{    
+	
+    	cap.open(0);
+	}
+
     double dWidth = 1280; //get the width of frames of the video
     double dHeight = 1024; //get the height of frames of the video
     Size frameSize(static_cast<int>(dWidth), static_cast<int>(dHeight));
-    VideoWriter video ;
-    //video.open("C:\\Users\\Guivenca\\Desktop\\AT\\video2.avi",-1, 20, frameSize, true); //initialize the VideoWriter object 
+
+    if (!isStoreResult)	
+	{
+    	VideoWriter video ;
+    	video.open("/home/ubuntu/video2.avi",-1, 20, frameSize, true); //initialize the VideoWriter object 
+	if(!video.isOpened() ){
+        	cout<<"could not open video"<<endl;
+        	return -1;
+    		}
+	}
     
-    /*
-    if(!video.isOpened() ){
-        cout<<"could not open video"<<endl;
-        return -1;
-    }
-     */
-	while(true){
-    //while (waitKey(10) <0) {
-    //for(int frame=1;frame<=504;frame++){
+while ((!isImgFromFile) || (waitKey(10) <0) ) {
+
+    for(int frame=1;frame<=frame_max;frame++){
 	pgr2cv::update_FPS(time(NULL));
-        cap>>gray_src;
-/*
-        //frame=frame_trackbar;
-        if(frame<1) frame=1;
-        ostringstream convert;
-        convert<<"C:\\Users\\Guivenca\\Desktop\\AT\\whiteboard test\\img-"<<frame<<".jpg";        
-        string file=convert.str();
-        src=imread(file);
-        cout<<"frame "<<frame<<endl;
-        cvtColor(src, gray_src, CV_BGR2GRAY);   
-   */   
+        
+	
+        if (isImgFromFile) 
+		{
+		frame=frame_trackbar;
+		if(frame<1) frame=1;
+		ostringstream convert;
+		//convert<<"C:\\Users\\ubuntu\\Desktop\\whiteboard test\\img-"<<frame<<".jpg";
+		convert<<"/home/ubuntu/Desktop/whiteboard_test/img-"<<frame<<".jpg";                
+		string file=convert.str();	
+		src=imread(file);
+		//cout<<"frame "<<frame<<endl;
+		cvtColor(src, gray_src, CV_BGR2GRAY);   
+		}
+	else
+	{
+	//read camera
+	cap>>gray_src;
+	}
 
 	
 	//cvtColor(gray_src, src, CV_GRAY2BGR); 
         inRange(gray_src, thresh_low, thresh_up, gray);
-	//imshow("gray", gray);
+	//imshow("gray", gray); waitKey(10);
+	
         //find the contours
         vector< vector<Point> > contours; // Vector for storing contour
         vector<Vec4i> hierarchy;
@@ -241,9 +287,9 @@ int main(int argc, char** argv) {
         bool found = true;//findReferenceRectangle(poly3, poly4,&rect_base,&tri_base);
         //cout << "found reference rectangle? :" << found << endl;
 	
-	bool draw=false;
-	if(draw) drawing = Mat::zeros(src.size(), CV_8UC3);
-        if ( found&&draw){
+
+	if(isDraw) drawing = Mat::zeros(src.size(), CV_8UC3);
+        if ( found&&isDraw){
             
             Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
             drawContours(src, vector<vector<Point> >(1,rect_base.points), -1, color, 1, 8);
@@ -266,7 +312,7 @@ int main(int argc, char** argv) {
         }
 
        
-        if (draw) {
+        if (isDraw) {
             for (int i = 0; i < contours.size(); i++) {
                 Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
                 drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
@@ -297,19 +343,20 @@ int main(int argc, char** argv) {
             }
 
 	        /// Show in a window
- /*      
+       
         createTrackbar("threshold upper", "gray", &thresh_up, 255);
         createTrackbar("threshold lower", "gray", &thresh_low, 255);
-        createTrackbar("frame", "view", &frame_trackbar, 504);
-        namedWindow("Contours", CV_WINDOW_NORMAL);
+        createTrackbar("frame", "view", &frame_trackbar, 504);	
+        namedWindow("Contours", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL
         resizeWindow("Contours",800,600);
         //resizeWindow("view",800,600);
         //resizeWindow("gray",800,600);
         imshow("Contours", drawing);
         imshow("view", src);
         //imshow("polygon",gray);
-*/
-        }
+
+	 }//endif isDraw
+        }//for image loop(?)
 
 /*
 

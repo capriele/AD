@@ -10,7 +10,7 @@ find_path (FLY_CAPTURE_PATH flycapture  REQUIRED)
 find_LIBRARY (FLYCAPTURE_LIB flycapture /usr/local/lib REQUIRED)
 
 
-add_executable(camera locator.cpp)
+add_executable(locator locator.cpp)
 
-target_link_libraries(camera opencv_core.so  opencv_highgui.so opencv_imgproc.so opencv_calib3d.so opencv_features2d.so)
-target_link_libraries(camera ${FLYCAPTURE_LIB})
+target_link_libraries(locator opencv_core.so  opencv_highgui.so opencv_imgproc.so opencv_calib3d.so opencv_features2d.so)
+target_link_libraries(locator ${FLYCAPTURE_LIB})

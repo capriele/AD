@@ -33,5 +33,7 @@ codebase/trunk/simulator/src/simulink/ert_main.c
 CMakeFiles/
 CMakeCache.txt
 codebase_lowlevel/vision/recording/Makefile
-codebase_lowlevel/vision/locator/camera
+codebase_lowlevel/vision/locator/locator
+codebase_lowlevel/vision/locator/Makefile
+cmake_install.cmake
 *.*.autosave
