@@ -149,7 +149,7 @@ bool findReferenceRectangle(const vector<Polygon> poly3, const vector<Polygon> p
 };
 
 int main(int argc, char** argv) {
-
+	
     Mat distCoeffs(5, 1, cv::DataType<double>::type);
     distCoeffs.at<double>(0) = -4.1802327018241026e-001;
     distCoeffs.at<double>(1) = 5.0715243805833121e-001;
@@ -159,38 +159,40 @@ int main(int argc, char** argv) {
     Mat rvec(3, 1, cv::DataType<double>::type);
     Mat tvec(3, 1, cv::DataType<double>::type);
     pgr2cv::VideoCapture cap;
+    VideoWriter video ;
+    string imagesPath;
 
-    Mat src, gray_src, gray,drawing;
+    Mat src, src_gray, gray,drawing;
     int thresh_up = 123;//90
     int thresh_low = 0;//0
     int frame_trackbar=1;
     int frame;
     int frame_max = 1; 
 
-    //Check if from camera or from file (if file, provide folder as call argument)
+    //Check if images from camera or from file (if file, provide folder as third call argument)
     bool isImgFromFile = false;
-    bool isStoreResult = false;
+    bool isWriteVideo = false;
     bool isDraw = false;
 	
-
+    //argument handling
     if (argc<3)	
 	{
-	cout<<"Please provide flag if want to write result to disk and if want to draw or not (e.g. './locator 0 1')!"<<endl;
+	cout<<"Please provide flag if want to write images to disk and if want to draw (e.g. './locator 0 1')!"<<endl;
 	return -1;
 	}
 
     else if (argc>=3)
 	{
-	isStoreResult = atoi(argv[1]);
+	isWriteVideo = atoi(argv[1]);
 	isDraw = atoi(argv[2]);
-	cout<<"store results: "<<isStoreResult<<" :: draw: "<<isDraw<<endl;
+	cout<<"write video: "<<isWriteVideo<<" :: draw: "<<isDraw<<endl;
 	};
 
     if (argc>=4)
 	{
 	isImgFromFile = true;
 	frame_max = 504; 	//@TODO make flexible
-	string imagesPath = argv[3];
+	imagesPath = argv[3];
 	cout<<"Pull images from: "<<imagesPath<<endl;
 	}
    else cout<<"Camera needs to be plug in!"<<endl<<endl;
@@ -198,58 +200,64 @@ int main(int argc, char** argv) {
 
     //Camera handler
     if (!isImgFromFile)
-	{    
+	{   
 	
     	cap.open(0);
 	}
 
     double dWidth = 1280; //get the width of frames of the video
     double dHeight = 1024; //get the height of frames of the video
+
     Size frameSize(static_cast<int>(dWidth), static_cast<int>(dHeight));
 
-    if (isStoreResult)	
+    //init video if want to write to disk	
+    if (isWriteVideo)	
 	{
-    	VideoWriter video ;
+
     	video.open("/home/ubuntu/video2.avi",-1, 20, frameSize, true); //initialize the VideoWriter object 
 	if(!video.isOpened() ){
         	cout<<"could not open video"<<endl;
         	return -1;
     		}
 	}
-    
-while ((!isImgFromFile) || (waitKey(10) <0) ) {
 
-    for(int frame=1;frame<=frame_max;frame++){
+   //loop over either stream or file-images 
+   while ((!isImgFromFile) || (waitKey(100) <0) ) {
+
+  //  for(int frame=1;frame<=frame_max;frame++){ //onyl 1 loop count if images come from camera
+
 	pgr2cv::update_FPS(time(NULL));
         
-	
+	//load file from image and convert to gray scale
         if (isImgFromFile) 
 		{
 		frame=frame_trackbar;
 		if(frame<1) frame=1;
 		ostringstream convert;
 		//convert<<"C:\\Users\\ubuntu\\Desktop\\whiteboard test\\img-"<<frame<<".jpg";
-		convert<<"/home/ubuntu/Desktop/whiteboard_test/img-"<<frame<<".jpg";                
+		convert<<imagesPath<<"img-"<<frame<<".jpg";                
 		string file=convert.str();	
 		src=imread(file);
 		//cout<<"frame "<<frame<<endl;
-		cvtColor(src, gray_src, CV_BGR2GRAY);   
+		cvtColor(src, src_gray, CV_BGR2GRAY);   
 		}
 	else
 	{
 	//read camera
-	cap>>gray_src;
+	cap>>src_gray;
 	}
 
 	
-	//cvtColor(gray_src, src, CV_GRAY2BGR); 
-        inRange(gray_src, thresh_low, thresh_up, gray);
-	//imshow("gray", gray); waitKey(10);
+	//cvtColor(src_gray, src, CV_GRAY2BGR); 
 	
+	//threshold	
+        inRange(src_gray, thresh_low, thresh_up, gray);
+	imshow("gray",gray);
+
         //find the contours
         vector< vector<Point> > contours; // Vector for storing contour
         vector<Vec4i> hierarchy;
-        findContours(gray, contours, hierarchy, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+        findContours(gray, contours, hierarchy, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE); //overrides input gray!
 
         vector<vector<Point> > contours_poly(contours.size());
         RNG rng(12345);
@@ -266,7 +274,7 @@ while ((!isImgFromFile) || (waitKey(10) <0) ) {
         vector<Polygon> poly4;
         poly3.resize(0);
         poly4.resize(0);
-/*
+ // /*
         for (int i = 0; i < contours.size(); i++) {
             int area = contourArea(contours[i], false);
             if (contourArea(contours[i], false) > 30 && contours[i].size() < 2000) {
@@ -278,14 +286,14 @@ while ((!isImgFromFile) || (waitKey(10) <0) ) {
                 }
             }
         }
- */   
+  // */   
         sort(poly3.rbegin(), poly3.rend());
         sort(poly4.rbegin(), poly4.rend());
         
         Polygon rect_base=Polygon(4);
         Polygon tri_base=Polygon(3);
-        bool found = true;//findReferenceRectangle(poly3, poly4,&rect_base,&tri_base);
-        //cout << "found reference rectangle? :" << found << endl;
+        bool found = findReferenceRectangle(poly3, poly4,&rect_base,&tri_base);
+        cout << "found reference rectangle? :" << found << endl;
 	
 
 	if(isDraw) drawing = Mat::zeros(src.size(), CV_8UC3);
@@ -333,6 +341,9 @@ while ((!isImgFromFile) || (waitKey(10) <0) ) {
                             //cout<<"Point "<<j<<" : "<<contours_poly.at(i).at(j)<<endl;
                             //diff.
                         }
+
+			//Pose reconstruction
+
                         //solvePnP(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec);
                         //cout<< "index: "<<i<<endl;
                         //cout<<"tvec: "<<tvec<<endl;
@@ -342,30 +353,30 @@ while ((!isImgFromFile) || (waitKey(10) <0) ) {
                 }
             }
 
-	        /// Show in a window
-       
-        createTrackbar("threshold upper", "gray", &thresh_up, 255);
-        createTrackbar("threshold lower", "gray", &thresh_low, 255);
-        createTrackbar("frame", "view", &frame_trackbar, 504);	
-        namedWindow("Contours", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL
-        resizeWindow("Contours",800,600);
-        //resizeWindow("view",800,600);
-        //resizeWindow("gray",800,600);
-        imshow("Contours", drawing);
-        imshow("view", src);
-        //imshow("polygon",gray);
+	    /// Show in a window
+	    namedWindow("gray", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL
+	    createTrackbar("threshold upper", "gray", &thresh_up, 255);
+	    createTrackbar("threshold lower", "gray", &thresh_low, 255);
+	
+	    namedWindow("view", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL
+	    createTrackbar("frame", "view", &frame_trackbar, 504);	
 
+       	    namedWindow("Contours", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL
+	    
+	     imshow("view",src);
+	     //imshow("gray",gray);	//shown earlier as findCountours overrides!
+	     //imshow("polygon",gray);
+	     imshow("Contours", drawing);
+	     waitKey(25);    
+
+	     
 	 }//endif isDraw
-        }//for image loop(?)
 
-/*
+        //}//for-image loop(?)
 
-        //video<<src;
-  */        
-    }
+	if (isWriteVideo) video<<src;
 
-
-
+    } //end while loop
 
 
     return 0;
