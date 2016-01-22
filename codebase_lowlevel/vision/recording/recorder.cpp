@@ -25,7 +25,7 @@ using namespace std;
 /*
  * 
  */
-bool contour_compare (vector<Point> i,vector<Point>j) { return (contourArea(i,false)>contourArea(j,false)); }
+//bool contour_compare (vector<Point> i,vector<Point>j) { return (contourArea(i,false)>contourArea(j,false)); }
 
 int main(int argc, char** argv) {
 	struct timeval tp;
