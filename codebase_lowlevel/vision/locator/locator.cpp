@@ -222,7 +222,7 @@ int main(int argc, char** argv) {
 	}
 
    //loop over either stream or file-images 
-   while ((!isImgFromFile) || (waitKey(100) <0) ) {
+   while ((!isImgFromFile) || !isDraw || (waitKey(100) <0) ) {
 
   //  for(int frame=1;frame<=frame_max;frame++){ //onyl 1 loop count if images come from camera
 
@@ -252,7 +252,7 @@ int main(int argc, char** argv) {
 	
 	//threshold	
         inRange(src_gray, thresh_low, thresh_up, gray);
-	imshow("gray",gray);
+	if (isDraw) imshow("gray",gray);
 
         //find the contours
         vector< vector<Point> > contours; // Vector for storing contour
