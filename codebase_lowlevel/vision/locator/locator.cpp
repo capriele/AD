@@ -177,7 +177,7 @@ int main(int argc, char** argv) {
     //argument handling
     if (argc<3)	
 	{
-	cout<<"Please provide flag if want to write images to disk and if want to draw (e.g. './locator 0 1')!"<<endl;
+	cout<<"Please provide flag if want to write images to disk, if want to draw and path to images if from disk instead of cam (e.g. './locator 0 1 /home/ubuntu/')!"<<endl;
 	return -1;
 	}
 
@@ -245,14 +245,14 @@ int main(int argc, char** argv) {
 	{
 	//read camera
 	cap>>src_gray;
+	cvtColor(src_gray, src, CV_GRAY2BGR);
 	}
-
+	 
 	
-	//cvtColor(src_gray, src, CV_GRAY2BGR); 
-	
-	//threshold	
+	//threshold
+		//imshow("gray",src_gray); waitKey(1000); show original now	
         inRange(src_gray, thresh_low, thresh_up, gray);
-	if (isDraw) imshow("gray",gray);
+	if (isDraw) imshow("gray",gray); 
 
         //find the contours
         vector< vector<Point> > contours; // Vector for storing contour
@@ -263,7 +263,7 @@ int main(int argc, char** argv) {
         RNG rng(12345);
         
         int index = 13;
-        //cout << " contours size: " << contours.size() << endl;
+        cout << " contours size: " << contours.size() << endl;
 
 
         // remove those too small or too complex
@@ -297,6 +297,7 @@ int main(int argc, char** argv) {
 	
 
 	if(isDraw) drawing = Mat::zeros(src.size(), CV_8UC3);
+
         if ( found&&isDraw){
             
             Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
@@ -319,11 +320,13 @@ int main(int argc, char** argv) {
 
         }
 
-       
+
+
         if (isDraw) {
             for (int i = 0; i < contours.size(); i++) {
                 Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
-                drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
+
+                drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );      
                 if (contourArea(contours[i], false) > 30 && contours[i].size() < 2000) {
 
                     //TODO maybe have a more accurate aproximation once you know 
@@ -352,7 +355,7 @@ int main(int argc, char** argv) {
                     }
                 }
             }
-
+ 
 	    /// Show in a window
 	    namedWindow("gray", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL
 	    createTrackbar("threshold upper", "gray", &thresh_up, 255);
