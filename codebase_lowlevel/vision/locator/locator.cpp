@@ -277,7 +277,8 @@ int main(int argc, char** argv) {
  // /*
         for (int i = 0; i < contours.size(); i++) {
             int area = contourArea(contours[i], false);
-            if (contourArea(contours[i], false) > 30 && contours[i].size() < 2000) {
+            //if (contourArea(contours[i], false) > 30 && contours[i].size() < 2000) {
+	    if (area > 30 && contours[i].size() < 2000) {
                 approxPolyDP(Mat(contours[i]), contours_poly[i], 7, true);
                 if (contours_poly[i].size() == 4 || contours_poly[i].size() == 3) {
                     Polygon new_p = Polygon(area, contours_poly[i]);
@@ -293,11 +294,12 @@ int main(int argc, char** argv) {
         Polygon rect_base=Polygon(4);
         Polygon tri_base=Polygon(3);
         bool found = findReferenceRectangle(poly3, poly4,&rect_base,&tri_base);
-        cout << "found reference rectangle? :" << found << endl;
+        cout << "N34poly: "<<poly3.size() <<" :: "<<poly4.size()<<" :: found reference rectangle? :" << found << endl;
 	
 
 	if(isDraw) drawing = Mat::zeros(src.size(), CV_8UC3);
 
+	//Draw reference rectangle and quadrilaterial onto bgr-source (src)
         if ( found&&isDraw){
             
             Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
@@ -321,6 +323,8 @@ int main(int argc, char** argv) {
         }
 
 
+	//Draw contours on new drawing
+
 
         if (isDraw) {
             for (int i = 0; i < contours.size(); i++) {
@@ -331,10 +335,11 @@ int main(int argc, char** argv) {
 
                     //TODO maybe have a more accurate aproximation once you know 
                     //the targets
+		    // this redoes the approx to polygons
                     approxPolyDP(Mat(contours[i]), contours_poly[i], 7, true);
                     
 
-                    //if (contours_poly[i].size() == 4||contours_poly[i].size() == 3)
+                    if (contours_poly[i].size() == 4||contours_poly[i].size() == 3)
                     {
                         drawContours(drawing, contours_poly, i, color, 2, 8, hierarchy, 0, Point());
                         color = Scalar(255, 255, 255);
