@@ -10,6 +10,10 @@ Servo motor[4];
 
 int flyCtrl[4] = {2, 3, 4, 5};   //these pins should be conected to flycontroller in the right order (first signal rises at pin2, next pin3, etc)
 int flag = 7;                  //pin 7 in used to read the switch signal from transmiter on channel 8
+/*first quad
+int flyCtrl[4] = {5, 6, 7, 8};   //these pins should be conected to flycontroller in the right order (first signal rises at pin2, next pin3, etc)
+int flag = 12;                  //pin 12 in used to read the switch signal from transmiter on channel 8
+*/
 long dt;
 long t[8];
 int pwms[5] = {1000,1000,1000,1000,1000};
@@ -31,24 +35,48 @@ void setup() {
   motor[1].attach(10);      
   motor[2].attach(11);
   motor[3].attach(12);
+
+/*first quad
+  pinMode(5,INPUT);
+  pinMode(6,INPUT);
+  pinMode(7,INPUT);
+  pinMode(8,INPUT);
+  pinMode(12,INPUT);
+  
+  pinMode(2,OUTPUT);
+  pinMode(3,OUTPUT);
+  pinMode(4,OUTPUT);
+  pinMode(13,OUTPUT);
+
+  motor[0].attach(2);       //those should be the pins of the motor-arduino on the quad
+  motor[1].attach(3);      
+  motor[2].attach(4);
+  motor[3].attach(13);
+*/
   
   Serial.begin(115200);
-
-  while(!digitalRead(flag))       
-      t[5] = micros();
-  while(digitalRead(flag))
-      t[6] = micros();
-  pwms[4] = t[6]-t[5];
   
-  while(Serial.read() != -1);
+  pwms[4] = pulseIn(flag, HIGH);
+  
+  while(Serial.read() != -1); //fflush;
   dt = micros();
+
+  Serial.println(pwms[4]);
   
 }
 
 void loop() {
+  
   if(pwms[4] > 1500)     //if switch on, copy flycontroller`s signal, and paste to motors.
   {
-      digitalWrite(13,HIGH);
+      
+      pwms[0] = pulseIn(flyCtrl[0], HIGH);
+      pwms[1] = pulseIn(flyCtrl[1], HIGH);
+      pwms[2] = pulseIn(flyCtrl[2], HIGH);
+      pwms[3] = pulseIn(flyCtrl[3], HIGH);
+      pwms[4] = pulseIn(flag, HIGH);
+      
+   /*   
       while(!digitalRead(flyCtrl[0]))      // "coping"
         t[0] = micros();                   //timestamp when the first channel rises
       while(digitalRead(flyCtrl[0]))
@@ -70,12 +98,13 @@ void loop() {
       pwms[2] = t[3]-t[2];
       pwms[3] = t[4]-t[3];
       pwms[4] = t[6]-t[5];
+     */
       
-       Serial.print(pwms[0]);Serial.print("\t");Serial.print(pwms[1]);Serial.print("\t");Serial.print(pwms[2]);Serial.print("\t");Serial.print(pwms[3]);Serial.print("\t");Serial.println(pwms[4]);
+      // Serial.print(pwms[0]);Serial.print("\t");Serial.print(pwms[1]);Serial.print("\t");Serial.print(pwms[2]);Serial.print("\t");Serial.print(pwms[3]);Serial.print("\t");Serial.println(pwms[4]);
   
       delay(2);   //delay sincronize signals from serial with signals from receiver
       
-      while(Serial.read() != -1);
+      while(Serial.read() != -1);  // fflush
       
     
       throttle[0] = map(pwms[0], 1000, 2000, 40, 140);      // "pasting"
@@ -90,7 +119,9 @@ void loop() {
   }
   else            //if swicth is off, read string from serial, compute the pwms values, and 'paste' to motors
   {
-      digitalWrite(13,LOW);
+      Serial.println(" test 3");
+  
+    
       while(!digitalRead(flag))      
          t[5] = micros();
       while(digitalRead(flag))
@@ -137,8 +168,6 @@ void loop() {
       motor[2].write(throttle[2]);
       throttle[3] = map(pwms[3], 1000, 2000, 40, 140);
       motor[3].write(throttle[3]);
-    
-     Serial.print(throttle[0]);Serial.print("\t");Serial.print(throttle[1]);Serial.print("\t");Serial.print(throttle[2]);Serial.print("\t");Serial.println(throttle[3]);
     
   }
 }
