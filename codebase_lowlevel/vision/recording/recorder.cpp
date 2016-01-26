@@ -25,7 +25,7 @@ using namespace std;
 /*
  * 
  */
-bool contour_compare (vector<Point> i,vector<Point>j) { return (contourArea(i,false)>contourArea(j,false)); }
+//bool contour_compare (vector<Point> i,vector<Point>j) { return (contourArea(i,false)>contourArea(j,false)); }
 
 int main(int argc, char** argv) {
 	struct timeval tp;
@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 	VideoWriter outputVideo;
 	int ex=-1;
 	
- 	outputVideo.open("teste.mpg", CV_FOURCC('X','2','6','5'), 20, S, true);
+ 	outputVideo.open("/home/ubuntu/tmp/teste.mpg", CV_FOURCC('X','2','6','5'), 20, S, true);
  	if (!outputVideo.isOpened())
     	{
         	cout  << "Could not open the output video for write: " << endl;
