@@ -14,20 +14,20 @@ public:
   //Pod-specific members to store received messages
   agile::imuRaw_t       	imudata;
 
-  agile::features_t       	features;
+  //agile::features_t       	features;
 
 
-  int isGotInitialFeatures;
+  int isGotBiases;
 
   //constructor
   stateEstimatorOrientCF_t (string podName, int64_t callInterval) : podBase_t(podName,callInterval)
 	{	
-		this->isGotInitialFeatures = -1;	
+		this->isGotBiases = -1;	
 
 		// this value is changed for the first time by the end of calibration
-		this->features.featureDirectionVersor[0][0] = 0;		
-		this->features.featureDirectionVersor[0][1] = 0;	
-		this->features.featureDirectionVersor[0][2] = 0;			
+		this->biases.accel[0] = 0;		
+		this->biases.accel[1] = 0;	
+		this->biases.accel[2] = 0;			
 	}
 
   //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call

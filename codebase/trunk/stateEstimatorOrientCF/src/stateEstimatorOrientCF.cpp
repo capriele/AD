@@ -191,18 +191,18 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 		}
 	  else
 	  {
-		if(podWorker->isGotInitialFeatures == -1){
+		if(podWorker->isGotBiases == -1){
 			printf("Waiting for IMU Calibration to end...\n");
-			podWorker->isGotInitialFeatures = 0;
+			podWorker->isGotBiases = 0;
 		}
-		else if(podWorker->isGotInitialFeatures == 0)
+		else if(podWorker->isGotBiases == 0)
 		{
-			if (podWorker->features.featureDirectionVersor[0][0] != 0 || 
-			    podWorker->features.featureDirectionVersor[0][1] != 0 ||
-			    podWorker->features.featureDirectionVersor[0][2] != 0   )
+			if (podWorker->biases.accel[0] != 0 || 
+			    podWorker->biases.accel[1] != 0 ||
+			    podWorker->biases.accel[2] != 0   )
 			{		
 		 	   	printf("IMU calibration ok! Continuing...\n");
-			   	podWorker->isGotInitialFeatures == 1;
+			   	podWorker->isGotBiases == 1;
 				
 				podWorker->biases.accel[0] = podWorker->stateVariances.imuBiasAccel[0];
 				podWorker->biases.accel[1] = podWorker->stateVariances.imuBiasAccel[1];
@@ -249,7 +249,7 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 				//after getting the initial versors, unsubscribe
 				podWorker->unsubscribe("stateVariancesOrientCF");		
 			
-				podWorker->isGotInitialFeatures = true;			
+				podWorker->isGotBiases = true;			
 
 				podWorker->statusPod.status = POD_OK;
 	 	
@@ -257,7 +257,7 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 			else if (strcmp(podWorker->imuRawChannel.c_str(),"imuRawSim")==0)
 				{
 				printf("IMU calibration ok! Continuing...it's only simulated anyway!\n");
-			   	podWorker->isGotInitialFeatures == 1;
+			   	podWorker->isGotBiases == 1;
 				
 				podWorker->biases.accel[0] = 0.0;
 				podWorker->biases.accel[1] = 0.0;
@@ -304,9 +304,9 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 
 				//after getting the initial versors, unsubscribe
 				podWorker->unsubscribe("stateVariancesOrientCF");
-				podWorker->unsubscribe("features");				
+				//podWorker->unsubscribe("features");				
 			
-				podWorker->isGotInitialFeatures = true;			
+				podWorker->isGotBiases = true;			
 
 				podWorker->statusPod.status = POD_OK;
 				};
@@ -359,8 +359,7 @@ int main (int argc, char** argv) {
   podWorker.subscribe("stateVariancesOrientCF", CALLINTERVAL_IMUACQUISITION, 
 		&(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
 
-    podWorker.subscribe("features", CALLINTERVAL_IMUACQUISITION, &(podWorker.features),
-		&podBase_t::handleMessage<agile::features_t>);
+   // podWorker.subscribe("features", CALLINTERVAL_IMUACQUISITION, &(podWorker.features),&podBase_t::handleMessage<agile::features_t>);
   /*---------*/
 
   

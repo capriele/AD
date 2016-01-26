@@ -230,7 +230,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 			podWorker->stateVariances.imuVarianceGyro[1] = podWorker->stateVariances.imuVarianceGyro[1]/(podWorker->nMeasurements-2);
 			podWorker->stateVariances.imuVarianceGyro[2] = podWorker->stateVariances.imuVarianceGyro[2]/(podWorker->nMeasurements-2);
 		
-			//stateEstimatorOrientV1 uses calib reslts as 0-reference vector
+			/*//stateEstimatorOrientV1 uses calib reslts as 0-reference vector
 			podWorker->features.featureDirectionVersor[0][0] = podWorker->imuCalib.accel[0];
 			podWorker->features.featureDirectionVersor[0][1] = podWorker->imuCalib.accel[1];
 			podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2]; 
@@ -238,11 +238,11 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 			podWorker->features.featureDirectionVersor[1][0] = podWorker->imuCalib.magn[0];
 			podWorker->features.featureDirectionVersor[1][1] = podWorker->imuCalib.magn[1];
 			podWorker->features.featureDirectionVersor[1][2] = podWorker->imuCalib.magn[2];
-
+			*/
 			
-			 //ATTENTION: we publish the calibration data over an estimation channel! -> estimator waits for this message on this channel!
-		  	podWorker->lcm.publish ("features", &podWorker->features);
-		  	podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances);
+			 //ATTENTION: we publish the calibration data over estimation channels! -> estimator waits for this first message on this channel!
+		  	//podWorker->lcm.publish ("features", &podWorker->features);
+		  	//podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances);
 			podWorker->lcm.publish ("stateVariancesOrientCF", &podWorker->stateVariances);
 		  
 			podWorker->statusCalib = 0;
@@ -250,25 +250,23 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		}
 		else if (podWorker->statusCalib==0)
 		{
-			//This publishes accelerometer and magnetometervectors as featureDirectionVersors; later this job will be done by vectors pointing to the visual markers
+			/*			
+			//This publishes accelerometer and magnetometervectors as featureDirectionVersors; later this job will be done by vectors pointing to the visual markers!
 			podWorker->features.featureDirectionVersor[0][0] = imuRaw.accel[0];
 			podWorker->features.featureDirectionVersor[0][1] = imuRaw.accel[1];
 			podWorker->features.featureDirectionVersor[0][2] = imuRaw.accel[2];
 			
 			podWorker->features.featureDirectionVersor[1][0] = imuRaw.magn[0];
 			podWorker->features.featureDirectionVersor[1][1] = imuRaw.magn[1];
-			podWorker->features.featureDirectionVersor[1][2] = imuRaw.magn[2];
-
-	
+			podWorker->features.featureDirectionVersor[1][2] = imuRaw.magn[2];	
 			podWorker->lcm.publish ("features", &podWorker->features);
+			*/
 		};
 
 		  /* Publishing computation result */
 		imuRaw.timestampJetson = GetTimeStamp();
-
-		//@TODO possibly transform measurements to drone body frame?
 		
-	//	if( vec[0]!=0 && vec[1]!=0 && vec[2]!=0 && vec[3]!=0 && vec[4]!=0 && vec[5]!=0 && vec[6]!=0 && vec[7]!=0 && vec[8]!=0 && vec[9]!=0)
+	//	if( vec[0]!=0 && vec[1]!=0 && vec[2]!=0 && vec[3]!=0 && vec[4]!=0 && vec[5]!=0 && vec[6]!=0 && vec[7]!=0 && vec[8]!=0 && vec[9]!=0) //@TODO should we add this?
 		{
 			podWorker->lcm.publish ("imuRaw", &imuRaw);
 		}		 

@@ -20,7 +20,7 @@ public:
 
   agile::statusPod_t  statusImuAcquisition;
   agile::statusPod_t  statusStateEstimatorOrientCF;
-  agile::statusPod_t  statusStateEstimatorOrientV1;
+  //agile::statusPod_t  statusStateEstimatorOrientV1;
   agile::statusPod_t  statusDetectorVis;
   agile::statusPod_t  statusRemoteController;
   agile::statusPod_t  statusControllerPDPose;
