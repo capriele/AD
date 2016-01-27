@@ -2,6 +2,7 @@
 #define SIMULATOR_H
 
 #include "../../framework/framework.hpp"
+#include "../../framework/paramsSimulator.hpp"
 
 #include <stddef.h>
 
