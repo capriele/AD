@@ -193,20 +193,24 @@ quadEDT.takeoff_duration            = 1;
 quadEDT.altitude                    = -1.1;
 %----
 
-% quadEDT.yawStep_amplitude           = 0.2;
-% quadEDT.yawStep_time                = 3;
-% quadEDT.yawStep_duration            = 2.5;
-% %pitch
-% quadEDT.pitchStep_amplitude         = 0.2; %0.1
-% quadEDT.pitchStep_time              = 3;
-% quadEDT.pitchStep_duration          = 1;
-% %roll
-% quadEDT.rollStep_amplitude          = 0.2; %0.1
-% quadEDT.rollStep_time               = 3; 
-% quadEDT.rollStep_duration           = 1;
-% %altitude
-% quadEDT.takeoff_duration            = 1;
-% quadEDT.altitude                    = -1.1;
+%reference values
+%----
+%yaw
+quadEDT.yawStep_amplitude           = 30/180*pi;
+quadEDT.yawStep_time                = 15;
+quadEDT.yawStep_duration            = 2.5;
+%pitch
+quadEDT.pitchStep_amplitude         = 30/180*pi; %0.1
+quadEDT.pitchStep_time              = 3;
+quadEDT.pitchStep_duration          = 1.5;
+%roll
+quadEDT.rollStep_amplitude          = 30/180*pi; %0.1
+quadEDT.rollStep_time               = 6; 
+quadEDT.rollStep_duration           = 1.5;
+%altitude
+quadEDT.takeoff_duration            = 1;
+quadEDT.altitude                    = -3.1;
+%----
 
 %Vision
 quadEDT.NO_VIS_X                    = -99.0;
@@ -216,7 +220,7 @@ quadEDT.dummy.usePosVIS_flag        = 0;
 
 
 %Motor Failure Simulation
-quadEDT.motorFailure_time           = 10;%0.1;
+quadEDT.motorFailure_time           = 12;%0.1;
 quadEDT.motorFailure_duration       = 0.05;
 quadEDT.motorFailure_m1             = 0;
 quadEDT.motorFailure_m2             = 0;
