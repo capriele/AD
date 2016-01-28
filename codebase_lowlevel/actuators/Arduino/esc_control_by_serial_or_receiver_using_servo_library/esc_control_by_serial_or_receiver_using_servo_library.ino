@@ -58,25 +58,42 @@ void setup() {
   
   Serial.begin(115200);
   
-  pwms[4] = pulseIn(flag, HIGH);
+  pwms[4] = pulseIn(flag, HIGH); pwms[4]=map(pwms[4], 1300, 2600, 1000, 2000); 
   
   while(Serial.read() != -1); //fflush;
   dt = micros();
 
-  Serial.println(pwms[4]);
+  Serial.println(pwms[4]); 
   
 }
 
 void loop() {
   
-  if(pwms[4] < 1500)     //if switch on, copy flycontroller`s signal, and paste to motors.
+  
+  if(pwms[4] > 1800)     //kill switch (SE switch completely up (physical position)). Receiver also sends this as failsafe
+    {
+      Serial.println("emergency deteced");
+       motor[0].writeMicroseconds(1000);
+      //throttle[1] = map(pwms[1], 1000, 2000, 40, 140);
+      //motor[1].write(throttle[1]);
+      motor[1].writeMicroseconds(1000);
+      //throttle[2] = map(pwms[2], 1000, 2000, 40, 140);
+      //motor[2].write(throttle[2]);
+      motor[2].writeMicroseconds(1000);
+      //throttle[3] = map(pwms[3], 1000, 2000, 40, 140);
+      //motor[3].write(throttle[3]);
+      motor[3].writeMicroseconds(1000); 
+    }
+  
+  
+  else if(pwms[4] < 1200)     //if switch , copy flycontroller`s signal, and paste to motors.
   {
       
       pwms[0] = pulseIn(flyCtrl[0], HIGH);
       pwms[1] = pulseIn(flyCtrl[1], HIGH);
       pwms[2] = pulseIn(flyCtrl[2], HIGH);
       pwms[3] = pulseIn(flyCtrl[3], HIGH);
-      pwms[4] = pulseIn(flag, HIGH);
+      pwms[4] = pulseIn(flag, HIGH); pwms[4]=map(pwms[4], 1300, 2600, 1000, 2000); 
       
       //I think this block of commands make the code wait until it got pulses on all channels. the flightcontroller ouputs pwm with cycle length 2.5ms, so the code is done with this block after 12.5ms.
       
@@ -132,9 +149,9 @@ void loop() {
        motor[3].writeMicroseconds(throttle[3]);
 
   }
-  else            //if swicth is off, read string from serial, compute the pwms values, and 'paste' to motors
+  else            //if swicth is middle, read string from serial, compute the pwms values, and 'paste' to motors
   {
-      Serial.println(" test 3");
+      //Serial.println("jetson");
   
     
       while(!digitalRead(flag))      
@@ -142,7 +159,7 @@ void loop() {
       while(digitalRead(flag))
          t[6] = micros();
       pwms[4] = t[6]-t[5];        // check switch
-
+      //Serial.println(pwms[4]);
       dt = micros();
       
       if(Serial.available()>16){
