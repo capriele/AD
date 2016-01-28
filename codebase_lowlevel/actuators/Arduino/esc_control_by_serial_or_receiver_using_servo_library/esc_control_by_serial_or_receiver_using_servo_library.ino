@@ -21,15 +21,17 @@ int test;
 char letter;
 
 void setup() {
-  pinMode(2,INPUT);
-  pinMode(3,INPUT);
-  pinMode(4,INPUT);
-  pinMode(5,INPUT);
+  pinMode(flyCtrl[0],INPUT); //replace fixed pins with declared pins for flightcontroller input above
+  pinMode(flyCtrl[1],INPUT);
+  pinMode(flyCtrl[2],INPUT);
+  pinMode(flyCtrl[3],INPUT);
+  pinMode(flag,INPUT); //added flag as an input. but has worked before. good?
 
-  pinMode(8,OUTPUT);
+  //pinMode(8,OUTPUT); //removed this, dont need it right?
   pinMode(9,OUTPUT);
   pinMode(10,OUTPUT);
   pinMode(11,OUTPUT);
+  pinMode(12,OUTPUT); //added this, we ouput motor[3] here no?
 
   motor[0].attach(9);       //those should be the pins of the motor-arduino on the quad
   motor[1].attach(10);      
@@ -67,7 +69,7 @@ void setup() {
 
 void loop() {
   
-  if(pwms[4] > 1500)     //if switch on, copy flycontroller`s signal, and paste to motors.
+  if(pwms[4] < 1500)     //if switch on, copy flycontroller`s signal, and paste to motors.
   {
       
       pwms[0] = pulseIn(flyCtrl[0], HIGH);
@@ -75,6 +77,8 @@ void loop() {
       pwms[2] = pulseIn(flyCtrl[2], HIGH);
       pwms[3] = pulseIn(flyCtrl[3], HIGH);
       pwms[4] = pulseIn(flag, HIGH);
+      
+      //I think this block of commands make the code wait until it got pulses on all channels. the flightcontroller ouputs pwm with cycle length 2.5ms, so the code is done with this block after 12.5ms.
       
    /*   
       while(!digitalRead(flyCtrl[0]))      // "coping"
@@ -103,18 +107,29 @@ void loop() {
       // Serial.print(pwms[0]);Serial.print("\t");Serial.print(pwms[1]);Serial.print("\t");Serial.print(pwms[2]);Serial.print("\t");Serial.print(pwms[3]);Serial.print("\t");Serial.println(pwms[4]);
   
       delay(2);   //delay sincronize signals from serial with signals from receiver
+                  //why not -dt as in code if pwm comes from jetson? the pulsln block takes its sweet time I think
+                  //also, is it possible that pulseln blocks and waits to get a signal anyway? so we dont need this delay?
       
       while(Serial.read() != -1);  // fflush
       
-    
-      throttle[0] = map(pwms[0], 1000, 2000, 40, 140);      // "pasting"
-      motor[0].write(throttle[0]);
-      throttle[1] = map(pwms[1], 1000, 2000, 40, 140);      // the range of servo library is 0-180, but for best 'building' a pulse of width between 1000ms and 2000ms, we must map to 40-140
-      motor[1].write(throttle[1]);
-      throttle[2] = map(pwms[2], 1000, 2000, 40, 140);
-      motor[2].write(throttle[2]);
-      throttle[3] = map(pwms[3], 1000, 2000, 40, 140);
-      motor[3].write(throttle[3]);
+      //throttle[1] = map(pwms[1], 1000, 2000, 40, 140);      // the range of servo library is 0-180, but for best 'building' a pulse of width between 1000ms and 2000ms, we must map to 40-140
+      //pulselen returns 1300ms for a 1000ms PWM input, and 2600ms for a 2000ms PWM input. Any ideas why?. for now, we remap linearly, but why is reading wrong?
+       throttle[0] = map(pwms[0], 1300, 2600, 1000, 2000);      // "pasting"
+       motor[0].writeMicroseconds(throttle[0]);
+       /*Serial.print(pwms[0]); //oscilocope checked: writeMicroseconds generates pwm with specified ms given as parameter
+       Serial.print(' ');
+       Serial.println(throttle[0]);*/
+       //motor[0].write(throttle[0]);
+       
+      
+       throttle[1] = map(pwms[1], 1300, 2600, 1000, 2000);
+       motor[1].writeMicroseconds(throttle[1]);
+      
+       throttle[2] = map(pwms[2], 1300, 2600, 1000, 2000);
+       motor[2].writeMicroseconds(throttle[2]);
+      
+       throttle[3] = map(pwms[3], 1300, 2600, 1000, 2000);
+       motor[3].writeMicroseconds(throttle[3]);
 
   }
   else            //if swicth is off, read string from serial, compute the pwms values, and 'paste' to motors
@@ -156,18 +171,24 @@ void loop() {
       }
   
 
-      dt = micros()-dt;
+      dt = micros()-dt;              //is that right? dt will be update with (time now) - (last dt)?
       delay(2 - dt/1000);           //delay miliseconds, separetely for better precision
       delayMicroseconds(dt%1000);   //delay remaining microseconds
+                                  //does this make the loop run at 2ms=500Hz? why not delayMicroseconds(2000-dt)?
+                                   //can we put this delay behind the motor-writing part? 
 
-      throttle[0] = map(pwms[0], 1000, 2000, 40, 140);    // the range of servo library is 0-180, but for best 'building' a pulse of width between 1000ms and 2000ms, we must map to 40-140
-      motor[0].write(throttle[0]);
-      throttle[1] = map(pwms[1], 1000, 2000, 40, 140);
-      motor[1].write(throttle[1]);
-      throttle[2] = map(pwms[2], 1000, 2000, 40, 140);
-      motor[2].write(throttle[2]);
-      throttle[3] = map(pwms[3], 1000, 2000, 40, 140);
-      motor[3].write(throttle[3]);
+      //throttle[0] = map(pwms[0], 1000, 2000, 40, 140);    // the range of servo library is 0-180, but for best 'building' a pulse of width between 1000ms and 2000ms, we must map to 40-140
+      //motor[0].write(throttle[0]);
+      motor[0].writeMicroseconds(pwms[0]);
+      //throttle[1] = map(pwms[1], 1000, 2000, 40, 140);
+      //motor[1].write(throttle[1]);
+      motor[1].writeMicroseconds(pwms[1]);
+      //throttle[2] = map(pwms[2], 1000, 2000, 40, 140);
+      //motor[2].write(throttle[2]);
+      motor[2].writeMicroseconds(pwms[2]);
+      //throttle[3] = map(pwms[3], 1000, 2000, 40, 140);
+      //motor[3].write(throttle[3]);
+      motor[3].writeMicroseconds(pwms[3]);
     
   }
 }
