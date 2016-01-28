@@ -113,7 +113,7 @@ void loop() {
       while(Serial.read() != -1);  // fflush
       
       //throttle[1] = map(pwms[1], 1000, 2000, 40, 140);      // the range of servo library is 0-180, but for best 'building' a pulse of width between 1000ms and 2000ms, we must map to 40-140
-      //pulselen returns 1300ms for a 1000ms PWM input, and 2600ms for a 2000ms PWM input. Any ideas why?. for now, we remap linearly, but why is reading wrong?
+      //pulselen returns 1300us for a 1000us PWM input, and 2600us for a 2000us PWM input. Any ideas why?. for now, we remap linearly, but why is reading wrong?
        throttle[0] = map(pwms[0], 1300, 2600, 1000, 2000);      // "pasting"
        motor[0].writeMicroseconds(throttle[0]);
        /*Serial.print(pwms[0]); //oscilocope checked: writeMicroseconds generates pwm with specified ms given as parameter
