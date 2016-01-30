@@ -25,10 +25,10 @@
 
 // Assign your channel in pins
 int flyCtrl_pinIns[4] = {2, 3, 4, 5}; //6 is flag channel
-int flag_pin = 6;
+int flag_pin = 7;
 
 // Assign your channel out pins
-int pwms_outPins[4] 	  = {7,8,10,11};
+int pwms_outPins[4] 	  = {9,10,11,12};
 
 int pwm_out[4] = {1000,1000,1000,1000};
 
@@ -131,12 +131,13 @@ void loop()
 //adjust spacing!
 
 
-  if ((unFlagIn<1200) & (!interruptsAttached))
+/*  if ((unFlagIn<1200) & (!interruptsAttached))
   {
   PCintPort::attachInterrupt(flyCtrl_pinIns[0], calcM0,CHANGE);
   PCintPort::attachInterrupt(flyCtrl_pinIns[1], calcM1,CHANGE);
   PCintPort::attachInterrupt(flyCtrl_pinIns[2], calcM2,CHANGE);
-  PCintPort::attachInterrupt(flyCtrl_pinIns[3], calcM3,CHANGE);    
+  PCintPort::attachInterrupt(flyCtrl_pinIns[3], calcM3,CHANGE); 
+  interruptsAttached=1;  
   }
   else
   {
@@ -146,7 +147,7 @@ void loop()
   PCintPort::detachInterrupt(flyCtrl_pinIns[3]);   
   interruptsAttached = 0;
   };
-
+*/
 
   if(bUpdateFlagsShared)
       {
@@ -188,10 +189,8 @@ void loop()
         // clear shared copy of updated flags as we have already taken the updates
         // we still have a local copy if we need to use it in bUpdateFlags
         bUpdateFlagsShared = 0;
-    
-        unGapPWM = unM0In+unM1In+unM2In+unM3In;
-        CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,UPDATEPERIOD-unGapPWM);
-    
+      
+   
         interrupts(); // we have local copies of the inputs, so now we can turn interrupts back on
         // as soon as interrupts are back on, we can no longer use the shared copies, the interrupt
         // service routines own these and could update them at any time. During the update, the
@@ -201,6 +200,8 @@ void loop()
   if (unFlagIn > 1800)     //kill switch (SE switch completely up (physical position)). Receiver also sends this as failsafe
     {
       Serial.println("emergency deteced");
+      unGapPWM = 4000;
+      CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,UPDATEPERIOD-unGapPWM);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M0,1000);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M1,1000);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M2,1000);
@@ -215,6 +216,9 @@ void loop()
     }  
   else if (unFlagIn<1200)
         {
+          
+          unGapPWM = unM0In+unM1In+unM2In+unM3In;
+          CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,UPDATEPERIOD-unGapPWM);
           // check shared update flags to see if any channels have a new signal
 
           //Serial.println(unFlagIn);
@@ -288,6 +292,8 @@ void loop()
         pwm_out[2] = 1000;
         pwm_out[3] = 1000;
       }
+      unGapPWM = pwm_out[0]+pwm_out[1]+pwm_out[2]+pwm_out[3];
+      CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,UPDATEPERIOD-unGapPWM);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M0,pwm_out[0]);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M1,pwm_out[1]);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M2,pwm_out[2]);
