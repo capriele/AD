@@ -1,0 +1,2 @@
+seems to discretize PWM signals into 200us steps! 1000 1200.. (probably bad use of oscilloscope!)
+plus, period changes and depends on sum of all input-channel-PWMs!!!

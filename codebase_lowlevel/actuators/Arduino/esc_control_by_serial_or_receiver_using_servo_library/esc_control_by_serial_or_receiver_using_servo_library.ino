@@ -20,6 +20,8 @@ int pwms[5] = {1000,1000,1000,1000,1000};
 int test;
 char letter;
 
+int pulselnTimeout = 20000;
+
 void setup() {
   pinMode(flyCtrl[0],INPUT); //replace fixed pins with declared pins for flightcontroller input above
   pinMode(flyCtrl[1],INPUT);
@@ -58,7 +60,7 @@ void setup() {
   
   Serial.begin(115200);
   
-  pwms[4] = pulseIn(flag, HIGH); pwms[4]=map(pwms[4], 1300, 2600, 1000, 2000); 
+  pwms[4] = pulseIn(flag, HIGH,pulselnTimeout); pwms[4]=map(pwms[4], 1300, 2600, 1000, 2000); 
   
   while(Serial.read() != -1); //fflush;
   dt = micros();
@@ -89,11 +91,11 @@ void loop() {
   else if(pwms[4] < 1200)     //if switch , copy flycontroller`s signal, and paste to motors.
   {
       
-      pwms[0] = pulseIn(flyCtrl[0], HIGH);
-      pwms[1] = pulseIn(flyCtrl[1], HIGH);
-      pwms[2] = pulseIn(flyCtrl[2], HIGH);
-      pwms[3] = pulseIn(flyCtrl[3], HIGH);
-      pwms[4] = pulseIn(flag, HIGH); pwms[4]=map(pwms[4], 1300, 2600, 1000, 2000); 
+      pwms[0] = pulseIn(flyCtrl[0], HIGH,pulselnTimeout);
+      pwms[1] = pulseIn(flyCtrl[1], HIGH,pulselnTimeout);
+      pwms[2] = pulseIn(flyCtrl[2], HIGH,pulselnTimeout);
+      pwms[3] = pulseIn(flyCtrl[3], HIGH,pulselnTimeout);
+      pwms[4] = pulseIn(flag, HIGH,pulselnTimeout); pwms[4]=map(pwms[4], 1300, 2600, 1000, 2000); 
       
       //I think this block of commands make the code wait until it got pulses on all channels. the flightcontroller ouputs pwm with cycle length 2.5ms, so the code is done with this block after 12.5ms.
       

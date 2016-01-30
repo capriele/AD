@@ -1,0 +1,5 @@
+has potential
+
+needs to be completed
+
+can use setting in Servo.h to increase update rate... but seems to have problems above 100Hz to!

@@ -1,0 +1,10 @@
+esc_control_by_serial_or_receiver_using_servo_library_100Hz
+
+requires change in Servo.h!
+
+
+
+best so far:
+esc_control_by_serial_or_receiver_using_rcarduinofastlib
+
+doesnt seem to work beyond 100hz. jitter of 5us

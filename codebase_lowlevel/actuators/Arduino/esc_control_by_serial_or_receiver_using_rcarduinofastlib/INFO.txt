@@ -1,0 +1,15 @@
+work in progess!
+
+need to change
+#define RC_CHANNEL_OUT_COUNT 4 to 5 (?, 4 out + 1 frame?) in RCArduinoFastLIB.h
+
+
+sum-of-all-outout-pwm-depended output-pwm-period fixed
+
+
+reading seems perfect!
+
+
+TODOs/Issues:
+
+-not possible to read faster than 100hz? If it assumes "consequtive" firing input PWM pulses, then not (4 channels x 2.5ms period)

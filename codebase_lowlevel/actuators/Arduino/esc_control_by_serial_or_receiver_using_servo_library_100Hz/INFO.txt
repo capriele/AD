@@ -1,0 +1,14 @@
+esc_control_by_serial_or_receiver_using_servo_library_100Hz
+------------------------------------------
+reads 50Hz channel-7 flag with interupts, thus getting rid of the upto 20ms delay introduced by pulseln on channel 7
+
+thus loop runs at 400Hz/4~100Hz
+
+Servolib changed to write 100Hz PWMinstead of 50Hz PWM,
+
+needs change in  Servo.h
+#define REFRESH_INTERVAL     10000     // minumim time to refresh servos in microseconds. orig  20000
+
+ISSUE
+
+interrupt during pulseln screw this up that reading!!
