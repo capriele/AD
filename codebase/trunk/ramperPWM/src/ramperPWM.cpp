@@ -172,11 +172,13 @@ int main (int argc, char** argv) {
   podWorker.unsubscribe("statusWatchdog");
   podWorker.unsubscribe("statusDrone");
 
-  if ((argc==2) && (strcmp(argv[1], "toArduino") == 0))	
+  if ((argc==3) && (strcmp(argv[1], "toArduino") == 0))	
 	{
+	cout<<"Writes to Motorarduino!"<<endl;
 	podWorker.isWriteToArduino = true;
-  	std::string tmp = argv[1];
+  	std::string tmp = argv[2];
 	podWorker.usbPortname = "/dev/" + tmp;
+	cout<<podWorker.usbPortname<<endl;
 	}
 
   // 2) Create LCM

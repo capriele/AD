@@ -292,6 +292,7 @@ void loop()
         pwm_out[2] = 1000;
         pwm_out[3] = 1000;
       }
+      Serial.println(pwm_out[0]);
       unGapPWM = pwm_out[0]+pwm_out[1]+pwm_out[2]+pwm_out[3];
       CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,UPDATEPERIOD-unGapPWM);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M0,pwm_out[0]);
