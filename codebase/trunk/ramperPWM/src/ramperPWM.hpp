@@ -35,7 +35,7 @@ public:
 
   bool isWriteToArduino;	//flag is motorcommander tries to write to arduino or not
 
-  char const* portname;		//arduino portname
+  std::string usbPortname;		//arduino portname
   int fd;	    		// file descriptor to write to arduino
   int writeToArdStatus;	    	// return value of write process to arduino
 
@@ -53,7 +53,6 @@ public:
 
 	this->fd = 0;
 	this->writeToArdStatus = 0;
-	this->portname = "/dev/ttyUSB0"; /* The IMU-Arduino is on /dev/ttyUSB0 */
 	this->isWriteToArduino = false; 
 	}
 

@@ -8,7 +8,4 @@
 //epsilon
 #define EPSREMOTE 0.00001
 
-//motor arduino
-#define USBPORTMOTORS "/dev/ttyUSB0"
-
 #endif
