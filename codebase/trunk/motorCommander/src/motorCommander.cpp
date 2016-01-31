@@ -219,9 +219,12 @@ int main (int argc, char** argv) {
   // 1) Create the app
   motorCommander_t podWorker = motorCommander_t("motorCommander",CALLINTERVAL_MOTORCOMMANDER); 	//provide your PODname here! 
 
-  if ((argc>=2) && (strcmp(argv[1], "toArduino") == 0))	
+  if ((argc==2) && (strcmp(argv[1], "toArduino") == 0))	
 	{
 	podWorker.isWriteToArduino = true;
+  	std::string tmp = argv[1];
+	podWorker.usbPortname = "/dev/" + tmp;
+
 	}
 
   // 2) Create LCM
@@ -246,7 +249,7 @@ int main (int argc, char** argv) {
   podWorker.publishStatus(POD_INITING);
 
   /* Open the file descriptor in non-blocking mode */
-  podWorker.fd = open(podWorker.portname, O_RDWR | O_NOCTTY);
+  podWorker.fd = open(podWorker.usbPortname.c_str(), O_RDWR | O_NOCTTY);
 
   /* Set up the control structure */
   struct termios toptions;
