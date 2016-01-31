@@ -25,9 +25,13 @@ public:
 		this->isGotBiases = -1;	
 
 		// this value is changed for the first time by the end of calibration
-		this->biases.accel[0] = 0;		
-		this->biases.accel[1] = 0;	
-		this->biases.accel[2] = 0;			
+		this->stateVariances.imuBiasAccel[0] = 0;		
+		this->stateVariances.imuBiasAccel[1] = 0;	
+		this->stateVariances.imuBiasAccel[2] = 0;
+		this->stateVariances.orient[0] = 1;
+		this->stateVariances.orient[1] = 0;
+		this->stateVariances.orient[2]=0 ;												
+		this->stateVariances.orient[3] = 0;						
 	}
 
   //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call

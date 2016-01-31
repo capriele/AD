@@ -21,7 +21,9 @@ public:
 
 
   //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call
-  char const* portname;		//arduino portname
+  
+  //char const* usbPortname;		//arduino portname
+  std::string usbPortname;		//arduino portname
   int fd;	    		// file descriptor to write to arduino
   char buf[256];
 
@@ -41,7 +43,6 @@ public:
 	{	
 	//Pod-specific initialization
 	this->fd = 0;
-	this->portname = USBPORTNAME_IMU;
 	this->statusCalib = -2;
 	this->starttimeCalib = 0;
 

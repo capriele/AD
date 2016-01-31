@@ -338,9 +338,18 @@ main to initialize and start the POD
 int main (int argc, char** argv) {
 
   /* General Infrastructure: setup (maintain this structure!)  */  
+;
 
   // 1) Create the app
   imuAcquisition_t podWorker = imuAcquisition_t("imuAcquisition",CALLINTERVAL_IMUACQUISITION); 	//provide your PODname here! 
+
+  if (argc<2) {
+		printf("Please provide USB port of IMU-reading arduino (e.g. ttyUSB0)!\n");
+		return EXIT_FAILURE;
+		};
+  std::string tmp = argv[1];
+  podWorker.usbPortname = "/dev/" + tmp;
+  cout<<podWorker.usbPortname<<endl;
 
   // 2) Create LCM
   if (!podWorker.lcm.good()) 
@@ -356,7 +365,7 @@ int main (int argc, char** argv) {
  	
  
 	/* Open the file descriptor in non-blocking mode */
-	 podWorker.fd = open(podWorker.portname, O_RDWR | O_NOCTTY);
+	 podWorker.fd = open(podWorker.usbPortname.c_str(), O_RDWR | O_NOCTTY);
 	 
 
 

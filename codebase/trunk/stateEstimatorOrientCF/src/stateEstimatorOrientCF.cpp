@@ -197,9 +197,9 @@ gboolean podBase_t::gtimerfuncStatusPod (gpointer data) {
 		}
 		else if(podWorker->isGotBiases == 0)
 		{
-			if (podWorker->biases.accel[0] != 0 || 
-			    podWorker->biases.accel[1] != 0 ||
-			    podWorker->biases.accel[2] != 0   )
+			if (podWorker->stateVariances.imuBiasAccel[0] != 0 || 
+			    podWorker->stateVariances.imuBiasAccel[1] != 0 ||
+			    podWorker->stateVariances.imuBiasAccel[2] != 0   )
 			{		
 		 	   	printf("IMU calibration ok! Continuing...\n");
 			   	podWorker->isGotBiases == 1;
