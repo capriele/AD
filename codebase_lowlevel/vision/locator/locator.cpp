@@ -126,9 +126,9 @@ bool findReferenceRectangle(const vector<Polygon> poly3, const vector<Polygon> p
             // TODO be careful with division by 0. It seems safe unless the area 
             //is not enforced to be higher than something
             //cross ratio and alignemnt are less approximate criteria
-            if (((double)min_distance / max_distance) <0.1 &&(poly4[j].area>3*poly3[i].area)){
+            if (((double)min_distance / max_distance) <0.3 && (((double)min_distance / max_distance) >0.05) && (poly4[j].area>3*poly3[i].area)){
                 
-                cout<<"ratio "<<(double)min_distance / max_distance<<endl;
+                //cout<<"ratio "<<(double)min_distance / max_distance<<endl;
                 for (int k=0;k<3;k++){
                     triang_base->points[k]=poly3[i].points[(k+pointy_i)%3];
                 }
@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
     string imagesPath;
 
     Mat src, src_gray, gray,drawing;
-    int thresh_up = 123;//90
+    int thresh_up = 185;//123;//90
     int thresh_low = 0;//0
     int frame_trackbar=1;
     int frame;
@@ -195,7 +195,7 @@ int main(int argc, char** argv) {
 	imagesPath = argv[3];
 	cout<<"Pull images from: "<<imagesPath<<endl;
 	}
-   else cout<<"Camera needs to be plug in!"<<endl<<endl;
+   else cout<<"Camera needs to be plugged in!"<<endl<<endl;
 
 
     //Camera handler
@@ -214,15 +214,16 @@ int main(int argc, char** argv) {
     if (isWriteVideo)	
 	{
 
-    	video.open("/home/ubuntu/video2.avi",-1, 20, frameSize, true); //initialize the VideoWriter object 
+    	video.open("/home/ubuntu/Desktop/video2.avi",CV_FOURCC('M','J','P','G'), 20, frameSize, true); //initialize the VideoWriter object
+    		//video.open("/home/ubuntu/Desktop/video2.avi",-1, 20, frameSize, true); //initialize the VideoWriter object  
 	if(!video.isOpened() ){
-        	cout<<"could not open video"<<endl;
+        	cout<<"could not open video!"<<endl;
         	return -1;
     		}
 	}
 
    //loop over either stream or file-images 
-   while ((!isImgFromFile) || !isDraw || (waitKey(100) <0) ) {
+   while ( ((!isDraw) && (waitKey(1) <0)) || (((isDraw) && (waitKey(100) <0))) ) {
 
   //  for(int frame=1;frame<=frame_max;frame++){ //onyl 1 loop count if images come from camera
 
@@ -231,7 +232,7 @@ int main(int argc, char** argv) {
 	//load file from image and convert to gray scale
         if (isImgFromFile) 
 		{
-		frame=frame_trackbar;
+		frame=frame_trackbar;		
 		if(frame<1) frame=1;
 		ostringstream convert;
 		//convert<<"C:\\Users\\ubuntu\\Desktop\\whiteboard test\\img-"<<frame<<".jpg";
@@ -263,7 +264,7 @@ int main(int argc, char** argv) {
         RNG rng(12345);
         
         int index = 13;
-        cout << " contours size: " << contours.size() << endl;
+        //cout << " contours size: " << contours.size() << endl;
 
 
         // remove those too small or too complex
@@ -294,7 +295,7 @@ int main(int argc, char** argv) {
         Polygon rect_base=Polygon(4);
         Polygon tri_base=Polygon(3);
         bool found = findReferenceRectangle(poly3, poly4,&rect_base,&tri_base);
-        cout << "N34poly: "<<poly3.size() <<" :: "<<poly4.size()<<" :: found reference rectangle? :" << found << endl;
+        //cout << "N34poly: "<<poly3.size() <<" :: "<<poly4.size()<<" :: found reference rectangle? :" << found << endl;
 	
 
 	if(isDraw) drawing = Mat::zeros(src.size(), CV_8UC3);
@@ -375,7 +376,7 @@ int main(int argc, char** argv) {
 	     //imshow("gray",gray);	//shown earlier as findCountours overrides!
 	     //imshow("polygon",gray);
 	     imshow("Contours", drawing);
-	     waitKey(25);    
+	     //waitKey(25);    
 
 	     
 	 }//endif isDraw
@@ -386,7 +387,7 @@ int main(int argc, char** argv) {
 
     } //end while loop
 
-
+    video.release();
     return 0;
 }
 

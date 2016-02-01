@@ -35,10 +35,11 @@ int main(int argc, char** argv) {
 	VideoWriter outputVideo;
 	int ex=-1;
 	
- 	outputVideo.open("/home/ubuntu/tmp/teste.mpg", CV_FOURCC('X','2','6','5'), 20, S, true);
+ 	//outputVideo.open("/home/ubuntu/Desktop/teste.mpg", CV_FOURCC('X','2','6','5'), 20, S, true);
+	outputVideo.open("/home/ubuntu/Desktop/video2.avi",CV_FOURCC('M','J','P','G'), 20, S, true); //initialize the VideoWriter object
  	if (!outputVideo.isOpened())
     	{
-        	cout  << "Could not open the output video for write: " << endl;
+        	cout  << "Could not open the output video for write! " << endl;
         	return -1;
     	}
     	

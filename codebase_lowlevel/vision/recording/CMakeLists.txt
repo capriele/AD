@@ -9,6 +9,7 @@ find_path (FLY_CAPTURE_PATH flycapture  REQUIRED)
 
 find_LIBRARY (FLYCAPTURE_LIB flycapture /usr/local/lib REQUIRED)
 
+add_definitions(-g)
 
 add_executable(recorder recorder.cpp)
 
