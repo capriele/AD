@@ -70,7 +70,7 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				else if (podWorker->motorIdxToRamp==9) 
 					for (i=0;i<4;i++)
 						{
-						crement(&(podWorker->motorsPwms.pwms[i]), +STEPSPWM, MINPWM, MAXPWM+100);
+						crement(&(podWorker->motorsPwms.pwms[i]), -STEPSPWM, MINPWM, MAXPWM+100);
 						printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[i],i);
 						}
 				break;
@@ -92,7 +92,15 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 				break;
 			case 'a':
 				podWorker->motorIdxToRamp = 9;
-				printf("selected motorindex: all");
+				printf("selected motorindex: all\n");
+				break;
+			case 'e':
+				for (i=0;i<4;i++)
+						{
+						podWorker->motorsPwms.pwms[i]=MINPWM;
+						printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[i],i);
+						}
+				printf("emergency issues!\n");
 				break;
 			} //end switch	
 

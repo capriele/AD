@@ -293,9 +293,9 @@ void loop()
         
       }
      
-     //Serial.println((micros()-lastJetson)); 
      if ((micros()-lastJetson)>10000) //Jetson updates at 200Hz, expected udpate every 5ms. if nothing after 10ms set zero
        {
+        Serial.println((micros()-lastJetson));  
         pwm_out[0] = 1000;
         pwm_out[1] = 1000;
         pwm_out[2] = 1000;
