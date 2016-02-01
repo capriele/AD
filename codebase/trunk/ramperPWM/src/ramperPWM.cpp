@@ -14,7 +14,7 @@ void crement(int16_t* var, int16_t step, double min, double max)
 	if (*var < min) {*var = min;};
 	//printf("%d (%f..%f)\n",*var,min,max);
 };
-
+int i;
 
 /*
 Implementation of loop function for computations in this specific POD
@@ -49,12 +49,30 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		switch (ch)
 			{
 			case '+':
-				crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), +STEPSPWM, MINPWM, MAXPWM+100);
-				printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp],podWorker->motorIdxToRamp);
+				if (podWorker->motorIdxToRamp<=3) 
+					{
+					crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), +STEPSPWM, MINPWM, MAXPWM+100);
+					printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp],podWorker->motorIdxToRamp);
+					}
+				else if (podWorker->motorIdxToRamp==9) 
+					for (i=0;i<4;i++)
+						{
+						crement(&(podWorker->motorsPwms.pwms[i]), +STEPSPWM, MINPWM, MAXPWM+100);
+						printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[i],i);
+						}
 				break;
 			case '-':
-				crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), -STEPSPWM, MINPWM, MAXPWM+100);
-				printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp],podWorker->motorIdxToRamp);
+				if (podWorker->motorIdxToRamp<=3) 
+					{
+					crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), -STEPSPWM, MINPWM, MAXPWM+100);
+					printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp],podWorker->motorIdxToRamp);
+					}
+				else if (podWorker->motorIdxToRamp==9) 
+					for (i=0;i<4;i++)
+						{
+						crement(&(podWorker->motorsPwms.pwms[i]), +STEPSPWM, MINPWM, MAXPWM+100);
+						printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[i],i);
+						}
 				break;
 			case '0':
 				podWorker->motorIdxToRamp = 0;
@@ -71,6 +89,10 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 			case '3':
 				podWorker->motorIdxToRamp = 3;
 				printf("selected motorindex: %d\n",podWorker->motorIdxToRamp);
+				break;
+			case 'a':
+				podWorker->motorIdxToRamp = 9;
+				printf("selected motorindex: all");
 				break;
 			} //end switch	
 
