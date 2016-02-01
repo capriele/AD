@@ -193,7 +193,7 @@ void loop() {
       dt = micros()-dt;              //is that right? dt will be update with (time now) - (last dt)?
       delay(2 - dt/1000);           //delay miliseconds, separetely for better precision
       delayMicroseconds(dt%1000);   //delay remaining microseconds
-                                  //does this make the loop run at 2ms=500Hz? why not delayMicroseconds(2000-dt)?
+                                  //does this make the loop run at 2ms=500Hz? 
                                    //can we put this delay behind the motor-writing part? 
 
       //throttle[0] = map(pwms[0], 1000, 2000, 40, 140);    // the range of servo library is 0-180, but for best 'building' a pulse of width between 1000ms and 2000ms, we must map to 40-140

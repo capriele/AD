@@ -79,11 +79,12 @@ uint32_t ulVariance = 0;
 uint32_t ulGetNextSampleMillis = 0;
 uint16_t unMaxDifference = 0;
 
+uint8_t isInterruptsAttached = 1;
 int tmp;
 
 void setup()
 {
-  Serial.begin(115200);
+
 
   Serial.println("multiChannels");
   // attach servo objects, these will generate the correct
@@ -108,6 +109,9 @@ void setup()
   PCintPort::attachInterrupt(flyCtrl_pinIns[2], calcM2,CHANGE);
   PCintPort::attachInterrupt(flyCtrl_pinIns[3], calcM3,CHANGE);
   PCintPort::attachInterrupt(flag_pin, calcFlag,CHANGE);
+  
+  Serial.begin(115200);
+  while(Serial.read() != -1);  //fflush serial
 }
 
 void loop()
@@ -125,29 +129,29 @@ void loop()
   static uint16_t unFlagIn;
   // local copy of update flags
   static uint8_t bUpdateFlags;
-  static uint8_t interruptsAttached = 1;
+  static long lastJetson;
 
 //Serial.println(unM3In); reading works!
 //adjust spacing!
 
 
-/*  if ((unFlagIn<1200) & (!interruptsAttached))
+  if ((unFlagIn<1200) & (!isInterruptsAttached))
   {
   PCintPort::attachInterrupt(flyCtrl_pinIns[0], calcM0,CHANGE);
   PCintPort::attachInterrupt(flyCtrl_pinIns[1], calcM1,CHANGE);
   PCintPort::attachInterrupt(flyCtrl_pinIns[2], calcM2,CHANGE);
   PCintPort::attachInterrupt(flyCtrl_pinIns[3], calcM3,CHANGE); 
-  interruptsAttached=1;  
+  isInterruptsAttached=1;  
   }
-  else
+  else if (unFlagIn>1200)
   {
   PCintPort::detachInterrupt(flyCtrl_pinIns[0]);
   PCintPort::detachInterrupt(flyCtrl_pinIns[1]);
   PCintPort::detachInterrupt(flyCtrl_pinIns[2]);
   PCintPort::detachInterrupt(flyCtrl_pinIns[3]);   
-  interruptsAttached = 0;
+  isInterruptsAttached = 0;
   };
-*/
+
 
   if(bUpdateFlagsShared)
       {
@@ -199,14 +203,14 @@ void loop()
       
   if (unFlagIn > 1800)     //kill switch (SE switch completely up (physical position)). Receiver also sends this as failsafe
     {
-      Serial.println("emergency deteced");
+      Serial.println("emergency detected");
       unGapPWM = 4000;
       CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,UPDATEPERIOD-unGapPWM);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M0,1000);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M1,1000);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M2,1000);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M3,1000);
-      
+        while(Serial.read() != -1);  //fflush serial
        /*      
        motor[0].writeMicroseconds(1000);
        motor[1].writeMicroseconds(1000);
@@ -262,6 +266,7 @@ void loop()
         
         
           bUpdateFlags = 0;
+          while(Serial.read() != -1);  //fflush serial
       } //end if from flightcontroller
  else            //if swicth is middle, read string from serial, compute the pwms values, and 'paste' to motors
   {
@@ -279,20 +284,25 @@ void loop()
              tmp = 10*tmp + (Serial.read() - '0');      
              if(tmp < 2001 && tmp > 999 )
                   pwm_out[i] = tmp;
+                   //        Serial.print(pwm_out[i]);         
          }
+         //Serial.println();
+         lastJetson = micros();
          
          while(Serial.read() != -1);   // serial print from jetson should be faster, clear jetson-printed stuff
         
       }
-      
-      else        // with switch off, if doesn't receive anything from the jetson, kill all motors
-      {
+     
+     //Serial.println((micros()-lastJetson)); 
+     if ((micros()-lastJetson)>10000) //Jetson updates at 200Hz, expected udpate every 5ms. if nothing after 10ms set zero
+       {
         pwm_out[0] = 1000;
         pwm_out[1] = 1000;
         pwm_out[2] = 1000;
         pwm_out[3] = 1000;
       }
-      Serial.println(pwm_out[0]);
+      
+      //Serial.println(pwm_out[0]);
       unGapPWM = pwm_out[0]+pwm_out[1]+pwm_out[2]+pwm_out[3];
       CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,UPDATEPERIOD-unGapPWM);
       CRCArduinoFastServos::writeMicroseconds(SERVO_M0,pwm_out[0]);

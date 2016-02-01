@@ -49,11 +49,11 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 		switch (ch)
 			{
 			case '+':
-				crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), +STEPSPWM, MINPWM, MAXPWM);
+				crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), +STEPSPWM, MINPWM, MAXPWM+100);
 				printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp],podWorker->motorIdxToRamp);
 				break;
 			case '-':
-				crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), -STEPSPWM, MINPWM, MAXPWM);
+				crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), -STEPSPWM, MINPWM, MAXPWM+100);
 				printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp],podWorker->motorIdxToRamp);
 				break;
 			case '0':

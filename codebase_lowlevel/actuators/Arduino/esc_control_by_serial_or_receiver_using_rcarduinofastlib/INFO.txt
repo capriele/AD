@@ -5,3 +5,4 @@ needed to change
 TODOs/Issues:
 
 -not possible to read faster than 100hz? If it assumes "consequtive" firing input PWM pulses, then not (4 channels x 2.5ms period)
+-noisy PWM
