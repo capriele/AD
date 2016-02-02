@@ -1,10 +1,9 @@
-#ifndef EXAMPLEPOD_H
-#define EXAMPLEPOD_H
+#ifndef POSEESTIMVIS_H
+#define POSEESTIMVIS_H
 
 #include "../../framework/framework.hpp"
-#include "../../framework/paramsExamplePod.hpp"
 
-class examplePod_t : public podBase_t {
+class poseEstimVis_t : public podBase_t {
   
 public: 
 
@@ -13,7 +12,7 @@ public:
   agile::statusPod_t  statusTestsender;
 
   //constructor
-  examplePod_t (string podName, int64_t callInterval) : podBase_t(podName,callInterval)
+  poseEstimVis_t (string podName, int64_t callInterval) : podBase_t(podName,callInterval)
 	{	
 	//Pod-specific initialization
 	//...
