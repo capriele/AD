@@ -195,14 +195,20 @@ int main(int argc, char** argv) {
 	imagesPath = argv[3];
 	cout<<"Pull images from: "<<imagesPath<<endl;
 	}
-   else cout<<"Camera needs to be plugged in!"<<endl<<endl;
+   else cout<<"Camera needs to be plugged in!"<<endl;
 
 
     //Camera handler
     if (!isImgFromFile)
 	{   
-	
+	cout<<"Trying to connect to camera..."<<endl;
     	cap.open(0);
+	cout<<"Connection process ended."<<endl;
+	if (!cap.isOpened() ){
+		cout<<"could not open camera!"<<endl;
+		return -1;
+		}
+	else cout<<"camera open!"<<endl;
 	}
 
     double dWidth = 1280; //get the width of frames of the video
