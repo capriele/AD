@@ -163,11 +163,12 @@ int main(int argc, char** argv) {
     string imagesPath;
 
     Mat src, src_gray, gray,drawing;
-    int thresh_up = 185;//123;//90
+    int thresh_up = 140;//123;//90
     int thresh_low = 0;//0
     int frame_trackbar=1;
-    int frame;
-    int frame_max = 1; 
+    int frame = 1;
+    int frame_max = 500; 
+    bool runVid = false;
 
     //Check if images from camera or from file (if file, provide folder as third call argument)
     bool isImgFromFile = false;
@@ -229,17 +230,27 @@ int main(int argc, char** argv) {
 	}
 
    //loop over either stream or file-images 
-   while ( ((!isDraw) && (waitKey(1) <0)) || (((isDraw) && (waitKey(100) <0))) ) {
-
+   while ( ((!isDraw) && (waitKey(1) <0)) || (isDraw) ) {
   //  for(int frame=1;frame<=frame_max;frame++){ //onyl 1 loop count if images come from camera
 
 	pgr2cv::update_FPS(time(NULL));
+
+	if ((isDraw) && (waitKey(10)>=0)) runVid = !runVid;
         
 	//load file from image and convert to gray scale
         if (isImgFromFile) 
 		{
-		frame=frame_trackbar;		
-		if(frame<1) frame=1;
+		
+		if (runVid)
+		{
+			frame=frame+1;
+			if (frame>frame_max) frame=1;
+			frame_trackbar = frame;	
+		}
+		else
+			frame=frame_trackbar;
+
+	
 		ostringstream convert;
 		//convert<<"C:\\Users\\ubuntu\\Desktop\\whiteboard test\\img-"<<frame<<".jpg";
 		convert<<imagesPath<<"img-"<<frame<<".jpg";                

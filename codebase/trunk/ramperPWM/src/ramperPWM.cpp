@@ -100,7 +100,15 @@ gboolean podBase_t::gtimerfuncComputations (gpointer data) {
 						podWorker->motorsPwms.pwms[i]=MINPWM;
 						printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[i],i);
 						}
-				printf("emergency issues!\n");
+				printf("emergency issued!\n");
+				break;
+			case 'c':
+				for (i=0;i<4;i++)
+						{
+						podWorker->motorsPwms.pwms[i]=MAXPWM+100;
+						printf("current pwm %d at motor %d \n",podWorker->motorsPwms.pwms[i],i);
+						}
+				printf("all motors to max!\n");
 				break;
 			} //end switch	
 
