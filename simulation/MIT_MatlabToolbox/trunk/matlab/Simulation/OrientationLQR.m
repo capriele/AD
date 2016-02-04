@@ -16,8 +16,8 @@ mdl_quadrotor
 %% 1.1) Simplified Dynamics
 
 %symbolic variables
-syms yaw pitch roll p q r taup taur tauy;
-symsvector  = [yaw ;pitch ;roll ; p ;q ;r ;taup ;taur ;tauy];
+syms yaw pitch roll p q r taur taup tauy;
+symsvector  = [yaw ;pitch ;roll ; p ;q ;r ;taur ;taup ;tauy];
 
 %Inertia
 J            = quad.J;
@@ -64,6 +64,10 @@ O_dot_jacobian  = jacobian(O_dot,symsvector);
 O_dot_jacobian_eql = subs(O_dot_jacobian,symsvector,equil);
 
 %o ddot      
+% syms Jxs Jys Jzs;
+% J_sym = diag([Jxs Jys Jzs]);
+% o_ddot          = inv(J_sym)*([taur; taup; tauy] - cross([p;q;r],J_sym*[p;q;r]));
+
 o_ddot          = inv(J)*([taur; taup; tauy] - cross([p;q;r],J*[p;q;r]));
 o_ddot_jacobian = jacobian(o_ddot,symsvector);
 o_ddot_jacobian_eql = subs(o_ddot_jacobian,symsvector,equil);
