@@ -37,5 +37,6 @@ codebase_lowlevel/vision/locator/locator
 codebase_lowlevel/vision/recording/recorder
 codebase_lowlevel/vision/locator/Makefile
 cmake_install.cmake
-*.*.autosave
+*.*.autosave\
+*.*mexw64
 

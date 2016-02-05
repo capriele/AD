@@ -64,10 +64,13 @@ O_dot_jacobian  = jacobian(O_dot,symsvector);
 O_dot_jacobian_eql = subs(O_dot_jacobian,symsvector,equil);
 
 %o ddot      
-% syms Jxs Jys Jzs;
-% J_sym = diag([Jxs Jys Jzs]);
-% o_ddot          = inv(J_sym)*([taur; taup; tauy] - cross([p;q;r],J_sym*[p;q;r]));
-
+ syms Jxs Jys Jzs;
+ J_sym = diag([Jxs Jys Jzs]);
+ o_ddot          = inv(J_sym)*([taur; taup; tauy] - cross([p;q;r],J_sym*[p;q;r]));
+o_ddot_jacobian = jacobian(o_ddot,symsvector);
+o_ddot_jacobian_eql = subs(o_ddot_jacobian,symsvector,equil);
+ 
+ 
 o_ddot          = inv(J)*([taur; taup; tauy] - cross([p;q;r],J*[p;q;r]));
 o_ddot_jacobian = jacobian(o_ddot,symsvector);
 o_ddot_jacobian_eql = subs(o_ddot_jacobian,symsvector,equil);
@@ -83,7 +86,7 @@ B = double(matrixAB(:,7:9));
 %LQR
 Q = diag([1/(pi/2) 1/(pi/3) 1/(pi/3) 1/5 1/5 1/5].^2);
 rho = 1/0.164^2;
-R = rho*diag([1 1 1]);
+R = rho*diag([1 1 7]);
 
 K_lqr = lqr(A,B,Q,R)
 
