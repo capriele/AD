@@ -163,37 +163,41 @@ int main(int argc, char** argv) {
     string imagesPath;
 
     Mat src, src_gray, gray,drawing;
-    int thresh_up = 140;//123;//90
+    int thresh_up = 170;//123;//90
     int thresh_low = 0;//0
     int frame_trackbar=1;
-    int frame = 1;
+    int frame = 0;
     int frame_max = 500; 
     bool runVid = false;
 
+    int eps=7; //orig 7
+
     //Check if images from camera or from file (if file, provide folder as third call argument)
     bool isImgFromFile = false;
-    bool isWriteVideo = false;
+    bool isWriteInput  = false;	
+    bool isWriteResults = false;
     bool isDraw = false;
 	
     //argument handling
     if (argc<3)	
 	{
-	cout<<"Please provide flag if want to write images to disk, if want to draw and path to images if from disk instead of cam (e.g. './locator 0 1 /home/ubuntu/')!"<<endl;
+	cout<<"Please provide flag if want to i) record input ii) record ouput iii) draw iv) path to simulated input (e.g. './locator 0 1 1 /home/ubuntu/')!"<<endl;
 	return -1;
 	}
 
-    else if (argc>=3)
+    else if (argc>=4)
 	{
-	isWriteVideo = atoi(argv[1]);
-	isDraw = atoi(argv[2]);
-	cout<<"write video: "<<isWriteVideo<<" :: draw: "<<isDraw<<endl;
+	isWriteInput = atoi(argv[1]);
+	isWriteResults = atoi(argv[2]);
+	isDraw = atoi(argv[3]);
+	cout<<"write input: "<<isWriteInput<<" :: write ouput: "<<isWriteResults<<" :: draw: "<<isDraw<<endl;
 	};
 
-    if (argc>=4)
+    if (argc>=5)
 	{
 	isImgFromFile = true;
 	frame_max = 504; 	//@TODO make flexible
-	imagesPath = argv[3];
+	imagesPath = argv[4];
 	cout<<"Pull images from: "<<imagesPath<<endl;
 	}
    else cout<<"Camera needs to be plugged in!"<<endl;
@@ -218,15 +222,16 @@ int main(int argc, char** argv) {
     Size frameSize(static_cast<int>(dWidth), static_cast<int>(dHeight));
 
     //init video if want to write to disk	
-    if (isWriteVideo)	
+    if (isWriteResults)	
 	{
 
-    	video.open("/home/ubuntu/Desktop/video2.avi",CV_FOURCC('M','J','P','G'), 20, frameSize, true); //initialize the VideoWriter object
+    	/*video.open("/home/ubuntu/Desktop/video2.avi",CV_FOURCC('M','J','P','G'), 20, frameSize, true); //initialize the VideoWriter object
     		//video.open("/home/ubuntu/Desktop/video2.avi",-1, 20, frameSize, true); //initialize the VideoWriter object  
 	if(!video.isOpened() ){
         	cout<<"could not open video!"<<endl;
         	return -1;
     		}
+	*/
 	}
 
    //loop over either stream or file-images 
@@ -264,6 +269,7 @@ int main(int argc, char** argv) {
 	//read camera
 	cap>>src_gray;
 	cvtColor(src_gray, src, CV_GRAY2BGR);
+	frame=frame+1;
 	}
 	 
 	
@@ -297,7 +303,7 @@ int main(int argc, char** argv) {
             int area = contourArea(contours[i], false);
             //if (contourArea(contours[i], false) > 30 && contours[i].size() < 2000) {
 	    if (area > 30 && contours[i].size() < 2000) {
-                approxPolyDP(Mat(contours[i]), contours_poly[i], 7, true);
+                approxPolyDP(Mat(contours[i]), contours_poly[i], eps, true); //orig approx eps 7
                 if (contours_poly[i].size() == 4 || contours_poly[i].size() == 3) {
                     Polygon new_p = Polygon(area, contours_poly[i]);
                     if (contours_poly[i].size() == 4) poly4.push_back(new_p);
@@ -314,6 +320,10 @@ int main(int argc, char** argv) {
         bool found = findReferenceRectangle(poly3, poly4,&rect_base,&tri_base);
         //cout << "N34poly: "<<poly3.size() <<" :: "<<poly4.size()<<" :: found reference rectangle? :" << found << endl;
 	
+
+	char pathinput[50]; sprintf(pathinput,"%s%d%s","/home/ubuntu/Desktop/input_tmp/img-",frame,".jpg");
+	if (isWriteInput) imwrite(pathinput,src);//video<<src;
+
 
 	if(isDraw) drawing = Mat::zeros(src.size(), CV_8UC3);
 
@@ -388,7 +398,8 @@ int main(int argc, char** argv) {
 	    createTrackbar("frame", "view", &frame_trackbar, 504);	
 
        	    namedWindow("Contours", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL
-	    
+	    createTrackbar("epsilon", "Contours", &eps, 30);	
+
 	     imshow("view",src);
 	     //imshow("gray",gray);	//shown earlier as findCountours overrides!
 	     //imshow("polygon",gray);
@@ -399,8 +410,10 @@ int main(int argc, char** argv) {
 	 }//endif isDraw
 
         //}//for-image loop(?)
+	char pathoutput[50]; sprintf(pathoutput,"%s%d%s","/home/ubuntu/Desktop/results_tmp/img-",frame,".jpg");		
+	if (isWriteResults) imwrite(pathoutput,src);//video<<src;
 
-	if (isWriteVideo) video<<src;
+	
 
     } //end while loop
 
