@@ -16,3 +16,6 @@
 [submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_Sensor"]
 	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_Sensor
 	url = https://github.com/adafruit/Adafruit_Sensor.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/PinChangeInt"]
+	path = codebase_lowlevel/libraries/arduino_libraries/PinChangeInt
+	url = https://github.com/GreyGnome/PinChangeInt
