@@ -1,0 +1,24 @@
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_10DOF"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_10DOF
+	url = https://github.com/adafruit/Adafruit_10DOF.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP085_Unified"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP085_Unified
+	url = https://github.com/adafruit/Adafruit_BMP085_Unified.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP183_Unified_Library"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP183_Unified_Library
+	url = https://github.com/adafruit/Adafruit_BMP183_Unified_Library.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_L3GD20_U"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_L3GD20_U
+	url = https://github.com/adafruit/Adafruit_L3GD20_U.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_LSM303DLHC"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_LSM303DLHC
+	url = https://github.com/adafruit/Adafruit_LSM303DLHC.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_Sensor"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_Sensor
+	url = https://github.com/adafruit/Adafruit_Sensor.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/PinChangeInt"]
+	path = codebase_lowlevel/libraries/arduino_libraries/PinChangeInt
+	url = https://github.com/GreyGnome/PinChangeInt
+[submodule "codebase_lowlevel/libraries/arduino_libraries/RCArduinoFastLib"]
+	path = codebase_lowlevel/libraries/arduino_libraries/RCArduinoFastLib
+	url = https://github.com/eric-wieser/RCArduinoFastLib.git
