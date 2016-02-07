@@ -4,3 +4,6 @@
 [submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP085_Unified"]
 	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP085_Unified
 	url = https://github.com/adafruit/Adafruit_BMP085_Unified.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP183_Unified_Library"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP183_Unified_Library
+	url = https://github.com/adafruit/Adafruit_BMP183_Unified_Library.git
