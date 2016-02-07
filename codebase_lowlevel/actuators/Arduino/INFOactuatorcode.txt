@@ -1,15 +1,19 @@
-esc_control_by_serial_or_receiver_using_servo_library_100Hz
-
-required change in Servo.h!
-
-
-
-best so far:
+--in use Feb/6/2016:--
 esc_control_by_serial_or_receiver_using_rcarduinofastlib
 
-doesnt seem to work beyond 100hz. jitter of 5us
+doesnt seem to work beyond 100hz. oscilloscope shows jitter of 5us
 
-also good, but uses int0 and int1-pins:
+also good, but uses interrupt pins int0 and int1:
 esc_control_by_serial_or_receiver_using_servo_lib)100hz
 
 interrupt on receiver-channel8-flag disturbs pulseln-reading, but that might be ok as cleaness and accuray of jetson-pwm is more important!
+
+
+
+esc_control_by_serial_or_receiver_using_servo_library_100Hz:
+----------------
+required changes in Servo.h!
+
+
+
+
