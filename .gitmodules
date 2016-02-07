@@ -7,3 +7,6 @@
 [submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP183_Unified_Library"]
 	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_BMP183_Unified_Library
 	url = https://github.com/adafruit/Adafruit_BMP183_Unified_Library.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_L3GD20_U"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_L3GD20_U
+	url = https://github.com/adafruit/Adafruit_L3GD20_U.git
