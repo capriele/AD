@@ -19,3 +19,6 @@
 [submodule "codebase_lowlevel/libraries/arduino_libraries/PinChangeInt"]
 	path = codebase_lowlevel/libraries/arduino_libraries/PinChangeInt
 	url = https://github.com/GreyGnome/PinChangeInt
+[submodule "codebase_lowlevel/libraries/arduino_libraries/RCArduinoFastLib"]
+	path = codebase_lowlevel/libraries/arduino_libraries/RCArduinoFastLib
+	url = https://github.com/eric-wieser/RCArduinoFastLib.git
