@@ -1,6 +1,6 @@
 #include <RCArduinoFastLib.h>
 
- // MultiChannels
+// MultiChannels
 //
 // rcarduino.blogspot.com
 //
@@ -66,150 +66,151 @@ uint16_t unMaxDifference = 0;
 
 void setup()
 {
-  Serial.begin(115200);
+    Serial.begin(115200);
 
-  Serial.println("multiChannels");
+    Serial.println("multiChannels");
 
-  // attach servo objects, these will generate the correct
-  // pulses for driving Electronic speed controllers, servos or other devices
-  // designed to interface directly with RC Receivers
-  CRCArduinoFastServos::attach(SERVO_THROTTLE,THROTTLE_OUT_PIN);
-  CRCArduinoFastServos::attach(SERVO_STEERING,STEERING_OUT_PIN);
-  CRCArduinoFastServos::attach(SERVO_AUX,AUX_OUT_PIN);
- 
-  // lets set a standard rate of 50 Hz by setting a frame space of 10 * 2000 = 3 Servos + 7 times 2000
-  CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE,7*125);
+    // attach servo objects, these will generate the correct
+    // pulses for driving Electronic speed controllers, servos or other devices
+    // designed to interface directly with RC Receivers
+    CRCArduinoFastServos::attach(SERVO_THROTTLE, THROTTLE_OUT_PIN);
+    CRCArduinoFastServos::attach(SERVO_STEERING, STEERING_OUT_PIN);
+    CRCArduinoFastServos::attach(SERVO_AUX, AUX_OUT_PIN);
 
-  CRCArduinoFastServos::begin();
- 
-  // using the PinChangeInt library, attach the interrupts
-  // used to read the channels
-  PCintPort::attachInterrupt(THROTTLE_IN_PIN, calcThrottle,CHANGE);
-  PCintPort::attachInterrupt(STEERING_IN_PIN, calcSteering,CHANGE);
-  PCintPort::attachInterrupt(AUX_IN_PIN, calcAux,CHANGE);
+    // lets set a standard rate of 50 Hz by setting a frame space of 10 * 2000 = 3 Servos + 7 times 2000
+    CRCArduinoFastServos::setFrameSpaceA(SERVO_FRAME_SPACE, 7 * 125);
+
+    CRCArduinoFastServos::begin();
+
+    // using the PinChangeInt library, attach the interrupts
+    // used to read the channels
+    PCintPort::attachInterrupt(THROTTLE_IN_PIN, calcThrottle, CHANGE);
+    PCintPort::attachInterrupt(STEERING_IN_PIN, calcSteering, CHANGE);
+    PCintPort::attachInterrupt(AUX_IN_PIN, calcAux, CHANGE);
 }
 
 void loop()
 {
-  // create local variables to hold a local copies of the channel inputs
-  // these are declared static so that thier values will be retained
-  // between calls to loop.
-  static uint16_t unThrottleIn;
-  static uint16_t unSteeringIn;
-  static uint16_t unAuxIn;
-  // local copy of update flags
-  static uint8_t bUpdateFlags;
+    // create local variables to hold a local copies of the channel inputs
+    // these are declared static so that thier values will be retained
+    // between calls to loop.
+    static uint16_t unThrottleIn;
+    static uint16_t unSteeringIn;
+    static uint16_t unAuxIn;
+    // local copy of update flags
+    static uint8_t bUpdateFlags;
 
-  // check shared update flags to see if any channels have a new signal
-  if(bUpdateFlagsShared)
-  {
-    noInterrupts(); // turn interrupts off quickly while we take local copies of the shared variables
+    // check shared update flags to see if any channels have a new signal
+    if(bUpdateFlagsShared)
+    {
+        noInterrupts(); // turn interrupts off quickly while we take local copies of the shared variables
 
-    // take a local copy of which channels were updated in case we need to use this in the rest of loop
-    bUpdateFlags = bUpdateFlagsShared;
-  
-    // in the current code, the shared values are always populated
-    // so we could copy them without testing the flags
-    // however in the future this could change, so lets
-    // only copy when the flags tell us we can.
-  
+        // take a local copy of which channels were updated in case we need to use this in the rest of loop
+        bUpdateFlags = bUpdateFlagsShared;
+
+        // in the current code, the shared values are always populated
+        // so we could copy them without testing the flags
+        // however in the future this could change, so lets
+        // only copy when the flags tell us we can.
+
+        if(bUpdateFlags & THROTTLE_FLAG)
+        {
+            unThrottleIn = unThrottleInShared;
+        }
+
+        if(bUpdateFlags & STEERING_FLAG)
+        {
+            unSteeringIn = unSteeringInShared;
+        }
+
+        if(bUpdateFlags & AUX_FLAG)
+        {
+            unAuxIn = unAuxInShared;
+        }
+
+        // clear shared copy of updated flags as we have already taken the updates
+        // we still have a local copy if we need to use it in bUpdateFlags
+        bUpdateFlagsShared = 0;
+
+        interrupts(); // we have local copies of the inputs, so now we can turn interrupts back on
+        // as soon as interrupts are back on, we can no longer use the shared copies, the interrupt
+        // service routines own these and could update them at any time. During the update, the
+        // shared copies may contain junk. Luckily we have our local copies to work with :-)
+    }
+
+    // do any processing from here onwards
+    // only use the local values unAuxIn, unThrottleIn and unSteeringIn, the shared
+    // variables unAuxInShared, unThrottleInShared, unSteeringInShared are always owned by
+    // the interrupt routines and should not be used in loop
+
+    // the following code provides simple pass through
+    // this is a good initial test, the Arduino will pass through
+    // receiver input as if the Arduino is not there.
+    // This should be used to confirm the circuit and power
+    // before attempting any custom processing in a project.
+
+    // we are checking to see if the channel value has changed, this is indicated
+    // by the flags. For the simple pass through we don't really need this check,
+    // but for a more complex project where a new signal requires significant processing
+    // this allows us to only calculate new values when we have new inputs, rather than
+    // on every cycle.
     if(bUpdateFlags & THROTTLE_FLAG)
     {
-      unThrottleIn = unThrottleInShared;
+        CRCArduinoFastServos::writeMicroseconds(SERVO_THROTTLE, unThrottleIn);
     }
-  
+
     if(bUpdateFlags & STEERING_FLAG)
     {
-      unSteeringIn = unSteeringInShared;
+        CRCArduinoFastServos::writeMicroseconds(SERVO_STEERING, unSteeringIn);
     }
-  
+
     if(bUpdateFlags & AUX_FLAG)
     {
-      unAuxIn = unAuxInShared;
+        CRCArduinoFastServos::writeMicroseconds(SERVO_AUX, unAuxIn);
     }
-   
-    // clear shared copy of updated flags as we have already taken the updates
-    // we still have a local copy if we need to use it in bUpdateFlags
-    bUpdateFlagsShared = 0;
-  
-    interrupts(); // we have local copies of the inputs, so now we can turn interrupts back on
-    // as soon as interrupts are back on, we can no longer use the shared copies, the interrupt
-    // service routines own these and could update them at any time. During the update, the
-    // shared copies may contain junk. Luckily we have our local copies to work with :-)
-  }
 
-  // do any processing from here onwards
-  // only use the local values unAuxIn, unThrottleIn and unSteeringIn, the shared
-  // variables unAuxInShared, unThrottleInShared, unSteeringInShared are always owned by
-  // the interrupt routines and should not be used in loop
-
-  // the following code provides simple pass through
-  // this is a good initial test, the Arduino will pass through
-  // receiver input as if the Arduino is not there.
-  // This should be used to confirm the circuit and power
-  // before attempting any custom processing in a project.
-
-  // we are checking to see if the channel value has changed, this is indicated
-  // by the flags. For the simple pass through we don't really need this check,
-  // but for a more complex project where a new signal requires significant processing
-  // this allows us to only calculate new values when we have new inputs, rather than
-  // on every cycle.
-  if(bUpdateFlags & THROTTLE_FLAG)
-  {
-    CRCArduinoFastServos::writeMicroseconds(SERVO_THROTTLE,unThrottleIn);
-  }
-
-  if(bUpdateFlags & STEERING_FLAG)
-  {
-    CRCArduinoFastServos::writeMicroseconds(SERVO_STEERING,unSteeringIn);
-  }
-
-  if(bUpdateFlags & AUX_FLAG)
-  {
-   CRCArduinoFastServos::writeMicroseconds(SERVO_AUX,unAuxIn);
-  }
-
-  delay(500);
-  bUpdateFlags = 0;
+    delay(500);
+    bUpdateFlags = 0;
 }
 
 
 // simple interrupt service routine
 void calcThrottle()
 {
-  if(PCintPort::pinState)
-  {
-    unThrottleInStart = TCNT1;
-  }
-  else
-  {
-    unThrottleInShared = (TCNT1 - unThrottleInStart)>>1;
-    bUpdateFlagsShared |= THROTTLE_FLAG;
-  }
+    if(PCintPort::pinState)
+    {
+        unThrottleInStart = TCNT1;
+    }
+    else
+    {
+        unThrottleInShared = (TCNT1 - unThrottleInStart) >> 1;
+        bUpdateFlagsShared |= THROTTLE_FLAG;
+    }
 }
 
 void calcSteering()
 {
-  if(PCintPort::pinState)
-  {
-    unSteeringInStart = TCNT1;
-  }
-  else
-  {
-    unSteeringInShared = (TCNT1 - unSteeringInStart)>>1;
+    if(PCintPort::pinState)
+    {
+        unSteeringInStart = TCNT1;
+    }
+    else
+    {
+        unSteeringInShared = (TCNT1 - unSteeringInStart) >> 1;
 
-    bUpdateFlagsShared |= STEERING_FLAG;
-  }
+        bUpdateFlagsShared |= STEERING_FLAG;
+    }
 }
 
 void calcAux()
 {
-  if(PCintPort::pinState)
-  {
-    unAuxInStart = TCNT1;
-  }
-  else
-  {
-    unAuxInShared = (TCNT1 - unAuxInStart)>>1;
-    bUpdateFlagsShared |= AUX_FLAG;  }
+    if(PCintPort::pinState)
+    {
+        unAuxInStart = TCNT1;
+    }
+    else
+    {
+        unAuxInShared = (TCNT1 - unAuxInStart) >> 1;
+        bUpdateFlagsShared |= AUX_FLAG;
+    }
 }

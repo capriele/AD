@@ -16,30 +16,31 @@ extern "C" {
 
 
 
-class simulator_t : public podBase_t {
-  
-public: 
+class simulator_t : public podBase_t
+{
 
-  //Pod-specific members to store received messages of channels that this POD is subscribed to (Note that every pod is auto-subscribed to statusWatchdog and has a member to store this (see base class constructor))
-  agile::motorsPwms_t   motorsPwms;
-  
-  //constructor
-  simulator_t (string podName, int64_t callInterval) : podBase_t(podName,callInterval)
-	{	
-	//Pod-specific initialization
-	//...
-	this->motorsPwms.pwms[0] = 0.0;
-	this->motorsPwms.pwms[1] = 0.0;	
-	this->motorsPwms.pwms[2] = 0.0;	
-	this->motorsPwms.pwms[3] = 0.0;		
-	}
+public:
 
-  //Pod-specifc members for storing values (if some values in the computation-cycle or statusUpdate-cycle are needed over more than 1 function call)
-  agile::stateVariances_t stateVariancesSim;
-  agile::imuRaw_t imuRawSim;
-  agile::poseRef_t stateEulerSim;    
+    //Pod-specific members to store received messages of channels that this POD is subscribed to (Note that every pod is auto-subscribed to statusWatchdog and has a member to store this (see base class constructor))
+    agile::motorsPwms_t   motorsPwms;
 
-  //Pod-specific member functions
+    //constructor
+    simulator_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)
+    {
+        //Pod-specific initialization
+        //...
+        this->motorsPwms.pwms[0] = 0.0;
+        this->motorsPwms.pwms[1] = 0.0;
+        this->motorsPwms.pwms[2] = 0.0;
+        this->motorsPwms.pwms[3] = 0.0;
+    }
+
+    //Pod-specifc members for storing values (if some values in the computation-cycle or statusUpdate-cycle are needed over more than 1 function call)
+    agile::stateVariances_t stateVariancesSim;
+    agile::imuRaw_t imuRawSim;
+    agile::poseRef_t stateEulerSim;
+
+    //Pod-specific member functions
 
 };
 
