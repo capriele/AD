@@ -1,0 +1,3 @@
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_10DOF"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_10DOF
+	url = https://github.com/adafruit/Adafruit_10DOF.git
