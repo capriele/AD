@@ -10,3 +10,6 @@
 [submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_L3GD20_U"]
 	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_L3GD20_U
 	url = https://github.com/adafruit/Adafruit_L3GD20_U.git
+[submodule "codebase_lowlevel/libraries/arduino_libraries/Adafruit_LSM303DLHC"]
+	path = codebase_lowlevel/libraries/arduino_libraries/Adafruit_LSM303DLHC
+	url = https://github.com/adafruit/Adafruit_LSM303DLHC.git
