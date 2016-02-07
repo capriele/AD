@@ -27,8 +27,8 @@ codebase/libbot2/trunk/bot2-procman/lcmtypes/c/
 codebase/libbot2/trunk/bot2-procman/lcmtypes/cpp/
 codebase/libbot2/trunk/bot2-procman/lcmtypes/java/
 codebase/libbot2/trunk/bot2-procman/python/src/bot_procman/build_prefix.py
-simulation/MIT_MatlabToolbox/trunk/matlab/Simulation/SimulatorDrone_ert_shrlib_rtw/
-simulation/MIT_MatlabToolbox/trunk/matlab/Simulation/slprj/
+simulation/Simulation/SimulatorDrone_ert_shrlib_rtw/
+simulation/Simulation/slprj/
 codebase/trunk/simulator/src/simulink/ert_main.c
 CMakeFiles/
 CMakeCache.txt

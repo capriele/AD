@@ -1,4 +1,24 @@
 group "G1Simulation-TestOrientCF-startRemoteControllerSeparatelyLast" {
+    cmd "simulatorG1" {
+        auto_respawn = "true";
+        exec = "simulator";
+        host = "ra-Desktop01";
+    }
+    cmd "motorCommanderG1" {
+        auto_respawn = "true";
+        exec = "motorCommander";
+        host = "ra-Desktop01";
+    }
+    cmd "testsenderG1" {
+        auto_respawn = "true";
+        exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw detectorVis controllerSOCPose controllerSOCOrient";
+        host = "ra-Desktop01";
+    }
+    cmd "controllerPDOrientG1" {
+        auto_respawn = "true";
+        exec = "controllerPDOrient stateVariancesSim";
+        host = "ra-Desktop01";
+    }
     cmd "controllerPDPoseG1" {
         exec = "controllerPDPose stateVariancesSim";
         host = "ra-Desktop01";
@@ -8,108 +28,76 @@ group "G1Simulation-TestOrientCF-startRemoteControllerSeparatelyLast" {
         exec = "watchdog imuRawSim stateVariancesSim";
         host = "ra-Desktop01";
     }
-    cmd "simulatorG1" {
-        auto_respawn = "true";
-        exec = "simulator";
-        host = "ra-Desktop01";
-    }
     cmd "stateEstimatorOrientCFG1" {
         exec = "stateEstimatorOrientCF imuRawSim";
-        host = "ra-Desktop01";
-    }
-    cmd "motorCommanderG1" {
-        auto_respawn = "true";
-        exec = "motorCommander";
-        host = "ra-Desktop01";
-    }
-    cmd "controllerPDOrientG1" {
-        auto_respawn = "true";
-        exec = "controllerPDOrient stateVariancesSim";
-        host = "ra-Desktop01";
-    }
-    cmd "testsenderG1" {
-        auto_respawn = "true";
-        exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw detectorVis controllerSOCPose controllerSOCOrient";
         host = "ra-Desktop01";
     }
 }
 
 group "t_G3TestOrientCF-startinOrder" {
-    cmd "imuAcquisitionG3" {
-        exec = "imuAcquisition ttyUSB1";
+    cmd "watchdogG3t" {
+        exec = "watchdog imuRaw stateVariancesOrientCF";
         host = "tegra-ubuntu";
     }
-    cmd "stateEstimatorOrientCFG3" {
+    cmd "stateEstimatorOrientCFG3t" {
         exec = "stateEstimatorOrientCF imuRaw";
         host = "tegra-ubuntu";
     }
-    cmd "watchdogG3" {
-        exec = "watchdog imuRaw stateVariancesOrientCF";
+    cmd "imuAcquisitionG3t" {
+        exec = "imuAcquisition ttyUSB1";
         host = "tegra-ubuntu";
     }
 }
 
 group "G0ExamplePod" {
-    cmd "testsenderG0" {
-        exec = "testsender examplePod";
-        host = "ra-Desktop01";
-    }
     cmd "examplePodG0" {
         exec = "examplePod";
+        host = "ra-Desktop01";
+    }
+    cmd "testsenderG0" {
+        exec = "testsender examplePod";
         host = "ra-Desktop01";
     }
 }
 
 group "t_G2Simulation-FullSimOrientCF-startRemoteControllerSeparatelyLast" {
-    cmd "controllerPDOrientG2" {
-        exec = "controllerPDOrient stateVariancesOrientCF";
-        host = "tegra-ubuntu";
-    }
-    cmd "stateEstimatorOrientG2" {
-        exec = "stateEstimatorOrientCF imuRawSim";
-        host = "tegra-ubuntu";
-    }
-    cmd "watchdogG2" {
+    cmd "watchdogG2t" {
         exec = "watchdog imuRawSim stateVariancesOrientCF";
         host = "tegra-ubuntu";
     }
-    cmd "controllerPDPoseG2" {
+    cmd "stateEstimatorOrientG2t" {
+        exec = "stateEstimatorOrientCF imuRawSim";
+        host = "tegra-ubuntu";
+    }
+    cmd "controllerPDOrientG2t" {
+        exec = "controllerPDOrient stateVariancesOrientCF";
+        host = "tegra-ubuntu";
+    }
+    cmd "simulatorG2t" {
+        exec = "simulator";
+        host = "tegra-ubuntu";
+    }
+    cmd "controllerPDPoseG2t" {
         exec = "controllerPDPose stateVariancesSim";
         host = "tegra-ubuntu";
     }
-    cmd "motorCommanderG2" {
-        exec = "motorCommander";
-        host = "tegra-ubuntu";
-    }
-    cmd "testsenderG2" {
+    cmd "testsenderG2t" {
         exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw detectorVis controllerSOCPose controllerSOCOrient";
         host = "tegra-ubuntu";
     }
-    cmd "simulatorG2" {
-        exec = "simulator";
+    cmd "motorCommanderG2t" {
+        exec = "motorCommander";
         host = "tegra-ubuntu";
     }
 }
 
 group "G2Simulation-FullSimOrientCF-startRemoteControllerSeparatelyLast" {
-    cmd "controllerPDPoseG2" {
-        exec = "controllerPDPose stateVariancesSim";
-        host = "ra-Desktop01";
-    }
-    cmd "controllerPDOrientG2" {
-        exec = "controllerPDOrient stateVariancesOrientCF";
-        host = "ra-Desktop01";
-    }
-    cmd "motorCommanderG2" {
-        exec = "motorCommander";
-        host = "ra-Desktop01";
-    }
     cmd "stateEstimatorOrientG2" {
         exec = "stateEstimatorOrientCF imuRawSim";
         host = "ra-Desktop01";
     }
-    cmd "simulatorG2" {
-        exec = "simulator";
+    cmd "controllerPDOrientG2" {
+        exec = "controllerPDOrient stateVariancesOrientCF";
         host = "ra-Desktop01";
     }
     cmd "testsenderG2" {
@@ -120,40 +108,83 @@ group "G2Simulation-FullSimOrientCF-startRemoteControllerSeparatelyLast" {
         exec = "watchdog imuRawSim stateVariancesOrientCF";
         host = "ra-Desktop01";
     }
+    cmd "controllerPDPoseG2" {
+        exec = "controllerPDPose stateVariancesSim";
+        host = "ra-Desktop01";
+    }
+    cmd "simulatorG2" {
+        exec = "simulator";
+        host = "ra-Desktop01";
+    }
+    cmd "motorCommanderG2" {
+        exec = "motorCommander";
+        host = "ra-Desktop01";
+    }
+}
+
+group "t_G4Flight" {
+    cmd "motorCommanderG4t" {
+        exec = "motorCommander toArduino ttyUSB0";
+        host = "tegra-ubuntu";
+    }
+    cmd "testsenderG4t" {
+        exec = "testsender detectorVis controllerSOCPose controllerSOCOrient";
+        host = "tegra-ubuntu";
+    }
+    cmd "controllerPDOrientG4t" {
+        exec = "controllerPDOrient stateVariancesOrientCF";
+        host = "tegra-ubuntu";
+    }
+    cmd "watchdogG4t" {
+        exec = "watchdog imuRaw stateVariancesOrientCF";
+        host = "tegra-ubuntu";
+    }
+    cmd "stateEstimatorOrientCFG4t" {
+        exec = "stateEstimatorOrientCF imuRaw";
+        host = "tegra-ubuntu";
+    }
+    cmd "controllerPDPoseG4t" {
+        exec = "controllerPDPose stateVariancesOrientCF";
+        host = "tegra-ubuntu";
+    }
+    cmd "imuAcquisitionG4t" {
+        exec = "imuAcquisition ttyUSB1";
+        host = "tegra-ubuntu";
+    }
 }
 
 group "t_G1Simulation-TestOrientCF-startRemoteControllerSeparatelyLast" {
-    cmd "stateEstimatorOrientCFG1" {
-        exec = "stateEstimatorOrientCF imuRawSim";
-        host = "tegra-ubuntu";
-    }
-    cmd "testsenderG1" {
-        auto_respawn = "true";
-        exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw detectorVis controllerSOCPose controllerSOCOrient";
-        host = "tegra-ubuntu";
-    }
-    cmd "controllerPDOrientG1" {
-        auto_respawn = "true";
-        exec = "controllerPDOrient stateVariancesSim";
-        host = "tegra-ubuntu";
-    }
-    cmd "controllerPDPoseG1" {
-        exec = "controllerPDPose stateVariancesSim";
-        host = "tegra-ubuntu";
-    }
-    cmd "watchdogG1" {
-        auto_respawn = "true";
-        exec = "watchdog imuRawSim stateVariancesSim";
-        host = "tegra-ubuntu";
-    }
-    cmd "simulatorG1" {
+    cmd "simulatorG1t" {
         auto_respawn = "true";
         exec = "simulator";
         host = "tegra-ubuntu";
     }
-    cmd "motorCommanderG1" {
+    cmd "stateEstimatorOrientCFG1t" {
+        exec = "stateEstimatorOrientCF imuRawSim";
+        host = "tegra-ubuntu";
+    }
+    cmd "watchdogG1t" {
+        auto_respawn = "true";
+        exec = "watchdog imuRawSim stateVariancesSim";
+        host = "tegra-ubuntu";
+    }
+    cmd "motorCommanderG1t" {
         auto_respawn = "true";
         exec = "motorCommander";
+        host = "tegra-ubuntu";
+    }
+    cmd "controllerPDOrientG1t" {
+        auto_respawn = "true";
+        exec = "controllerPDOrient stateVariancesSim";
+        host = "tegra-ubuntu";
+    }
+    cmd "controllerPDPoseG1t" {
+        exec = "controllerPDPose stateVariancesSim";
+        host = "tegra-ubuntu";
+    }
+    cmd "testsenderG1t" {
+        auto_respawn = "true";
+        exec = "testsender imuAcquisitionStatus imuAcquisitionImuRaw detectorVis controllerSOCPose controllerSOCOrient";
         host = "tegra-ubuntu";
     }
 }
