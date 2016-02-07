@@ -15,37 +15,38 @@
 
 
 
-class motorCommander_t : public podBase_t {
-  
-public: 
+class motorCommander_t : public podBase_t
+{
 
-  //Pod-specific members to store received messages  
-  agile::controlMode_t       controlMode;	
-  agile::powerAdjust_t       powerAdjust;
+public:
 
-  agile::motorsWsRef_t       motorsWsRefPDOrient;
-  agile::motorsWsRef_t       motorsWsRefPDPose;
+    //Pod-specific members to store received messages
+    agile::controlMode_t       controlMode;
+    agile::powerAdjust_t       powerAdjust;
 
-  bool isWriteToArduino;	//flag is motorcommander tries to write to arduino or not
+    agile::motorsWsRef_t       motorsWsRefPDOrient;
+    agile::motorsWsRef_t       motorsWsRefPDPose;
 
-  std::string usbPortname;		//arduino portname
-  int fd;	    		// file descriptor to write to arduino
-  int writeToArdStatus;	    	// return value of write process to arduino
+    bool isWriteToArduino;	//flag is motorcommander tries to write to arduino or not
 
-  
-  //constructor
-  motorCommander_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)
-	{	
-	//Pod-specific initialization
-	//...	
-	this->fd = 0;
-	this->writeToArdStatus = 0;
-	this->isWriteToArduino = false; 	
-	}
+    std::string usbPortname;		//arduino portname
+    int fd;	    		// file descriptor to write to arduino
+    int writeToArdStatus;	    	// return value of write process to arduino
 
-  //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call
-  agile::motorsPwms_t   motorsPwms;
-  agile::motorsWsRef_t*  motorsWsRefControlerToUse;	
+
+    //constructor
+    motorCommander_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)
+    {
+        //Pod-specific initialization
+        //...
+        this->fd = 0;
+        this->writeToArdStatus = 0;
+        this->isWriteToArduino = false;
+    }
+
+    //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call
+    agile::motorsPwms_t   motorsPwms;
+    agile::motorsWsRef_t*  motorsWsRefControlerToUse;
 
 
 

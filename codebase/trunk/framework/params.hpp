@@ -18,8 +18,8 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 
 
 #define AW2PWM 2.6673e-4   //omega = sqrt((pwm-BPWM2W)/APWM2W)+CPWM2W :: pwm = AW2PWM*(w-CW2PWM)^2+BW2PWM
-#define BW2PWM 1009.0 
-#define CW2PWM -200.2 
+#define BW2PWM 1009.0
+#define CW2PWM -200.2
 
 #define THRUST2OMEGA2 455390 // THRUST2OMEGA2=1/ALPHAT with ALPHAT 2.2e-6 //Thrust = ALPHAT*w^2 (w=rotational speed of motor in rad/s)
 
