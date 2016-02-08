@@ -130,7 +130,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         double euler_hat[3];
         int64_t nowCompUpdate = GetTimeStamp();
 
-        double dt = (nowCompUpdate - podWorker->stateVariances.timestampJetson) / (1000000.0); //printf("dt: %f\n",dt);
+        double dt = (nowCompUpdate - podWorker->stateVariances.timestampJetson) / (1000000.0); //printf("dt: %f\n",dt); //@TODO should probably refer to Arduino clock, but then we need some sort of clock sync!
 
 
         if(dt > 10) dt = 0.01; //initial timestamp

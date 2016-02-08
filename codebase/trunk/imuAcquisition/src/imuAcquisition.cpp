@@ -121,6 +121,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         //I.e., every other arduino reading is missed
         readFromArdStatus = serialport_read_until(podWorker->fd, podWorker->buf);
 
+    imuRaw.timestampJetson = GetTimeStamp();
     double k = 1000000.0;
 
     vector<int> vec(10);
@@ -275,7 +276,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         };
 
         /* Publishing computation result */
-        imuRaw.timestampJetson = GetTimeStamp();
+        //imuRaw.timestampJetson = GetTimeStamp(); //moved to closer when actually read from USB @TODO estimators should work with arduino clock when figuring out dt to last measurement, however: pay attention to clocksync!
 
         //	if( vec[0]!=0 && vec[1]!=0 && vec[2]!=0 && vec[3]!=0 && vec[4]!=0 && vec[5]!=0 && vec[6]!=0 && vec[7]!=0 && vec[8]!=0 && vec[9]!=0) //@TODO should we add this?
         {
