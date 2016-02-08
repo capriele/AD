@@ -178,7 +178,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time
     {
-        printf("motorCommander: delay occured of % " PRId64 "us!\n", podWorker->computationInterval); //@TODO why has this guy delays oftentimes?
+        printf("motorCommander: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval); //@TODO why has this guy delays oftentimes?
         podWorker->statusPod.status = POD_FATAL;
     }
     else if((podWorker->isWriteToArduino) && (podWorker->writeToArdStatus < 0))

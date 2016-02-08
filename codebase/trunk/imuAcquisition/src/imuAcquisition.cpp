@@ -317,7 +317,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     if((podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-        printf("imuAcquisition: delay occured of % " PRId64 "us!\n", podWorker->computationInterval);
+        printf("imuAcquisition: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }
 

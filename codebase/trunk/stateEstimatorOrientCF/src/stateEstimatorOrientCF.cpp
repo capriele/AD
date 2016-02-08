@@ -179,7 +179,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
     /*Computation statusPOD*/
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
     {
-        printf("stateEstimatorOrientCF: delay occured of % " PRId64 "us!\n",
+        printf("stateEstimatorOrientCF: delay occured; comp interval % " PRId64 "us!\n",
                podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }

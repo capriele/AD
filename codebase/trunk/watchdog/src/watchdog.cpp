@@ -179,7 +179,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
     /*Computation statusPOD*/
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
     {
-        printf("watchdog: delay occured of % " PRId64 "us!\n", podWorker->computationInterval);
+        printf("watchdog: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }
     else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
@@ -272,7 +272,7 @@ int main(int argc, char** argv)
 
     /*  POD-specific init procedures  */
     printf("Initializing...\n");
-    usleep(500000);				 //imuAcquisition waits for watchdogs' POD_Initing and might miss it if too early @TODO maybe add proper waiting-for-imuAcquisition-message
+    usleep(1500000);				 //imuAcquisition waits for watchdogs' POD_Initing and might miss it if too early @TODO maybe add proper waiting-for-imuAcquisition-message
     podWorker.publishStatus(POD_INITING);	 // Update and publish status of watchdogPod (this POD is the second to start after imuAcquisition)
 
     podWorker.statusDrone.status = DRONE_WAITPODS;

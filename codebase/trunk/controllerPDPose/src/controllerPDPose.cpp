@@ -94,7 +94,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
     /*Computation statusPOD*/
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
     {
-        printf("controllerPDPose: delay occured of % " PRId64 "us!\n", podWorker->computationInterval);
+        printf("controllerPDPose: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }
     else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
