@@ -243,14 +243,14 @@ int main(int argc, char** argv)
     podWorker.unsubscribe("statusWatchdog"); //unsubscribed from base-class-autosubscribed channels
     podWorker.unsubscribe("statusDrone");	  //unsubscribed from base-class-autosubscribed channels
 
-    if(strcmp(podWorker.stateVariancesChannel.c_str(), "stateVariancesSim") == 0)
-        podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_SIMULATOR, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
-    else if(strcmp(podWorker.stateVariancesChannel.c_str(), "stateVariancesOrientCF") == 0)
-        podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_STATEESTIMATORORIENTCF, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
-    /*else if (strcmp(podWorker.stateVariancesChannel.c_str(),"stateVariancesOrientV1")==0)
-      podWorker.subscribe(podWorker.stateVariancesChannel.c_str(),CALLINTERVAL_STATEESTIMATORORIENTV1, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);*/
+    if(podWorker.stateVariancesChannel == "stateVariancesSim")
+        podWorker.subscribe(podWorker.stateVariancesChannel, CALLINTERVAL_SIMULATOR, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
+    else if(podWorker.stateVariancesChannel == "stateVariancesOrientCF")
+        podWorker.subscribe(podWorker.stateVariancesChannel, CALLINTERVAL_STATEESTIMATORORIENTCF, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);
+    /*else if (podWorker.stateVariancesChannel == "stateVariancesOrientV1")
+      podWorker.subscribe(podWorker.stateVariancesChannel,CALLINTERVAL_STATEESTIMATORORIENTV1, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);*/
 
-    podWorker.subscribe(podWorker.imuRawChannel.c_str(), CALLINTERVAL_IMUACQUISITION * 2, &(podWorker.imuRaw), &podBase_t::handleMessage<agile::imuRaw_t>); //@TODO remove callinterval x2
+    podWorker.subscribe(podWorker.imuRawChannel, CALLINTERVAL_IMUACQUISITION * 2, &(podWorker.imuRaw), &podBase_t::handleMessage<agile::imuRaw_t>); //@TODO remove callinterval x2
     podWorker.subscribe("controlMode", CALLINTERVAL_REMOTECONTROLLER, &(podWorker.controlMode), &podBase_t::handleMessage<agile::controlMode_t>);
 
     podWorker.subscribe("statusImuAcquisition", CALLINTERVAL_IMUACQUISITION, &(podWorker.statusImuAcquisition), &podBase_t::handleMessage<agile::statusPod_t>);
