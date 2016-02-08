@@ -232,7 +232,7 @@ public:
 
             if(!allUptodate)
             {
-                printf("message -%s- delayed in POD -%s- at time %" PRId64"\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp);
+                printf("message -%s- delayed in POD -%s- at time %" PRId64" with %" PRId64 "\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta);
                 someMsgDeadlyLate = updateDelta >  DEADMSGDELAY_X * MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US;
                 if(someMsgDeadlyLate) 	printf("message deadly delayed\n");
             }
