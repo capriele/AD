@@ -29,12 +29,12 @@ all: pod-build/Makefile
 pod-build/Makefile:
 	$(MAKE) configure
 
-.PHONY: configure
-configure:
-	@echo "\nBUILD_PREFIX: $(BUILD_PREFIX)\n\n"
+pod-build:
+	cmake -E make_directory pod-build
 
-	# create the temporary build directory if needed
-	@mkdir -p pod-build
+.PHONY: configure
+configure: pod-build
+	@echo "\nBUILD_PREFIX: $(BUILD_PREFIX)\n\n"
 
 	# run CMake to generate and configure the build scripts
 	@cd pod-build && cmake -DCMAKE_INSTALL_PREFIX=$(BUILD_PREFIX) \
