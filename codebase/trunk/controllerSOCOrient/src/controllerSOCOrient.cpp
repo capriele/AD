@@ -41,42 +41,42 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     double totalThrust = - QUADMASS * GRAVITY - podWorker->powerAdjust.tBiasPDO;
 
     //convert [totalthrust;body torque references] into the four motor speeds
-    podWorker->motorsWsRef.wsRef[0] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0));
-                                           podWorker->motorsWsRef.wsRef[1] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
-                                           podWorker->motorsWsRef.wsRef[2] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
-                                           podWorker->motorsWsRef.wsRef[3] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0]));
+    podWorker->motorsWsRef.wsRef[0] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0]));
+    podWorker->motorsWsRef.wsRef[1] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
+    podWorker->motorsWsRef.wsRef[2] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
+    podWorker->motorsWsRef.wsRef[3] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0]));
 
 
-                                           podWorker->motorsWsRef.timestampJetson = GetTimeStamp();
+    podWorker->motorsWsRef.timestampJetson = GetTimeStamp();
 
-                                           /*---------*/
-
-
-                                           /* Publishing */
-
-                                           // statusDrone - publish
-                                           podWorker->lcm.publish("motorsWsRefSOCOrient", &podWorker->motorsWsRef); 	//choose channelName here!
-
-                                           /*---------*/
+    /*---------*/
 
 
+    /* Publishing */
 
-                                           /*General Infrastructure (maintain this structure!)*/
-                                           podWorker->updateComputationInterval();
-                                           return TRUE;
-                                           /*---------*/
+    // statusDrone - publish
+    podWorker->lcm.publish("motorsWsRefSOCOrient", &podWorker->motorsWsRef); 	//choose channelName here!
+
+    /*---------*/
+
+
+
+    /*General Infrastructure (maintain this structure!)*/
+    podWorker->updateComputationInterval();
+    return TRUE;
+    /*---------*/
 }
-                                  /*--------------------------*/
+/*--------------------------*/
 
 
 
 
 
-                                  /*
-                                  Implementation of loop function for publishing statusPod
-                                  */
+/*
+Implementation of loop function for publishing statusPod
+*/
 
-                                  gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
 
     /*General Infrastructure (maintain this infrastructure!)*/
