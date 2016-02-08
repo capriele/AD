@@ -272,7 +272,7 @@ int main(int argc, char** argv)
         return 1;
 
     // 3) Subscribe this POD to channels
-    podWorker.subscribe(podWorker.imuRawChannel.c_str(), CALLINTERVAL_IMUACQUISITION, &(podWorker.imudata),
+    podWorker.subscribe(podWorker.imuRawChannel, CALLINTERVAL_IMUACQUISITION, &(podWorker.imudata),
                         &podBase_t::handleMessage<agile::imuRaw_t>);
 
     podWorker.subscribe("stateVariancesOrientV1", CALLINTERVAL_STATEESTIMATORORIENTV1,

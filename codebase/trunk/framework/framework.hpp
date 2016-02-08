@@ -256,9 +256,9 @@ public:
     {
         std::lock_guard<std::mutex> guard(podMutex);
         //store mesage
-        *reinterpret_cast<msgType_t*>(this->messageAdmin[chan.c_str()].message) = *msg;
+        *reinterpret_cast<msgType_t*>(this->messageAdmin[chan].message) = *msg;
         //update messageadmin that message was received
-        this->updateMessageLastReceived(chan.c_str());
+        this->updateMessageLastReceived(chan);
 
     };
 
