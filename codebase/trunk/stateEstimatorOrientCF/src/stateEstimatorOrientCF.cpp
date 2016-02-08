@@ -204,8 +204,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
                     podWorker->stateVariances.imuBiasAccel[1] != 0 ||
                     podWorker->stateVariances.imuBiasAccel[2] != 0)
             {
-                printf("IMU calibration ok! Continuing...\n");
-                podWorker->isGotBiases == 1;
+                printf("IMU calibration ok! Continuing...\n");                
 
                 podWorker->biases.accel[0] = podWorker->stateVariances.imuBiasAccel[0];
                 podWorker->biases.accel[1] = podWorker->stateVariances.imuBiasAccel[1];
@@ -252,9 +251,9 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
                 //after getting the initial versors, unsubscribe
                 podWorker->unsubscribe("stateVariancesOrientCF");
 
-                podWorker->isGotBiases = true;
+                podWorker->isGotBiases = 1;
 
-                podWorker->statusPod.status = POD_OK;
+                //podWorker->statusPod.status = POD_OK;
 
             }
             else if(strcmp(podWorker->imuRawChannel.c_str(), "imuRawSim") == 0)
@@ -310,14 +309,12 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
                 //podWorker->unsubscribe("features");
 
                 podWorker->isGotBiases = true;
+		//podWorker->statusPod.status = POD_OK;
+                
+            };	
+        }
 
-                podWorker->statusPod.status = POD_OK;
-            };
-        };
-
-
-
-
+    else if(podWorker->isGotBiases == 1) podWorker->statusPod.status = POD_OK;	
     };
 
     /*---------*/

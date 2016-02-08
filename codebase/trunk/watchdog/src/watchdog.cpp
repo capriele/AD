@@ -257,7 +257,7 @@ int main(int argc, char** argv)
     //podWorker.subscribe("statusStateEstimatorOrientV1",CALLINTERVAL_STATEESTIMATORORIENTV1,&(podWorker.statusStateEstimatorOrientV1), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusStateEstimatorOrientCF", CALLINTERVAL_STATEESTIMATORORIENTCF, &(podWorker.statusStateEstimatorOrientCF), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusDetectorVis", CALLINTERVAL_DETECTORVIS, &(podWorker.statusDetectorVis), &podBase_t::handleMessage<agile::statusPod_t>);
-    podWorker.subscribe("statusRemoteController", CALLINTERVAL_REMOTECONTROLLER*2, &(podWorker.statusRemoteController), &podBase_t::handleMessage<agile::statusPod_t>); //@TODO remove callintervall x2 (messages from over lcm-tunnel often late, that's why increased tolerance)
+    podWorker.subscribe("statusRemoteController", CALLINTERVAL_REMOTECONTROLLER*2, &(podWorker.statusRemoteController), &podBase_t::handleMessage<agile::statusPod_t>); //@TODO remove callintervall x2 (messages from over lcm-tunnel often late, that's why increased tolerance?!)
     podWorker.subscribe("statusControllerPDPose", CALLINTERVAL_CONTROLLERPDPOSE, &(podWorker.statusControllerPDPose), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusControllerPDOrient", CALLINTERVAL_CONTROLLERPDORIENT, &(podWorker.statusControllerPDOrient), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusControllerSOCOrient", CALLINTERVAL_CONTROLLERSOCORIENT, &(podWorker.statusControllerSOCOrient), &podBase_t::handleMessage<agile::statusPod_t>);
@@ -272,9 +272,11 @@ int main(int argc, char** argv)
 
     /*  POD-specific init procedures  */
     printf("Initializing...\n");
-    podWorker.publishStatus(POD_INITING);	 // Update and publish status of watchdogPod (this POD is the first to start)
+    usleep(500000);				 //imuAcquisition waits for watchdogs' POD_Initing and might miss it if too early @TODO maybe add proper waiting-for-imuAcquisition-message
+    podWorker.publishStatus(POD_INITING);	 // Update and publish status of watchdogPod (this POD is the second to start after imuAcquisition)
 
     podWorker.statusDrone.status = DRONE_WAITPODS;
+    podWorker.initComputationInterval();
 
     //Create message listener thead
     std::thread listenerThread(listen, &podWorker);
