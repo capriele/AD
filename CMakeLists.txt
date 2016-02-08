@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 2.8.0)
 project(agile-drones-superbuild)
 
+# PODs out-of-source build logic
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	find_file(_build_dir build PATHS ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/.. ${PROJECT_SOURCE_DIR}/../.. ${PROJECT_SOURCE_DIR}/../../.. ${PROJECT_SOURCE_DIR}/../../../..)
+	if (_build_dir)
+		set(CMAKE_INSTALL_PREFIX "${_build_dir}" CACHE STRING
+		"install prefix" FORCE)
+	else()
+		execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/build)
+		set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/build
+		CACHE STRING "install prefix" FORCE)
+	endif()
+endif()
+
+message(STATUS CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
 
 include(ExternalProject)
 
@@ -10,11 +24,11 @@ set(lcm_dependencies gtk)
 set(libbot_dependencies lcm)
 
 # download information, in alphabetical order
-set(cmake_GIT_REPOSITORY https://github.com/RobotLocomotion/cmake.git)
-set(cmake_GIT_TAG 2d8eebdaf3a7e7a7125c1190462bc02fb3a83824)
-set(cmake_GIT_CLONE_DIR "${PROJECT_SOURCE_DIR}/drake/cmake")
-set(cmake_NO_BUILD TRUE)
-set(cmake_IS_PUBLIC TRUE)
+# set(cmake_GIT_REPOSITORY https://github.com/RobotLocomotion/cmake.git)
+# set(cmake_GIT_TAG 2d8eebdaf3a7e7a7125c1190462bc02fb3a83824)
+# set(cmake_GIT_CLONE_DIR "${PROJECT_SOURCE_DIR}/cmake")
+# set(cmake_NO_BUILD TRUE)
+# set(cmake_IS_PUBLIC TRUE)
 set(gtk_GIT_REPOSITORY https://github.com/RobotLocomotion/gtk-pod.git)
 set(gtk_GIT_TAG 78a110023b527e6ee372e4686118a8c7a6a51131)
 set(gtk_IS_CMAKE_POD TRUE)
@@ -40,7 +54,7 @@ endif()
 
 # process optional projects
 # note: keep drake in this loop in case externals depend on drake (e.g. the director might in the near future)
-set(EXTERNAL_PROJECTS cmake gtk lcm libbot)
+set(EXTERNAL_PROJECTS gtk lcm libbot)
 
 set(EXTERNAL_SOURCE_DIRS)
 foreach (proj ${EXTERNAL_PROJECTS})
