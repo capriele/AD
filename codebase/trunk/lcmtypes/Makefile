@@ -1,45 +1,49 @@
-# Default makefile distributed with pods version: 11.02.09
 
-default_target: all
-
-# Default to a less-verbose build.  If you want all the gory compiler output,
-# run "make VERBOSE=1"
-$(VERBOSE).SILENT:
-
-# Figure out where to build the software.
-#   Use BUILD_PREFIX if it was passed in.
-#   If not, search up to four parent directories for a 'build' directory.
-#   Otherwise, use ./build.
-ifeq "$(BUILD_PREFIX)" ""
-BUILD_PREFIX:=$(shell for pfx in .. ../.. ../../.. ../../../..; do d=`pwd`/$$pfx/build;\
-               if [ -d $$d ]; then echo $$d; exit 0; fi; done; echo `pwd`/build)
+# support only a few flags that might be passed through:
+#   BUILD_PREFIX, BUILD_TYPE, CMAKE_FLAGS*
+CMAKE_FLAGS+=$(strip $(CMAKE_FLAGS1) $(CMAKE_FLAGS2) $(CMAKE_FLAGS3) $(CMAKE_FLAGS4) $(CMAKE_FLAGS5) $(CMAKE_FLAGS6) $(CMAKE_FLAGS7) $(CMAKE_FLAGS8) $(CMAKE_FLAGS9) $(CMAKE_FLAGS10) $(CMAKE_FLAGS11) $(CMAKE_FLAGS12) $(CMAKE_FLAGS13) $(CMAKE_FLAGS14) $(CMAKE_FLAGS15) $(CMAKE_FLAGS16) $(CMAKE_FLAGS17) $(CMAKE_FLAGS18) $(CMAKE_FLAGS19) $(CMAKE_FLAGS20))
+ifneq "$(BUILD_PREFIX)" ""
+  CMAKE_FLAGS+=-DCMAKE_INSTALL_PREFIX="$(BUILD_PREFIX)"
 endif
-# create the build directory if needed, and normalize its path name
-BUILD_PREFIX:=$(shell mkdir -p $(BUILD_PREFIX) && cd $(BUILD_PREFIX) && echo `pwd`)
-
-# Default to a release build.  If you want to enable debugging flags, run
-# "make BUILD_TYPE=Debug"
 ifeq "$(BUILD_TYPE)" ""
-BUILD_TYPE="Release"
+  BUILD_TYPE="Release"
 endif
+CMAKE_FLAGS+=-DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
+CMAKE_CONFIG=--config $(BUILD_TYPE)
 
-all: pod-build/Makefile
-	$(MAKE) -C pod-build all install
-
-pod-build/Makefile:
-	$(MAKE) configure
+.PHONY: all
+all: configure
+	cmake --build pod-build $(CMAKE_CONFIG) --target install
 
 pod-build:
 	cmake -E make_directory pod-build
 
 .PHONY: configure
 configure: pod-build
-	@echo "\nBUILD_PREFIX: $(BUILD_PREFIX)\n\n"
+	@echo Configuring with CMAKE_FLAGS: $(CMAKE_FLAGS)
+	@cd pod-build && cmake $(CMAKE_FLAGS) ..
 
-	# run CMake to generate and configure the build scripts
-	@cd pod-build && cmake -DCMAKE_INSTALL_PREFIX=$(BUILD_PREFIX) \
-		   -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ..
+.PHONY: options
+options: configure
+ifeq ($(OS),Windows_NT)
+	cmake-gui pod-build
+else
+	ccmake pod-build
+endif
 
+.PHONY: clean
 clean:
-	-if [ -e pod-build/install_manifest.txt ]; then rm -f `cat pod-build/install_manifest.txt`; fi
-	-if [ -d pod-build ]; then $(MAKE) -C pod-build clean; rm -rf pod-build; fi
+	cmake --build pod-build --target clean
+	cmake -E remove_directory pod-build
+	cmake -E remove_directory build
+
+# other (custom) targets are passed through to the cmake-generated Makefile
+%::
+	cmake --build pod-build $(CMAKE_CONFIG) --target $@
+
+# Default to a less-verbose build.  If you want all the gory compiler output,
+# run "make VERBOSE=1"
+$(VERBOSE).SILENT:
+
+
+### rules specific to this project (everything above is the generic pods makefile wrapper of a cmake project)
