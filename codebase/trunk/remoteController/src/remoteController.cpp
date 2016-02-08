@@ -30,7 +30,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (maintain this structure!) */
-    remoteController_t* podWorker = (remoteController_t*) data;
+    remoteController_t* podWorker = reinterpret_cast<remoteController_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -390,7 +390,7 @@ Implementation of loop function for publishing statusPod
 gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
     /*General Infrastructure (maintain this infrastructure!)*/
-    remoteController_t* podWorker = (remoteController_t*) data;
+    remoteController_t* podWorker = reinterpret_cast<remoteController_t*>(data);
     /*---------*/
 
     /*Computation statusPOD*/

@@ -404,7 +404,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (keep this infrastructure!) */
-    simulator_t* podWorker = (simulator_t*) data;
+    simulator_t* podWorker = reinterpret_cast<simulator_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -414,10 +414,10 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     //Update inputs to simulink model
 
-    SimulatorDrone_U_motorsPWM_datin[0] = (int)((podWorker->motorsPwms.pwms[0]) / PWMDISCRESC + 0.5) * PWMDISCRESC; //NOTE: +0.5 to make cast as semi-rounding procedure
-    SimulatorDrone_U_motorsPWM_datin[1] = (int)((podWorker->motorsPwms.pwms[1]) / PWMDISCRESC + 0.5) * PWMDISCRESC;
-    SimulatorDrone_U_motorsPWM_datin[2] = (int)((podWorker->motorsPwms.pwms[2]) / PWMDISCRESC + 0.5) * PWMDISCRESC;
-    SimulatorDrone_U_motorsPWM_datin[3] = (int)((podWorker->motorsPwms.pwms[3]) / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[0] = static_cast<int>(podWorker->motorsPwms.pwms[0] / PWMDISCRESC + 0.5) * PWMDISCRESC; //NOTE: +0.5 to make cast as semi-rounding procedure
+    SimulatorDrone_U_motorsPWM_datin[1] = static_cast<int>(podWorker->motorsPwms.pwms[1] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[2] = static_cast<int>(podWorker->motorsPwms.pwms[2] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[3] = static_cast<int>(podWorker->motorsPwms.pwms[3] / PWMDISCRESC + 0.5) * PWMDISCRESC;
 
     //printf("in %d, act int %f\n",podWorker->motorsPwms.pwms[0],SimulatorDrone_U_motorsPWM_datin[0]);
 
@@ -504,7 +504,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
 
     /*General Infrastructure (keep this infrastructure!)*/
-    simulator_t* podWorker = (simulator_t*) data;
+    simulator_t* podWorker = reinterpret_cast<simulator_t*>(data);
     /*---------*/
 
     /*Computation statusPOD*/

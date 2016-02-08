@@ -8,17 +8,18 @@ struct timeval tv;
 int16_t omegaToPwm(double omega)
 {
     //int pwm = (int)(AOMEGA2TOPWM*pow(omega,2)+COMEGA2TOPWM);
-    int pwm = ((int)((AW2PWM * pow((omega - CW2PWM), 2) + BW2PWM)));
+    int pwm = static_cast<int>(AW2PWM * pow(omega - CW2PWM, 2) + BW2PWM);
 
     //PWM saturation
-    if(pwm > MAXPWM)     pwm = MAXPWM;
+    if(pwm > MAXPWM)
+        pwm = MAXPWM;
     if(pwm < ZERORPMPWM)
     {
         pwm = ZERORPMPWM;
         printf("pwm %d < %d", pwm, ZERORPMPWM);
-    };
+    }
 
-    return (int16_t)(pwm);
+    return static_cast<int16_t>(pwm);
 };
 
 
@@ -30,7 +31,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (maintain this structure!) */
-    motorCommander_t* podWorker = (motorCommander_t*) data;
+    motorCommander_t* podWorker = reinterpret_cast<motorCommander_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -65,45 +66,45 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     switch(podWorker->statusDrone.status)
     {
     case DRONE_WAITPODS: //outputs PWM 0
-        podWorker->motorsPwms.pwms[0] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[1] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[2] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[3] = (int16_t)(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
         break;
 
     case DRONE_IDLE:   //outputs PWM idle spin
-        podWorker->motorsPwms.pwms[0] = (int16_t)(IDLERPMPWM);
-        podWorker->motorsPwms.pwms[1] = (int16_t)(IDLERPMPWM);
-        podWorker->motorsPwms.pwms[2] = (int16_t)(IDLERPMPWM);
-        podWorker->motorsPwms.pwms[3] = (int16_t)(IDLERPMPWM);
+        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(IDLERPMPWM);
+        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(IDLERPMPWM);
+        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(IDLERPMPWM);
+        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(IDLERPMPWM);
         break;
 
     case DRONE_TAKEOFF: //outputs PWM suggested by PD-pose controller
-        podWorker->motorsPwms.pwms[0] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[0]));
-        podWorker->motorsPwms.pwms[1] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[1]));
-        podWorker->motorsPwms.pwms[2] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[2]));
-        podWorker->motorsPwms.pwms[3] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[3]));
+        podWorker->motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[0]);
+        podWorker->motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[1]);
+        podWorker->motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[2]);
+        podWorker->motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[3]);
         break;
 
     case DRONE_FLY:    //outputs PWM suggested by controller selecetd by controlMode
-        podWorker->motorsPwms.pwms[0] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[0]));
-        podWorker->motorsPwms.pwms[1] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[1]));
-        podWorker->motorsPwms.pwms[2] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[2]));
-        podWorker->motorsPwms.pwms[3] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[3]));
+        podWorker->motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[0]);
+        podWorker->motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[1]);
+        podWorker->motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[2]);
+        podWorker->motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[3]);
         break;
 
     case DRONE_CRITICAL://outputs PWM suggested by PD-pose controller //@TODO change this to PD-pose once available
-        podWorker->motorsPwms.pwms[0] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[0]));
-        podWorker->motorsPwms.pwms[1] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[1]));
-        podWorker->motorsPwms.pwms[2] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[2]));
-        podWorker->motorsPwms.pwms[3] = (omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[3]));
+        podWorker->motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[0]);
+        podWorker->motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[1]);
+        podWorker->motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[2]);
+        podWorker->motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[3]);
         break;
 
     case DRONE_FATAL:
-        podWorker->motorsPwms.pwms[0] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[1] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[2] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[3] = (int16_t)(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
         break;
 
     default:
@@ -115,10 +116,10 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     if((podWorker->statusPod.status < POD_INITING) && (podWorker->statusDrone.status > DRONE_WAITPODS))
     {
         printf("motorCommanderStatus bad (emergency issued without watchdog!\n");
-        podWorker->motorsPwms.pwms[0] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[1] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[2] = (int16_t)(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[3] = (int16_t)(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
+        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
     }
 
     //add timestamp
@@ -169,7 +170,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
 
     /*General Infrastructure (maintain this infrastructure!)*/
-    motorCommander_t* podWorker = (motorCommander_t*) data;
+    motorCommander_t* podWorker = reinterpret_cast<motorCommander_t*>(data);
 
     /*---------*/
 

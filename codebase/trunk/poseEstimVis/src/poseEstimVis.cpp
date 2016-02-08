@@ -12,7 +12,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (keep this infrastructure!) */
-    poseEstimVis_t* podWorker = (poseEstimVis_t*) data;
+    poseEstimVis_t* podWorker = reinterpret_cast<poseEstimVis_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -76,7 +76,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
 
     /*General Infrastructure (keep this infrastructure!)*/
-    poseEstimVis_t* podWorker = (poseEstimVis_t*) data;
+    poseEstimVis_t* podWorker = reinterpret_cast<poseEstimVis_t*>(data);
     /*---------*/
 
     /*Computation statusPOD*/

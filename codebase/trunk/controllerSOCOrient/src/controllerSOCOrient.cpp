@@ -14,7 +14,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (maintain this structure!) */
-    controllerSOCOrient_t* podWorker = (controllerSOCOrient_t*) data;
+    controllerSOCOrient_t* podWorker = reinterpret_cast<controllerSOCOrient_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
     /*--------*/
 
@@ -80,7 +80,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /*General Infrastructure (maintain this infrastructure!)*/
-    controllerSOCOrient_t* podWorker = (controllerSOCOrient_t*) data;
+    controllerSOCOrient_t* podWorker = reinterpret_cast<controllerSOCOrient_t*>(data);
     /*---------*/
 
     /*Computation statusPOD*/

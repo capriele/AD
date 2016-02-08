@@ -63,7 +63,7 @@ public:
 gboolean gtimerfunc(gpointer data)
 {
 
-    Testpod_t* podWorker = (Testpod_t*) data;
+    Testpod_t* podWorker = reinterpret_cast<Testpod_t*>(data);
 
 //publish a statusPOD message
     agile::statusPod_t statusPod;

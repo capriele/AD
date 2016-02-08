@@ -30,7 +30,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (maintain this structure!) */
-    ramperPWM_t* podWorker = (ramperPWM_t*) data;
+    ramperPWM_t* podWorker = reinterpret_cast<ramperPWM_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -166,7 +166,7 @@ Implementation of loop function for publishing statusPod
 gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
     /*General Infrastructure (maintain this infrastructure!)*/
-    ramperPWM_t* podWorker = (ramperPWM_t*) data;
+    ramperPWM_t* podWorker = reinterpret_cast<ramperPWM_t*>(data);
     /*---------*/
 
     /*Computation statusPOD*/

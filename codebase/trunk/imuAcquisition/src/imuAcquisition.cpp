@@ -102,7 +102,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (maintain this structure!) */
-    imuAcquisition_t* podWorker = (imuAcquisition_t*) data;
+    imuAcquisition_t* podWorker = reinterpret_cast<imuAcquisition_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -308,7 +308,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
 
     /*General Infrastructure (maintain this infrastructure!)*/
-    imuAcquisition_t* podWorker = (imuAcquisition_t*) data;
+    imuAcquisition_t* podWorker = reinterpret_cast<imuAcquisition_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
