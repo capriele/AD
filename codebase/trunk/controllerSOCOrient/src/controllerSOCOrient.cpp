@@ -142,9 +142,9 @@ int main(int argc, char** argv)
     // 3) Subscribe this POD to channels
 
     //channel that provides state-estimates
-    if(strcmp(podWorker.stateVariancesChannel.c_str(), "stateVariancesOrientV1") == 0)
+    if(podWorker.stateVariancesChannel == "stateVariancesOrientV1")
         podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_STATEESTIMATORORIENTV1, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
-    else if(strcmp(podWorker.stateVariancesChannel.c_str(), "stateVariancesOrientCF") == 0)
+    else if(podWorker.stateVariancesChannel == "stateVariancesOrientCF")
         podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_STATEESTIMATORORIENTCF, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
     else podWorker.subscribe(podWorker.stateVariancesChannel.c_str(), CALLINTERVAL_SIMULATOR, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
 

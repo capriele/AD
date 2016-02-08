@@ -96,7 +96,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         //accels
         double imuTrafo[6];
 
-        if(strcmp(podWorker->imuRawChannel.c_str(), "imuRaw") == 0)
+        if(podWorker->imuRawChannel == "imuRaw")
         {
             imuTrafo[0] = -podWorker->imuFiltered[1];
             imuTrafo[1] = -podWorker->imuFiltered[0];
@@ -257,7 +257,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
                 podWorker->statusPod.status = POD_OK;
 
             }
-            else if(strcmp(podWorker->imuRawChannel.c_str(), "imuRawSim") == 0)
+            else if(podWorker->imuRawChannel == "imuRawSim")
             {
                 printf("IMU calibration ok! Continuing...it's only simulated anyway!\n");
                 podWorker->isGotBiases == 1;
