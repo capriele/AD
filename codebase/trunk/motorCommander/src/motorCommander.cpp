@@ -257,6 +257,8 @@ int main(int argc, char** argv)
     // Update and publish status of motorCommander (this POD is the first to start)
     podWorker.publishStatus(POD_INITING);
 
+     if (podWorker.isWriteToArduino)
+    {
     /* Open the file descriptor in non-blocking mode */
     podWorker.fd = open(podWorker.usbPortname.c_str(), O_RDWR | O_NOCTTY);
 
@@ -303,7 +305,7 @@ int main(int argc, char** argv)
     tcflush(podWorker.fd, TCIFLUSH);
     /* read up to 128 bytes from the fd */
 //  int n = read(fd, buf, 128);
-
+    }
 
 
     /*---------*/
