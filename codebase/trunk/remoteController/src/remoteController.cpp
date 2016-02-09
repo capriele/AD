@@ -441,6 +441,12 @@ int main(int argc, char** argv)
     /*---------*/
 
     // 3) Subscribe this POD to channels
+	//resubscribre statusWatchdog and Drone with different message-age tolerance settings
+    podWorker.unsubscribe("statusWatchdog"); //unsubscribed from base-class-autosubscribed channels
+    podWorker.unsubscribe("statusDrone");	  //unsubscribed from base-class-autosubscribed channels
+
+    podWorker.subscribe("statusWatchdog", CALLINTERVAL_WATCHDOG * AGEMSG_X_TUNNEL, &(podWorker.statusWatchdog), &podBase_t::handleMessage<agile::statusPod_t>);
+    podWorker.subscribe("statusDrone", CALLINTERVAL_WATCHDOG * AGEMSG_X_TUNNEL, &(podWorker.statusDrone), &podBase_t::handleMessage<agile::statusDrone_t>);
 
     /*  POD-specific init procedures  */
     // Update and publish status of remoteController (this POD is the first to start)
