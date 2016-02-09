@@ -74,8 +74,9 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 
 
 //multi-POD communication, timing
-#define MAXPODDELAY_X 1.8 	 // POD computation interval can take at max MAXPODDELAY_X-times the POD's callinterval before timeout (error) is issued
-#define MAXAGEMSGS_X 1.9  	 // stored message from a subscribed channel is considered out of date if age of last stored message is older than MAXAGEMSGS_X-times the expected receive interval of that message
+#define MAXPODDELAY_X 2.5 	 // POD computation interval can take at max MAXPODDELAY_X-times the POD's callinterval before error is issued //@TODO this should be lower!
+#define MAXAGEMSGS_X 2.6  	 // stored message from a subscribed channel is considered out of date if age of last stored message is older than MAXAGEMSGS_X-times the expected receive interval of that message
+#define AGEMSG_X_TUNNEL 10.0	 //factor to increase tolerance for delays in received messages (put to messages that are received over lcm) @TODO hack fix lcm/tunnel speed
 #define MS2US 1000		 // conversion us to ms
 #define DEADMSGDELAY_X 2	 // factor when delayed message is interpreted as sender POD probably being dead
 
