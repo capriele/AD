@@ -141,8 +141,8 @@ int main(int argc, char** argv)
         podWorker.subscribe(podWorker.stateVariancesChannel, CALLINTERVAL_STATEESTIMATORORIENTCF, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
     else podWorker.subscribe(podWorker.stateVariancesChannel, CALLINTERVAL_SIMULATOR, 	 &(podWorker.stateVariances), 	&podBase_t::handleMessage<agile::stateVariances_t>);
 
-    podWorker.subscribe("poseRef",  CALLINTERVAL_REMOTECONTROLLER, &(podWorker.poseRef), &podBase_t::handleMessage<agile::poseRef_t>);
-    podWorker.subscribe("powerAdjust",  CALLINTERVAL_REMOTECONTROLLER, &(podWorker.powerAdjust), &podBase_t::handleMessage<agile::powerAdjust_t>);
+    podWorker.subscribe("poseRef",  CALLINTERVAL_REMOTECONTROLLER*AGEMSG_X_TUNNEL, &(podWorker.poseRef), &podBase_t::handleMessage<agile::poseRef_t>);
+    podWorker.subscribe("powerAdjust",  CALLINTERVAL_REMOTECONTROLLER*AGEMSG_X_TUNNEL, &(podWorker.powerAdjust), &podBase_t::handleMessage<agile::powerAdjust_t>);
 
     /*---------*/
 

@@ -250,14 +250,14 @@ int main(int argc, char** argv)
     /*else if (podWorker.stateVariancesChannel == "stateVariancesOrientV1")
       podWorker.subscribe(podWorker.stateVariancesChannel,CALLINTERVAL_STATEESTIMATORORIENTV1, &(podWorker.stateVariances), &podBase_t::handleMessage<agile::stateVariances_t>);*/
 
-    podWorker.subscribe(podWorker.imuRawChannel, CALLINTERVAL_IMUACQUISITION * 2, &(podWorker.imuRaw), &podBase_t::handleMessage<agile::imuRaw_t>); //@TODO remove callinterval x2
-    podWorker.subscribe("controlMode", CALLINTERVAL_REMOTECONTROLLER, &(podWorker.controlMode), &podBase_t::handleMessage<agile::controlMode_t>);
+    podWorker.subscribe(podWorker.imuRawChannel, CALLINTERVAL_IMUACQUISITION * 2, &(podWorker.imuRaw), &podBase_t::handleMessage<agile::imuRaw_t>); //@TODO hack: callinterval x2 to prevent shut downs from this delay
+    podWorker.subscribe("controlMode", CALLINTERVAL_REMOTECONTROLLER*AGEMSG_X_TUNNEL, &(podWorker.controlMode), &podBase_t::handleMessage<agile::controlMode_t>); 
 
     podWorker.subscribe("statusImuAcquisition", CALLINTERVAL_IMUACQUISITION, &(podWorker.statusImuAcquisition), &podBase_t::handleMessage<agile::statusPod_t>);
     //podWorker.subscribe("statusStateEstimatorOrientV1",CALLINTERVAL_STATEESTIMATORORIENTV1,&(podWorker.statusStateEstimatorOrientV1), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusStateEstimatorOrientCF", CALLINTERVAL_STATEESTIMATORORIENTCF, &(podWorker.statusStateEstimatorOrientCF), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusDetectorVis", CALLINTERVAL_DETECTORVIS, &(podWorker.statusDetectorVis), &podBase_t::handleMessage<agile::statusPod_t>);
-    podWorker.subscribe("statusRemoteController", CALLINTERVAL_REMOTECONTROLLER*2, &(podWorker.statusRemoteController), &podBase_t::handleMessage<agile::statusPod_t>); //@TODO remove callintervall x2 (messages from over lcm-tunnel often late, that's why increased tolerance?!)
+    podWorker.subscribe("statusRemoteController", CALLINTERVAL_REMOTECONTROLLER*AGEMSG_X_TUNNEL, &(podWorker.statusRemoteController), &podBase_t::handleMessage<agile::statusPod_t>); 
     podWorker.subscribe("statusControllerPDPose", CALLINTERVAL_CONTROLLERPDPOSE, &(podWorker.statusControllerPDPose), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusControllerPDOrient", CALLINTERVAL_CONTROLLERPDORIENT, &(podWorker.statusControllerPDOrient), &podBase_t::handleMessage<agile::statusPod_t>);
     podWorker.subscribe("statusControllerSOCOrient", CALLINTERVAL_CONTROLLERSOCORIENT, &(podWorker.statusControllerSOCOrient), &podBase_t::handleMessage<agile::statusPod_t>);

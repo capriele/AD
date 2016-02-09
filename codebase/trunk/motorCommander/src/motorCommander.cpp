@@ -241,11 +241,11 @@ int main(int argc, char** argv)
         return 1;
 
     // 3) Subscribe this POD to channels
-    podWorker.subscribe("powerAdjust", CALLINTERVAL_REMOTECONTROLLER,	 &(podWorker.powerAdjust), 	&podBase_t::handleMessage<agile::powerAdjust_t>);
+    podWorker.subscribe("powerAdjust", CALLINTERVAL_REMOTECONTROLLER*AGEMSG_X_TUNNEL,	 &(podWorker.powerAdjust), 	&podBase_t::handleMessage<agile::powerAdjust_t>);
     podWorker.subscribe("motorsWsRefPDOrient", CALLINTERVAL_CONTROLLERPDORIENT, 	 &(podWorker.motorsWsRefPDOrient), 	&podBase_t::handleMessage<agile::motorsWsRef_t>);
     podWorker.subscribe("motorsWsRefPDPose", CALLINTERVAL_CONTROLLERPDPOSE, 	 &(podWorker.motorsWsRefPDPose), 	&podBase_t::handleMessage<agile::motorsWsRef_t>);
     //podWorker.subscribe("statusDrone", CALLINTERVAL_WATCHDOG, &(podWorker.statusDrone), &podBase_t::handleMessage<agile::statusDrone_t>); //is autosubscribed via base class constructor!
-    podWorker.subscribe("controlMode", CALLINTERVAL_REMOTECONTROLLER, &(podWorker.controlMode), &podBase_t::handleMessage<agile::controlMode_t>);
+    podWorker.subscribe("controlMode", CALLINTERVAL_REMOTECONTROLLER*AGEMSG_X_TUNNEL, &(podWorker.controlMode), &podBase_t::handleMessage<agile::controlMode_t>);
     //@TODO subscribe to more controllers
 
     /*---------*/
