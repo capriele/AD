@@ -116,11 +116,12 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     int readFromArdStatus = serialport_read_until(podWorker->fd, podWorker->buf);
 
     if((readFromArdStatus != 0) || (podWorker->buf[0] == 10))
-
+	{
         //@TODO without this, "publish imuRaw" is always half the imuAcuqition-callrate.
         //I.e., every other arduino reading is missed
         readFromArdStatus = serialport_read_until(podWorker->fd, podWorker->buf);
-
+	//cout<<"second reading of serial occured!"<<endl;
+	}
     imuRaw.timestampJetson = GetTimeStamp();
     double k = 1000000.0;
 
@@ -317,8 +318,13 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     if((podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-        printf("imuAcquisition: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);
-        podWorker->statusPod.status = POD_FATAL;
+        printf("imuAcquisition: delay occured; comp interval % " PRId64 "us!\n POD only set to critical instead of usual fatal!\n", podWorker->computationInterval);
+        podWorker->statusPod.status = POD_CRITICAL;
+    }
+
+    else if((podWorker->computationInterval > MAXPODDELAY_NOTIFY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
+    {
+        printf("imuAcquisition (noncritical notification): delay occured; comp interval % " PRId64 "us!\n ", podWorker->computationInterval);        
     }
 
     else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
