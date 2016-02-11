@@ -137,7 +137,8 @@ bool findReferenceRectangle(const vector<Polygon> poly3, const vector<Polygon> p
             // TODO be careful with division by 0. It seems safe unless the area
             //is not enforced to be higher than something
             //cross ratio and alignemnt are less approximate criteria
-            if(((double)min_distance / max_distance) < 0.3 && (((double)min_distance / max_distance) > 0.05) && (poly4[j].area > 3 * poly3[i].area))
+//            if(((double)min_distance / max_distance) < 0.3 && (((double)min_distance / max_distance) > 0.05) && (poly4[j].area > 3 * poly3[i].area))
+         	if(((double)min_distance / max_distance) < 0.2 && (((double)min_distance / max_distance) > 0.02) && (poly4[j].area > 2.5 * poly3[i].area) && (poly4[j].area < 7 * poly3[i].area))
             {
 
                 //cout<<"ratio "<<(double)min_distance / max_distance<<endl;
@@ -178,14 +179,14 @@ int main(int argc, char** argv)
     string imagesPath;
 
     Mat src, src_gray, gray, drawing;
-    int thresh_up = 170;//123;//90
+    int thresh_up = 160;//123;//90
     int thresh_low = 0;//0
     int frame_trackbar = 1;
     int frame = 0;
     int frame_max = 500;
     bool runVid = false;
 
-    int eps = 7; //orig 7
+    int eps = 13; //orig 7
 
     //Check if images from camera or from file (if file, provide folder as third call argument)
     bool isImgFromFile = false;
