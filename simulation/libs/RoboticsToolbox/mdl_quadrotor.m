@@ -177,7 +177,7 @@ quadEDT.sampletime                  = 0.005;
 %reference values
 %----
 %yaw
-quadEDT.yawStep_amplitude           = 0.1;
+quadEDT.yawStep_amplitude           = 0.17;
 quadEDT.yawStep_time                = 5.5;
 quadEDT.yawStep_duration            = 2.5;
 %pitch
@@ -185,7 +185,7 @@ quadEDT.pitchStep_amplitude         = 0.0; %0.1
 quadEDT.pitchStep_time              = 3;
 quadEDT.pitchStep_duration          = 1;
 %roll
-quadEDT.rollStep_amplitude          = 0.1; %0.1
+quadEDT.rollStep_amplitude          = 0.17; %0.1
 quadEDT.rollStep_time               = 3; 
 quadEDT.rollStep_duration           = 1;
 %altitude
@@ -196,21 +196,21 @@ quadEDT.altitude                    = -1.1;
 %reference values
 %----
 %yaw
-quadEDT.yawStep_amplitude           = 30/180*pi;
-quadEDT.yawStep_time                = 15;
-quadEDT.yawStep_duration            = 2.5;
-%pitch
-quadEDT.pitchStep_amplitude         = 30/180*pi; %0.1
-quadEDT.pitchStep_time              = 3;
-quadEDT.pitchStep_duration          = 1.5;
-%roll
-quadEDT.rollStep_amplitude          = 30/180*pi; %0.1
-quadEDT.rollStep_time               = 6; 
-quadEDT.rollStep_duration           = 1.5;
-%altitude
-quadEDT.takeoff_duration            = 1;
-quadEDT.altitude                    = -3.1;
-%----
+% quadEDT.yawStep_amplitude           = 30/180*pi;
+% quadEDT.yawStep_time                = 15;
+% quadEDT.yawStep_duration            = 2.5;
+% %pitch
+% quadEDT.pitchStep_amplitude         = 30/180*pi; %0.1
+% quadEDT.pitchStep_time              = 3;
+% quadEDT.pitchStep_duration          = 1.5;
+% %roll
+% quadEDT.rollStep_amplitude          = 30/180*pi; %0.1
+% quadEDT.rollStep_time               = 6; 
+% quadEDT.rollStep_duration           = 1.5;
+% %altitude
+% quadEDT.takeoff_duration            = 1;
+% quadEDT.altitude                    = -3.1;
+% %----
 
 %Vision
 quadEDT.NO_VIS_X                    = -99.0;
