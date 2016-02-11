@@ -318,13 +318,13 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     if((podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-        printf("imuAcquisition: delay occured; comp interval % " PRId64 "us!\n POD only set to critical instead of usual fatal!\n", podWorker->computationInterval);
+        printf("imuAcquisition: delay occured; comp interval % " PRId64 "us! (POD only set to critical instead of usual fatal!)\n", podWorker->computationInterval);
         podWorker->statusPod.status = POD_CRITICAL;
     }
 
     else if((podWorker->computationInterval > MAXPODDELAY_NOTIFY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-        printf("imuAcquisition (noncritical notification): delay occured; comp interval % " PRId64 "us!\n ", podWorker->computationInterval);        
+        printf("\timuAcquisition (noncritical notification): delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);        
     }
 
     else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
