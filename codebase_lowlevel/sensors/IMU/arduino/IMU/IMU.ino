@@ -16,6 +16,7 @@ long ax, ay, az;
 long mx, my, mz;
 long p;
 int i = 0;
+String data = "";
 
 void displaySensorDetails(void)
 {
@@ -143,7 +144,7 @@ void loop(void)
 
     Serial.print(micros()); Serial.print(" ");
 
-    Serial.print(gx); Serial.print(" ");
+    /*Serial.print(gx); Serial.print(" ");
     Serial.print(gy); Serial.print(" ");
     Serial.print(gz); Serial.print(" "); //Serial.print("rad/s ");
     Serial.print(ax); Serial.print(" ");
@@ -152,10 +153,14 @@ void loop(void)
     Serial.print(mx); Serial.print(" ");
     Serial.print(my); Serial.print(" ");
     Serial.println(mz);
-
+*/
+    //this slows down arduino, but might be better for USB connection?
+    data = data + gx + " " + gy + " " + gz + " " + ax + " " + ay + " " + az + " " + mx + " " + my + " " + mz;
+    Serial.println(data);
+    data = "";
     //Serial.println("  "); //Serial.println("uT");
     //Serial.print(p);  Serial.println("  "); //Serial.println("hPa");
 
-    //delay(5);
+    delayMicroseconds(5);
 }
 
