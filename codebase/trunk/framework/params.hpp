@@ -58,7 +58,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 #define CALLINTERVAL_EXAMPLEPOD 10
 #define CALLINTERVAL_TESTSENDER 10
 
-#define CALLINTERVAL_IMUACQUISITION 10
+#define CALLINTERVAL_IMUACQUISITION 7		//faster than IMU prints (currently ~ 130Hz)
 #define CALLINTERVAL_STATEESTIMATORORIENTV1 10
 #define CALLINTERVAL_STATEESTIMATORORIENTCF 10
 #define CALLINTERVAL_DETECTORVIS 20
