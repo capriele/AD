@@ -155,12 +155,14 @@ void loop(void)
     Serial.println(mz);
 */
     //this slows down arduino, but might be better for USB connection?
-    data = data + gx + " " + gy + " " + gz + " " + ax + " " + ay + " " + az + " " + mx + " " + my + " " + mz;
-    Serial.println(data);
+    //data = data + gx + " " + gy + " " + gz + " " + ax + " " + ay + " " + az + " " + mx + " " + my + " " + mz;
     data = "";
+    data = data + gx + " " + gy + " " + gz + " " + (long)ax/100 + " " + (long)ay/100 + " " + (long)az/100 + " " + "0 0 0"; // truncate long int by 100 to reduce bytes sent
+    Serial.println(data);
+
     //Serial.println("  "); //Serial.println("uT");
     //Serial.print(p);  Serial.println("  "); //Serial.println("hPa");
 
-    delayMicroseconds(5);
+    delayMicroseconds(10);
 }
 

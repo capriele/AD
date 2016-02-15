@@ -24,6 +24,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     double yaw_hat, pitch_hat, roll_hat;
     quat2Euler(podWorker->stateVariances.orient, &(yaw_hat), &(pitch_hat), &(roll_hat));
 
+
     double tau_p 		= podWorker->powerAdjust.ppAdjustPDO * Pp * (podWorker->poseRef.orientEuler[1] - pitch_hat) - podWorker->powerAdjust.dpAdjustPDO * Dp * podWorker->stateVariances.veloOrientBody[1] + podWorker->powerAdjust.pBiasPDO; //@TODO check convention, see PODdescriptions!
     double tau_r 		= podWorker->powerAdjust.prAdjustPDO * Pr * (podWorker->poseRef.orientEuler[2] - roll_hat)  - podWorker->powerAdjust.drAdjustPDO * Dr * podWorker->stateVariances.veloOrientBody[0] + podWorker->powerAdjust.rBiasPDO;
     double tau_y 		= podWorker->powerAdjust.pyAdjustPDO * Py * (podWorker->poseRef.orientEuler[0] - yaw_hat)   - podWorker->powerAdjust.dyAdjustPDO * Dy * podWorker->stateVariances.veloOrientBody[2] + podWorker->powerAdjust.yBiasPDO;
