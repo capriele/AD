@@ -128,7 +128,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
         //feed complimentary filter
         double euler_hat[3];
-        int64_t nowCompUpdate = GetTimeStamp();
+        int64_t nowCompUpdate = GetTimeStamp();		
 
         double dt = (nowCompUpdate - podWorker->stateVariances.timestampJetson) / (1000000.0); //printf("dt: %f\n",dt); //@TODO should probably refer to Arduino clock, but then we need some sort of clock sync!
 
@@ -137,7 +137,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         complimentaryfilter(yaw_cur, pitch_cur, roll_cur, dt, imuTrafo, euler_hat);
 
         //transform to quaternions and update stateVariances
-
+	//printf("%f\n",roll_cur/3.14*180);
         Euler2quat(podWorker->stateVariances.orient, &(euler_hat[0]), &(euler_hat[1]), &(euler_hat[2]));
         podWorker->stateVariances.veloOrientBody[0] = imuTrafo[3];
         podWorker->stateVariances.veloOrientBody[1] = imuTrafo[4];
@@ -145,9 +145,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
         podWorker->stateVariances.timestampJetson = nowCompUpdate;
 
-        /* Publishing computation result, here status update of drone status */
+        /* Publishing computation result*/
 
-        // statusDrone - publish
+        // - publish
         podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
 
         /*---------*/
@@ -174,7 +174,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
     stateEstimatorOrientCF_t* podWorker = reinterpret_cast<stateEstimatorOrientCF_t*>(data);
     /*---------*/
 
-
+    int isMessagesUptodate = podWorker->checkMessagesUptodate();
 
     /*Computation statusPOD*/
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
@@ -183,11 +183,11 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
                podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }
-    else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
+    else if((isMessagesUptodate == MSGS_LATE))
     {
         podWorker->statusPod.status = POD_CRITICAL;
     }
-    else if((podWorker->checkMessagesUptodate() == MSGS_DEAD))
+    else if((isMessagesUptodate == MSGS_DEAD))
     {
         podWorker->statusPod.status = POD_FATAL;
     }

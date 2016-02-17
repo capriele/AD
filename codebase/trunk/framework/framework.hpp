@@ -225,20 +225,19 @@ public:
 
         while(((allUptodate) && (iterator != end)))
         {
-            if(this->statusDrone.status == DRONE_WAITPODS) updateDelta = 0;  //drone still waiting for all PODs to be up an running
-            else		   updateDelta = currentTimestamp - iterator->second.timestampJetsonLastReceived;
+	    updateDelta = currentTimestamp - iterator->second.timestampJetsonLastReceived;
 
             allUptodate = (updateDelta <  MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US) ;
 
             if(!allUptodate)
             {
-                printf("message -%s- delayed in POD -%s- at time %" PRId64" with %" PRId64 "\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta);
+                printf("message -%s- delayed in POD -%s- at time %" PRId64" with age %" PRId64 "\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta);
                 someMsgDeadlyLate = updateDelta >  DEADMSGDELAY_X * MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US;
                 if(someMsgDeadlyLate) 	printf("message deadly delayed\n");
             }
             ++iterator;
         }
-        if(allUptodate) return MSGS_OK;
+        if(allUptodate || (this->statusDrone.status == DRONE_WAITPODS) ) return MSGS_OK;
         else if(!someMsgDeadlyLate) return MSGS_LATE;
         else return MSGS_DEAD;
     };

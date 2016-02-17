@@ -45,7 +45,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     /*---------*/
 
 
-    /* Publishing computation result, in this case, the status update of drone status */
+    /* Publishing computation result, in case of this example, the status update of drone status */
 
     // statusDrone - publish
     podWorker->lcm.publish("statusDronePUBLISHONEXMAPLECHANNEL", &podWorker->statusDrone); 	//choose channelName here!

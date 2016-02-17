@@ -130,7 +130,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     /* Publishing compuation result */
 
-    // statusDrone - publish
+    // publish
     podWorker->lcm.publish("motorsPwms", &podWorker->motorsPwms);
 
 
