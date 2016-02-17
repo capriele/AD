@@ -9,7 +9,6 @@ Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(54321);
 Adafruit_LSM303_Mag_Unified mag = Adafruit_LSM303_Mag_Unified(12345);
 Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085);
 
-long t;
 long k = 1000000;
 long gx, gy, gz;
 long ax, ay, az;
@@ -17,6 +16,7 @@ long mx, my, mz;
 long p;
 int i = 0;
 String data = "";
+long now;
 
 void displaySensorDetails(void)
 {
@@ -116,14 +116,14 @@ void setup(void)
     /* Display some basic information on this sensor */
     displaySensorDetails();
 
-    t = micros();
+    now = micros();
+
 }
 
 void loop(void)
 {
 
 
-    //t = micros();
     /* Get a new sensor event */
     sensors_event_t event1, event2, event3, event4;
     gyro.getEvent(&event1);
@@ -140,9 +140,9 @@ void loop(void)
     my = k * event3.magnetic.y;
     mz = k * event3.magnetic.z;
     //p =k*event4.pressure;
-
-
-    Serial.print(micros()); Serial.print(" ");
+    now=micros();
+    
+    //Serial.print(micros()-now); Serial.print(" ");
 
     /*Serial.print(gx); Serial.print(" ");
     Serial.print(gy); Serial.print(" ");
@@ -155,14 +155,14 @@ void loop(void)
     Serial.println(mz);
 */
     //this slows down arduino, but might be better for USB connection?
-    //data = data + gx + " " + gy + " " + gz + " " + ax + " " + ay + " " + az + " " + mx + " " + my + " " + mz;
+    //data = data + gx + " " + gy + " " + gz + " " + ax + " " + ay + " " + az + " " + mx + " " + my + " " + mz;    
     data = "";
-    data = data + gx + " " + gy + " " + gz + " " + (long)ax/100 + " " + (long)ay/100 + " " + (long)az/100 + " " + "0 0 0"; // truncate long int by 100 to reduce bytes sent
+    data = data + now + " " + gx + " " + gy + " " + gz + " " + (long)ax/100 + " " + (long)ay/100 + " " + (long)az/100 + " " + "0 0 0"; // truncate long int by 100 to reduce bytes sent
     Serial.println(data);
 
     //Serial.println("  "); //Serial.println("uT");
     //Serial.print(p);  Serial.println("  "); //Serial.println("hPa");
 
-    delayMicroseconds(10);
+    delayMicroseconds(10000-(micros()-now));
 }
 
