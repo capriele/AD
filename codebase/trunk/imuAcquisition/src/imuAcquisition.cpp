@@ -158,6 +158,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     /* General Infrastructure (maintain this structure!) */
     imuAcquisition_t* podWorker = reinterpret_cast<imuAcquisition_t*>(data);
+    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -384,32 +385,38 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
     /*General Infrastructure (maintain this infrastructure!)*/
     imuAcquisition_t* podWorker = reinterpret_cast<imuAcquisition_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
+    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     /*---------*/
 
     /*Computation statusPOD*/
 
     if((podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-        printf("imuAcquisition: delay occured; comp interval % " PRId64 "us! (POD only set to critical instead of usual fatal!)\n", podWorker->computationInterval);
+  	printf("%s: delay in computation, dt=% " PRId64 "us! (POD only set to critical instead of usual fatal!)\n", podWorker->podName.c_str(), podWorker->computationInterval);
         podWorker->statusPod.status = POD_CRITICAL;
     }
 
     else if((podWorker->computationInterval > MAXPODDELAY_NOTIFY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-        printf("\timuAcquisition (noncritical notification): delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);        
+        printf("\%s (noncritical notification): delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval);        
     }
 
-    else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
+    else 
     {
-        podWorker->statusPod.status = POD_CRITICAL;
-    }
-    else if((podWorker->checkMessagesUptodate() == MSGS_DEAD))
-    {
-        podWorker->statusPod.status = POD_FATAL;
-    }
-    else
-    {
-        podWorker->statusPod.status = POD_OK;
+
+	if(messageStatus == MSGS_LATE)
+    	{
+		podWorker->statusPod.status = POD_CRITICAL;
+	}
+	else if(messageStatus == MSGS_DEAD)
+	{
+		podWorker->statusPod.status = POD_FATAL;
+	}
+	else
+	{
+		podWorker->statusPod.status = POD_OK;
+	};
+
     };
     /*---------*/
 

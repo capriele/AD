@@ -81,29 +81,40 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     /*General Infrastructure (maintain this infrastructure!)*/
     controllerSOCOrient_t* podWorker = reinterpret_cast<controllerSOCOrient_t*>(data);
+    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
+
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
     {
-        printf("controllerSOCOrient: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);
+        printf("%s: delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }
-    else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
+    else 
     {
-        podWorker->statusPod.status = POD_CRITICAL;
-    }
-    else if((podWorker->checkMessagesUptodate() == MSGS_DEAD))
-    {
-        podWorker->statusPod.status = POD_FATAL;
-    }
-    else
-    {
-        podWorker->statusPod.status = POD_OK;
+
+	if(messageStatus == MSGS_LATE)
+    	{
+		podWorker->statusPod.status = POD_CRITICAL;
+	}
+	else if(messageStatus == MSGS_DEAD)
+	{
+		podWorker->statusPod.status = POD_FATAL;
+	}
+	else
+	{
+		podWorker->statusPod.status = POD_OK;
+	};
+
     };
+
+
+
     /*---------*/
 
-    /*Publishing statusPOD*/
+    /*Publishing statusPOD (keep this infrastructure!)*/
     podWorker->publishStatus(podWorker->statusPod.status);
     /*---------*/
 

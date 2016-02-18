@@ -77,7 +77,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 #define MAXPODDELAY_NOTIFY_X 1.2 // POD computation interval can take at max MAXPODDELAY_X-times the POD's callinterval before notification is issued //@TODO this should be lower!, currently only used in imuAcquisition!
 #define MAXPODDELAY_X 1.8 	 // POD computation interval can take at max MAXPODDELAY_X-times the POD's callinterval before error is issued //@TODO this should be lower!
 #define MAXAGEMSGS_X 2.5  	 // stored message from a subscribed channel is considered out of date if age of last stored message is older than MAXAGEMSGS_X-times the expected receive interval of that message //@TODO this should be lower!
-#define AGEMSG_X_TUNNEL 100.0	 //factor to increase tolerance for delays in received messages (put to messages that are received over lcm) @TODO hack fix lcm/tunnel speed, should be lower, either delay or missing clock sync!
+#define AGEMSG_X_TUNNEL 100.0	 //factor to increase tolerance for delays in receive-interval for messages (put to messages that are received over lcm) @TODO hack fix lcm/tunnel speed, should be lower, either delay or a lot of missed messaged (lost packets?!) missing clock sync should not be the issues since _received_-intervals are compared
 
 #define MS2US 1000		 // conversion us to ms
 #define DEADMSGDELAY_X 2	 // factor when delayed message is interpreted as sender POD probably being dead

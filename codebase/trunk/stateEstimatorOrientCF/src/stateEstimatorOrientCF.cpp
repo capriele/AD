@@ -61,7 +61,6 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     stateEstimatorOrientCF_t* podWorker = reinterpret_cast<stateEstimatorOrientCF_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
-
     /*--------*/
 
     if(podWorker->statusPod.status == POD_OK)
@@ -172,9 +171,9 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     /*General Infrastructure (maintain this infrastructure!)*/
     stateEstimatorOrientCF_t* podWorker = reinterpret_cast<stateEstimatorOrientCF_t*>(data);
+    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
-
-    int isMessagesUptodate = podWorker->checkMessagesUptodate();
 
     /*Computation statusPOD*/
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
@@ -183,11 +182,11 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
                podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }
-    else if((isMessagesUptodate == MSGS_LATE))
+    else if((messageStatus == MSGS_LATE))
     {
         podWorker->statusPod.status = POD_CRITICAL;
     }
-    else if((isMessagesUptodate == MSGS_DEAD))
+    else if((messageStatus == MSGS_DEAD))
     {
         podWorker->statusPod.status = POD_FATAL;
     }

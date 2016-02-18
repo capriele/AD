@@ -171,6 +171,8 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     /*General Infrastructure (maintain this infrastructure!)*/
     motorCommander_t* podWorker = reinterpret_cast<motorCommander_t*>(data);
+    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    std::lock_guard<std::mutex> guard(podMutex);
 
     /*---------*/
 
@@ -178,25 +180,30 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time
     {
-        printf("motorCommander: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval); //@TODO why has this POD delays oftentimes?
+        printf("%s: delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval); //@TODO why has this POD delays oftentimes?
         podWorker->statusPod.status = POD_FATAL;
     }
     else if((podWorker->isWriteToArduino) && (podWorker->writeToArdStatus < 0))
     {
-        printf("motorCommander: error in write to arduino!\n"); //@TODO add errorhandling with return status of write (m)
+        printf("motorCommander: error in write to arduino!\n");
         podWorker->statusPod.status = POD_FATAL;
     }
-    else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
+    else 
     {
-        podWorker->statusPod.status = POD_CRITICAL;
-    }
-    else if((podWorker->checkMessagesUptodate() == MSGS_DEAD))
-    {
-        podWorker->statusPod.status = POD_FATAL;
-    }
-    else
-    {
-        podWorker->statusPod.status = POD_OK;
+
+	if(messageStatus == MSGS_LATE)
+    	{
+		podWorker->statusPod.status = POD_CRITICAL;
+	}
+	else if(messageStatus == MSGS_DEAD)
+	{
+		podWorker->statusPod.status = POD_FATAL;
+	}
+	else
+	{
+		podWorker->statusPod.status = POD_OK;
+	};
+
     };
 
 

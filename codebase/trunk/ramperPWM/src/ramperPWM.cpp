@@ -167,30 +167,36 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
     /*General Infrastructure (maintain this infrastructure!)*/
     ramperPWM_t* podWorker = reinterpret_cast<ramperPWM_t*>(data);
+    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     /*---------*/
 
     /*Computation statusPOD*/
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time
     {
-        printf("ramperPWM: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval); //@TODO why has this guy delays oftentimes?
+        printf("%s: delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval); //@TODO why has this guy delays oftentimes?
         podWorker->statusPod.status = POD_FATAL;
     }
     else if((podWorker->isWriteToArduino) && (podWorker->writeToArdStatus < 0))
     {
-        printf("ramperPWM: error in write to arduino!\n"); //@TODO add errorhandling with return status of write (m)
-        podWorker->statusPod.status = POD_OK;
-    }
-    else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
-    {
-        podWorker->statusPod.status = POD_CRITICAL;
-    }
-    else if((podWorker->checkMessagesUptodate() == MSGS_DEAD))
-    {
+        printf("ramperPWM: error in write to arduino!\n");
         podWorker->statusPod.status = POD_FATAL;
     }
-    else
+    else 
     {
-        podWorker->statusPod.status = POD_OK;
+
+	if(messageStatus == MSGS_LATE)
+    	{
+		podWorker->statusPod.status = POD_CRITICAL;
+	}
+	else if(messageStatus == MSGS_DEAD)
+	{
+		podWorker->statusPod.status = POD_FATAL;
+	}
+	else
+	{
+		podWorker->statusPod.status = POD_OK;
+	};
+
     };
     /*---------*/
 
