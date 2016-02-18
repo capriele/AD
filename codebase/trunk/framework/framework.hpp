@@ -41,9 +41,12 @@ Get timestamp
 */
 int64_t GetTimeStamp()
 {
+    int64_t time;
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    return tv.tv_sec * (int64_t)1000000 + tv.tv_usec;
+    time = tv.tv_sec * (int64_t)1000000 + tv.tv_usec;
+    if (time>1455836757697046) time=time-1455836757697046; //microseconds since 2016-02-18
+    return time;
 };
 
 
@@ -242,7 +245,7 @@ public:
             if(!allUptodate)
             {
 		lcmMessageAgileDronesTSBase = reinterpret_cast<lcmMessageAgileDronesTSBase_t*>(iterator->second.message);
-                printf("msg -%s- delayed in -%s- at t=%" PRId64", dt1 since last msg received: %" PRId64 ", dt2 sent-last received: %" PRId64 ", expected dt1 %f, max accepted dt1: %f\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta,iterator->second.timestampJetsonLastReceived-lcmMessageAgileDronesTSBase->timestampJetson,iterator->second.receiveIntervalExpected * MS2US*1.0,MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US);
+                printf("msg -%s- delayed in -%s- at t=%" PRId64", dt1 since last msg received: %" PRId64 ", dt2 sent-received-delay: %" PRId64 ", expected dt1 %f, max accepted dt1: %f\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta,iterator->second.timestampJetsonLastReceived-lcmMessageAgileDronesTSBase->timestampJetson,iterator->second.receiveIntervalExpected * MS2US*1.0,MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US);
                 someMsgDeadlyLate = updateDelta >  DEADMSGDELAY_X * MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US;
                 if(someMsgDeadlyLate) 	printf("\t msg receive-interval fatally long\n");
             }

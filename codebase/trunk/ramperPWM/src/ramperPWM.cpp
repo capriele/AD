@@ -171,9 +171,9 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
     /*---------*/
 
     /*Computation statusPOD*/
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time
+    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time //@TODO why has this guy delays oftentimes?
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval); //@TODO why has this guy delays oftentimes?
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
         podWorker->statusPod.status = POD_FATAL;
     }
     else if((podWorker->isWriteToArduino) && (podWorker->writeToArdStatus < 0))

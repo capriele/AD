@@ -392,7 +392,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     if((podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-  	printf("%s: delay in computation, dt=% " PRId64 "us! (POD only set to critical instead of usual fatal!)\n", podWorker->podName.c_str(), podWorker->computationInterval);
+	printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "! (POD only set to critical instead of usual fatal!)\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
         podWorker->statusPod.status = POD_CRITICAL;
     }
 
