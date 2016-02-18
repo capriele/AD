@@ -77,26 +77,33 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     /*General Infrastructure (keep this infrastructure!)*/
     poseEstimVis_t* podWorker = reinterpret_cast<poseEstimVis_t*>(data);
+    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
-    /*--compute updated pod status--*/
+
     if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
     {
-        printf("poseEstimVis: delay occured; comp interval % " PRId64 "us!\n", podWorker->computationInterval);
+        printf("%s: delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval);
         podWorker->statusPod.status = POD_FATAL;
     }
-    else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
+    else 
     {
-        podWorker->statusPod.status = POD_CRITICAL;
-    }
-    else if((podWorker->checkMessagesUptodate() == MSGS_DEAD))
-    {
-        podWorker->statusPod.status = POD_FATAL;
-    }
-    else
-    {
-        podWorker->statusPod.status = POD_OK;
+
+	if(messageStatus == MSGS_LATE)
+    	{
+		podWorker->statusPod.status = POD_CRITICAL;
+	}
+	else if(messageStatus == MSGS_DEAD)
+	{
+		podWorker->statusPod.status = POD_FATAL;
+	}
+	else
+	{
+		podWorker->statusPod.status = POD_OK;
+	};
+
     };
     /*---------*/
 

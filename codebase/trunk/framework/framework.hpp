@@ -85,6 +85,14 @@ class podBase_t;
 
 //Classes
 
+class lcmMessageAgileDronesTSBase_t
+{
+    public:
+        int64_t    timestampJetson;
+};
+
+
+
 class podBase_t
 {
     /*
@@ -209,7 +217,7 @@ public:
     };
 
     /*
-    checks if all stored messages are sufficiently uptodate
+    checks if all stored messages are sufficiently uptodate (checks time between two received messages)
     input: callInterval (of POD)
     output: boolean result of check
     */
@@ -219,6 +227,8 @@ public:
         bool someMsgDeadlyLate = false;
         int64_t currentTimestamp = GetTimeStamp();
         int64_t updateDelta;
+
+	lcmMessageAgileDronesTSBase_t* lcmMessageAgileDronesTSBase;
 
         messageAdmin_t::iterator iterator = this->messageAdmin.begin();
         messageAdmin_t::iterator end = this->messageAdmin.end();
@@ -231,9 +241,10 @@ public:
 
             if(!allUptodate)
             {
-                printf("message -%s- delayed in POD -%s- at time %" PRId64" with age %" PRId64 "\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta);
+		lcmMessageAgileDronesTSBase = reinterpret_cast<lcmMessageAgileDronesTSBase_t*>(iterator->second.message);
+                printf("msg -%s- delayed in -%s- at t=%" PRId64", dt1 since last msg received: %" PRId64 ", dt2 sent-last received: %" PRId64 ", expected dt1 %f, max accepted dt1: %f\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta,iterator->second.timestampJetsonLastReceived-lcmMessageAgileDronesTSBase->timestampJetson,iterator->second.receiveIntervalExpected * MS2US*1.0,MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US);
                 someMsgDeadlyLate = updateDelta >  DEADMSGDELAY_X * MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US;
-                if(someMsgDeadlyLate) 	printf("message deadly delayed\n");
+                if(someMsgDeadlyLate) 	printf("\t msg receive-interval fatally long\n");
             }
             ++iterator;
         }

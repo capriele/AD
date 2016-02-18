@@ -9,6 +9,13 @@ using namespace std;
 
 
 /*
+
+NOT UPDATED/WORKED ON ANY LONGER
+
+*/
+
+
+/*
 Implementation of loop function for computations in this specific POD
 */
 

@@ -8,10 +8,10 @@
 #define STEPSPOWERGAIN 5
 
 //total thrust bias PD-Orient-controller
-#define INITBIASPDO 0
-#define MINTBIASPDO -2.5
-#define MAXTBIASPDO 2.5
-#define STEPSTBIASPDO 0.05
+#define INITBIASPDO -6.0
+#define MINTBIASPDO -6.0
+#define MAXTBIASPDO 4.0
+#define STEPSTBIASPDO 0.5
 
 //yaw  bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITYBIASPDO 0.0
