@@ -73,7 +73,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
         double imuOrig[6];
 
-        imuOrig[0] = podWorker->imudata.accel[0] - podWorker->biases.accel[0];
+        imuOrig[0] = podWorker->imudata.accel[0] - podWorker->biases.accel[0]; 
         imuOrig[1] = podWorker->imudata.accel[1] - podWorker->biases.accel[1];
         imuOrig[2] = podWorker->imudata.accel[2] - podWorker->biases.accel[2]; //printf("%f %f\n",podWorker->imudata.accel[2],podWorker->biases.accel[2]);
         imuOrig[3] = podWorker->imudata.gyro[0] - podWorker->biases.gyro[0];
@@ -145,6 +145,8 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         podWorker->stateVariances.timestampJetson = nowCompUpdate;
 
         /* Publishing computation result*/
+
+	printf("dt imurawsent from POD - estimate being published: \t%" PRId64 "\n",podWorker->imudata.timestampJetson-GetTimeStamp());
 
         // - publish
         podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
