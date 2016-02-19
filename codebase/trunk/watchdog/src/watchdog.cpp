@@ -14,7 +14,7 @@ void errorPrint(bool isSomePodCritical, bool isSomePodFatal, bool isStateCritica
     if(isStateFatal) message      	= message + "> Some state is fatal\n";
     if(controlMode == CMODE_FATAL) message 	= message + "> Control mode is FATAL\n";
 
-    printf("%s\n", message.c_str());
+    printf("%s at t=%" PRId64 "\n", message.c_str(),GetTimeStamp());
 
 }
 
