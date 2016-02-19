@@ -244,11 +244,11 @@ public:
 
             if(!allUptodate)
             {
-		lcmMessageAgileDronesTSBase = static_cast<lcmMessageAgileDronesTSBase_t*>(iterator->second.message);                
+		lcmMessageAgileDronesTSBase = static_cast<lcmMessageAgileDronesTSBase_t*>(iterator->second.message); //this is crude; assumes lcmtypes are setup with timestampJetson as first element of struct                
                 someMsgDeadlyLate = updateDelta >  DEADMSGDELAY_X * MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US;
 		if ((this->statusDrone.status != DRONE_WAITPODS)) 
 		{
-			printf("msg -%s- delayed in -%s- at t=%" PRId64", dt1 since last msg received: %" PRId64 ", dt2 sent-received-delay: %" PRId64 " %" PRId64 " %" PRId64 ", expected dt1 %f, max accepted dt1: %f\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta,lcmMessageAgileDronesTSBase->timestampJetson,iterator->second.timestampJetsonLastReceived,lcmMessageAgileDronesTSBase->timestampJetson-iterator->second.timestampJetsonLastReceived,iterator->second.receiveIntervalExpected * MS2US*1.0,MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US);
+			printf("msg -%s- delayed in -%s- at t=%" PRId64", dt1 since last msg received: %" PRId64 ", dt2 published-received-delay last msg: %" PRId64 ", expected dt1 %f, max accepted dt1: %f\n", iterator->first.c_str(), this->podName.c_str(), currentTimestamp,updateDelta,iterator->second.timestampJetsonLastReceived-lcmMessageAgileDronesTSBase->timestampJetson,iterator->second.receiveIntervalExpected * MS2US*1.0,MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US);
                 	if(someMsgDeadlyLate) 	printf("\t msg receive-interval fatally long\n");
 		}
             }

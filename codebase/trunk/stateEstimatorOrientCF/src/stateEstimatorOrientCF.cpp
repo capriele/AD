@@ -146,7 +146,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
         /* Publishing computation result*/
 
-	printf("dt imurawsent from POD - estimate being published: \t%" PRId64 "\n",podWorker->imudata.timestampJetson-GetTimeStamp());
+	printf("dt imuraw got from serial - estimate being published: \t%" PRId64 "\n",GetTimeStamp()-podWorker->imudata.timestampJetson);
 
         // - publish
         podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
