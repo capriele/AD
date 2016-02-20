@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  double dt, double* sensorIMU, double* euler_hat)
+void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  double dt, double* sensorIMU, double* euler_hat) //this is nasty, should be a member function, but then it cannot be called from within static podBase_t compuation function. See suggestion on github-issues on "can multiple pods be run simulatenously
 {
 
 
@@ -146,7 +146,8 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
         /* Publishing computation result*/
 
-	printf("dt imuraw got from serial - estimate being published: \t%" PRId64 "\n",GetTimeStamp()-podWorker->imudata.timestampJetson);
+	//printf("dt imuraw got from serial - estimate being published: \t%" PRId64 "\n",GetTimeStamp()-podWorker->imudata.timestampJetson);
+	podWorker->stateVariances.deltaSensAcquiToEstimPub = GetTimeStamp()-podWorker->imudata.timestampJetson;
 
         // - publish
         podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);

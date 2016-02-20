@@ -19,6 +19,7 @@ public:
 
 
     int isGotBiases;
+    agile::statusPod_t statusPOD;
 
     //constructor
     stateEstimatorOrientCF_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)

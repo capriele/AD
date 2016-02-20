@@ -86,6 +86,16 @@ std::mutex podMutex; //see comment in podBase_t::podMutex
 //Forward declarations
 class podBase_t;
 
+
+struct messageContainer_t  					//contains timestamp when most recent message was received, the expected interval of receiving this message, a pointer to the stored message and a pointer to the lcm subscription
+    {
+        int64_t timestampJetsonLastReceived;
+        int64_t receiveIntervalExpected;
+        void* message;
+        lcm::Subscription* subscription;
+    };
+
+typedef std::map<string, messageContainer_t> messageAdmin_t;
 //Classes
 
 class lcmMessageAgileDronesTSBase_t
@@ -115,16 +125,9 @@ public:
     //Communication
     lcm::LCM lcm;							//lcm object for lcm communication
 
-    struct messageContainer_t  					//contains timestamp when most recent message was received, the expected interval of receiving this message, a pointer to the stored message and a pointer to the lcm subscription
-    {
-        int64_t timestampJetsonLastReceived;
-        int64_t receiveIntervalExpected;
-        void* message;
-        lcm::Subscription* subscription;
-    };
 
     //messageAdmin to manage the  subscriptions of this POD to multiple channels
-    typedef std::map<string, messageContainer_t> messageAdmin_t;
+
     messageAdmin_t messageAdmin;			//map that contains messageContainers that can be retrieved using the channelName of the message
 
 
@@ -244,7 +247,7 @@ public:
 
             if(!allUptodate)
             {
-		lcmMessageAgileDronesTSBase = static_cast<lcmMessageAgileDronesTSBase_t*>(iterator->second.message); //this is crude; assumes lcmtypes are setup with timestampJetson as first element of struct                
+		lcmMessageAgileDronesTSBase = reinterpret_cast<lcmMessageAgileDronesTSBase_t*>(iterator->second.message); //this is crude; assumes lcmtypes are setup with timestampJetson as first element of struct                
                 someMsgDeadlyLate = updateDelta >  DEADMSGDELAY_X * MAXAGEMSGS_X * iterator->second.receiveIntervalExpected * MS2US;
 		if ((this->statusDrone.status != DRONE_WAITPODS)) 
 		{
