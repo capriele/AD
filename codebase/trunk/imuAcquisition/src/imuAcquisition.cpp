@@ -398,7 +398,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 
     else if((podWorker->computationInterval > MAXPODDELAY_NOTIFY_X * podWorker->callInterval * MS2US) && (podWorker->statusCalib == 0))
     {
-        printf("\%s (noncritical notification): delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval);        
+        printf("\t %s (noncritical notification): delay in computation, dt=% " PRId64 "us!\n", podWorker->podName.c_str(), podWorker->computationInterval);        
     }
 
     else 

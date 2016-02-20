@@ -14,5 +14,7 @@ struct stateVariances_t {
 	double imuVarianceGyro[3];	
 	
 	double variances[12][12];
+
+	int64_t deltaSensAcquiToEstimPub;
 }
 

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  double dt, double* sensorIMU, double* euler_hat)
+void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  double dt, double* sensorIMU, double* euler_hat) //this is nasty, should be a member function, but then it cannot be called from within static podBase_t compuation function. See suggestion on github-issues on "can multiple pods be run simulatenously
 {
 
 
@@ -73,7 +73,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
         double imuOrig[6];
 
-        imuOrig[0] = podWorker->imudata.accel[0] - podWorker->biases.accel[0];
+        imuOrig[0] = podWorker->imudata.accel[0] - podWorker->biases.accel[0]; 
         imuOrig[1] = podWorker->imudata.accel[1] - podWorker->biases.accel[1];
         imuOrig[2] = podWorker->imudata.accel[2] - podWorker->biases.accel[2]; //printf("%f %f\n",podWorker->imudata.accel[2],podWorker->biases.accel[2]);
         imuOrig[3] = podWorker->imudata.gyro[0] - podWorker->biases.gyro[0];
@@ -145,6 +145,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         podWorker->stateVariances.timestampJetson = nowCompUpdate;
 
         /* Publishing computation result*/
+
+	//printf("dt imuraw got from serial - estimate being published: \t%" PRId64 "\n",GetTimeStamp()-podWorker->imudata.timestampJetson);
+	podWorker->stateVariances.deltaSensAcquiToEstimPub = GetTimeStamp()-podWorker->imudata.timestampJetson;
 
         // - publish
         podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
