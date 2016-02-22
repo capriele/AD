@@ -14,3 +14,4 @@ motorCommander
 simulator
 stateEstimatorOrientCF
 ramperPWM
+detectorVIS
