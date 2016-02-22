@@ -228,7 +228,7 @@ renderer_pose_control_draw(BotViewer *viewer, BotRenderer *renderer)
         yaw = -yaw;
         pitch = -pitch;
 
-        //printf("euler X: %f %f %f\n",yaw/3.14*180, pitch/3.14*180, roll/3.14*180); //@TODO remove
+        printf("euler X: %f %f %f\n",yaw/3.14*180, pitch/3.14*180, roll/3.14*180); //@TODO remove
 
         Euler2quat(q, &(yaw), &(pitch), &(roll));
         //---
@@ -254,14 +254,16 @@ renderer_pose_control_draw(BotViewer *viewer, BotRenderer *renderer)
         rotmatrix[15] = 1;
 
 
-        glTranslated(dx, dy, dz);
-        glMultMatrixd(rotmatrix);
-        /*
-        glRotated(rot_z, 0, 0, 1);
-        glRotated(rot_y, 0, 1, 0);
-        glRotated(rot_x, 1, 0, 0);
-        */
 
+       
+	glTranslated(dx, dy, dz);
+	//glMultMatrixd(rotmatrix);
+        
+
+
+        glRotated(yaw/3.14*180, 0, 0, 1);
+        glRotated(pitch/3.14*180, 0, 1, 0);        
+        glRotated(roll/3.14*180, 1, 0, 0);
 
         const double kModelRotX = 90.0;
         const double kModelRotY = 0.0;
@@ -275,7 +277,7 @@ renderer_pose_control_draw(BotViewer *viewer, BotRenderer *renderer)
         glRotated(kModelRotZ, 0, 0, 1);
         glRotated(kModelRotY, 0, 1, 0);
         glRotated(kModelRotX, 1, 0, 0);
-        glScaled(kModelScale, kModelScale, kModelScale);
+        //glScaled(kModelScale, kModelScale, kModelScale);
 
 
 

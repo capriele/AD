@@ -41,10 +41,10 @@ public:
         //Adjustments of PD-gains in PDOrientController
         powerAdjust.pyAdjustPDO = 1.0;
         powerAdjust.dyAdjustPDO = 1.0;
-        powerAdjust.ppAdjustPDO = 1.0;
-        powerAdjust.dpAdjustPDO = 1.0;
-        powerAdjust.prAdjustPDO = 1.0;
-        powerAdjust.drAdjustPDO = 1.0;
+        powerAdjust.ppAdjustPDO = INITPDGAINADJUST;
+        powerAdjust.dpAdjustPDO = INITPDGAINADJUST;
+        powerAdjust.prAdjustPDO = INITPDGAINADJUST;
+        powerAdjust.drAdjustPDO = INITPDGAINADJUST;
         powerAdjust.ptAdjustPDO = 1.0;
         powerAdjust.dtAdjustPDO = 1.0;
 
