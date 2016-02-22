@@ -15,9 +15,9 @@
 
 //yaw  bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITYBIASPDO 0.0
-#define MINYBIASPDO -10.0
-#define MAXYBIASPDO 10.0
-#define STEPSYBIASPDO 0.1
+#define MINYBIASPDO -3.0
+#define MAXYBIASPDO 3.0
+#define STEPSYBIASPDO 0.2
 
 //pitch bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITPBIASPDO 0
@@ -32,9 +32,10 @@
 #define STEPSRBIASPDO 0.1
 
 //PD-gain tuner
-#define MINPDGAINADJUST 0.5
-#define MAXPDGAINADJUST 1.5
-#define STEPSPDGAINADJUST 0.02
+#define INITPDGAINADJUST 0.1
+#define MINPDGAINADJUST 0.1
+#define MAXPDGAINADJUST 2.0
+#define STEPSPDGAINADJUST 0.05
 
 
 
