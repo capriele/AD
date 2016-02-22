@@ -56,7 +56,6 @@ Implementation of loop function for computations in this specific POD
 
 gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
-
     /* General Infrastructure (maintain this structure!) */
     stateEstimatorOrientCF_t* podWorker = reinterpret_cast<stateEstimatorOrientCF_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
@@ -146,7 +145,11 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
         /* Publishing computation result*/
 
+	
+	//printf("imuRaw-msgage: \t%" PRId64 "\n",podWorker->messageAdmin["imuRaw"].timestampJetsonLastReceived-podWorker->imudata.timestampJetson);
+	//printf("msg received last to pub now: \t%" PRId64 "\n",GetTimeStamp()-podWorker->messageAdmin["imuRaw"].timestampJetsonLastReceived);
 	//printf("dt imuraw got from serial - estimate being published: \t%" PRId64 "\n",GetTimeStamp()-podWorker->imudata.timestampJetson);
+
 	podWorker->stateVariances.deltaSensAcquiToEstimPub = GetTimeStamp()-podWorker->imudata.timestampJetson;
 
         // - publish

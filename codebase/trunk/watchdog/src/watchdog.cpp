@@ -6,7 +6,7 @@ using namespace std;
 
 void errorPrint(bool isSomePodCritical, bool isSomePodFatal, bool isStateCritical, bool isStateFatal, int16_t controlMode)
 {
-    string message = "Watchdog: Problem(s) with drone:\n ";
+    string message = "-----\n\nProblem(s) with drone:\n ";
 
     if(isSomePodCritical) message 	= message + "> Some POD is critical\n";
     if(isSomePodFatal) message    	= message + "> Some POD is fatal\n";
@@ -14,7 +14,7 @@ void errorPrint(bool isSomePodCritical, bool isSomePodFatal, bool isStateCritica
     if(isStateFatal) message      	= message + "> Some state is fatal\n";
     if(controlMode == CMODE_FATAL) message 	= message + "> Control mode is FATAL\n";
 
-    printf("%s at t=%" PRId64 "\n", message.c_str(),GetTimeStamp());
+    printf("%s at t=%" PRId64 ". Also check history above.\n-----\n\n", message.c_str(),GetTimeStamp());
 
 }
 
@@ -107,7 +107,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         if(isAllPodsOK)
         {
             podWorker->statusDrone.status = DRONE_IDLE;
-            printf("watchdog: drone from waitPodsOK to IDLE\n");
+            printf("++drone from waitPodsOK to IDLE++\n");
         };
         break;
 
@@ -115,7 +115,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         if(isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL) || isSomePodCritical || (podWorker->controlMode.controlMode == CMODE_CRITICAL))
         {
             podWorker->statusDrone.status = DRONE_FATAL;
-            printf("watchdog: drone from IDLE to FATAL\n");
+            printf("++drone from IDLE to FATAL++\n");
             errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
         }
 
@@ -123,7 +123,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         {
             podWorker->statusDrone.status = DRONE_TAKEOFF;
             podWorker->takeoffMoment = GetTimeStamp();
-            printf("watchdog: drone from IDLE to TAKEOFF\n");
+            printf("++drone from IDLE to TAKEOFF++\n");
         }
         break;
 
@@ -131,19 +131,19 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         if(isStateFatal || isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL))
         {
             podWorker->statusDrone.status = DRONE_FATAL;
-            printf("watchdog: drone from TAKEOFF to FATAL\n");
+            printf("++drone from TAKEOFF to FATAL++\n");
             errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
         }
         else if(isStateCritical || isSomePodCritical || (podWorker->controlMode.controlMode == CMODE_CRITICAL))
         {
             podWorker->statusDrone.status = DRONE_CRITICAL;
-            printf("watchdog: drone from TAKEOFF to CRITICAL\n");
+            printf("++drone from TAKEOFF to CRITICAL++\n");
             errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
         }
         else if((GetTimeStamp() - podWorker->takeoffMoment) > TAKEOFFINTERVAL * MS2US)
         {
             podWorker->statusDrone.status = DRONE_FLY;
-            printf("watchdog: drone from TAKEOFF to FLY\n");
+            printf("++drone from TAKEOFF to FLY++\n");
         }
 
         break;
@@ -151,13 +151,13 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         if(isStateFatal || isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL))
         {
             podWorker->statusDrone.status = DRONE_FATAL;
-            printf("watchdog: drone from FLY to FATAL\n");
+            printf("++drone from FLY to FATAL++\n");
             errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
         }
         else if(isStateCritical || isSomePodCritical || (podWorker->controlMode.controlMode == CMODE_CRITICAL))
         {
             podWorker->statusDrone.status = DRONE_CRITICAL;
-            printf("watchdog: drone from FLY to CRITICAL\n");
+            printf("++drone from FLY to CRITICAL\n");
             errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
         }
 
@@ -167,13 +167,13 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         if(isStateFatal || isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL))
         {
             podWorker->statusDrone.status = DRONE_FATAL;
-            printf("watchdog: drone from CRITICAL to FATAL\n");
+            printf("++drone from CRITICAL to FATAL++\n");
             errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
         }
         else if(!isStateCritical && !isSomePodCritical && (podWorker->controlMode.controlMode > CMODE_FATAL))
         {
             podWorker->statusDrone.status = DRONE_FLY;
-            printf("watchdog: drone from CRITICAL to FLY\n");
+            printf("++drone from CRITICAL to FLY\n");
         }
         break;
 
