@@ -112,7 +112,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     }
 
-    //Handle case where motorCommander itself has issues and watchdog is probably too dead to notice
+    //Shortcut emergecency without going throught watchdog
     if((podWorker->statusPod.status < POD_INITING) && (podWorker->statusDrone.status > DRONE_WAITPODS))
     {
         printf("motorCommanderStatus bad (emergency status this Pod -> motor stop) !\n"); //watchdog would also do, since this pod status is not OK anymore, but might take longer than shutting motors in here!
