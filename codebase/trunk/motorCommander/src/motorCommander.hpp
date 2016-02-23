@@ -42,6 +42,13 @@ public:
         this->fd = 0;
         this->writeToArdStatus = 0;
         this->isWriteToArduino = false;
+
+        this->motorsPwms.pwms[0] = 1000;
+	this->motorsPwms.pwms[1] = 1000;
+        this->motorsPwms.pwms[2] = 1000;
+        this->motorsPwms.pwms[3] = 1000;
+
+	this->powerAdjust.powerGain = 0.0;
     }
 
     //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call

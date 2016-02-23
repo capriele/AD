@@ -5,6 +5,7 @@
 
 //Controller parameters
 #include "../../framework/paramsControllerPDOrient.hpp"
+#include "../../framework/paramsRemoteController.hpp"
 
 class controllerPDOrient_t : public podBase_t
 {
@@ -23,6 +24,34 @@ public:
     {
         //Pod-specific initialization
         //...
+	this->powerAdjust.tBiasPDO = INITBIASPDO;
+	this->powerAdjust.yBiasPDO = INITYBIASPDO;
+	this->powerAdjust.pBiasPDO = INITPBIASPDO;
+	this->powerAdjust.rBiasPDO = INITRBIASPDO;
+
+	this->powerAdjust.pyAdjustPDO = INITPDGAINADJUST_YZ;
+	this->powerAdjust.dyAdjustPDO = INITPDGAINADJUST_YZ;
+	this->powerAdjust.ppAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.dpAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.prAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.drAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.ptAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.dtAdjustPDO = INITPDGAINADJUST_PRX;
+
+
+	this->powerAdjust.pXYAdjustPDPOS = INITPDGAINADJUST_PRX;
+	this->powerAdjust.dXYAdjustPDPOS = INITPDGAINADJUST_PRX;
+	this->powerAdjust.pZAdjustPDPOS = INITPDGAINADJUST_YZ;
+	this->powerAdjust.dZAdjustPDPOS = INITPDGAINADJUST_YZ;
+
+	this->poseRef.position[0] = 0.0;
+	this->poseRef.position[1] = 0.0;
+	this->poseRef.position[2] = -1.0;
+
+	this->poseRef.orientEuler[0] = 0.0;
+	this->poseRef.orientEuler[1] = 0.0;
+	this->poseRef.orientEuler[2] = 0.0;
+
     }
 
     //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call

@@ -79,6 +79,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         imuOrig[4] = podWorker->imudata.gyro[1] - podWorker->biases.gyro[1];
         imuOrig[5] = podWorker->imudata.gyro[2] - podWorker->biases.gyro[2];
 
+
         //Apply IIR filter to Accel
         double imuFiltered[6];
         podWorker->imuFiltered[0] = IIRIMU * podWorker->imuFiltered[0] + (1.0 - IIRIMU) * imuOrig[0];
@@ -105,7 +106,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
             imuTrafo[4] = -podWorker->imuFiltered[3];
             imuTrafo[5] = -podWorker->imuFiltered[5];
         }
-        else
+        else //imuRawData from simulation
         {
             imuTrafo[0] = podWorker->imuFiltered[0];
             imuTrafo[1] = podWorker->imuFiltered[1];
@@ -117,7 +118,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
             imuTrafo[5] = podWorker->imuFiltered[5];
         }
 
-
+	//printf("imu raw-body: %f %f %f %f %f %f ::%f %f %f %f %f %f\n",podWorker->imuFiltered[0],podWorker->imuFiltered[1],podWorker->imuFiltered[2],podWorker->imuFiltered[3],podWorker->imuFiltered[4],podWorker->imuFiltered[5],imuTrafo[0],imuTrafo[1],imuTrafo[2],imuTrafo[3],imuTrafo[4],imuTrafo[5]);
 
 
         //prepare current estimates
