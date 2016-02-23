@@ -3,15 +3,7 @@
 using namespace std;
 
 /* TODO
-- april tag detection and publishing
-- camera initialization
-- sub function locations??
-- parameters file
-- update header file with needed info
 */
-
-
-
 /*
 Implementation of loop function for computations in this specific POD
 */
@@ -44,13 +36,25 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     // Get relative positions
     podWorker->features.numFeat = detections.size();
-    Eigen::Matrix3d relRot;
+    Eigen::Matrix3d relRot;	// @TODO should these be declared here?
     Eigen::Vector3d relPos;
     double x,y,z,yaw,pitch,roll;
     for (int i=0; i<detections.size(); i++) {
+	// Get position and location of tags in quadcopter frame, place in features LCM message
 	detections[i].getRelativeTranslationRotation(APRIL_TAG_SIZE, M_FX, M_FY, M_PX, M_PY, relPos, relRot);
 	wRo_to_euler(relRot, yaw, pitch, roll);
-	
+	podWorker->features.featLoc[i][0] = relPos[0];
+	podWorker->features.featLoc[i][1] = relPos[1];
+	podWorker->features.featLoc[i][2] = relPos[2];
+	podWorker->features.featDirEuler[i][0] = yaw;
+	podWorker->features.featDirEuler[i][1] = pitch;
+	podWorker->features.featDirEuler[i][2] = roll;
+	for (int j=0; 9; j++) {
+	    // Uncertainty 0 for now
+	    podWorker->features.featLocVar[i][j] = 0;
+	    podWorker->featuers.featDirEulerVar[i][j] = 0;
+	}
+    }	
 
     // Get uncertainty
     // @TODO: Uncertainty figures for april tag detections
