@@ -5,6 +5,7 @@
 
 //Controller parameters
 #include "../../framework/paramsControllerPDOrient.hpp"
+#include "../../framework/paramsRemoteController.hpp"
 
 class controllerPDOrient_t : public podBase_t
 {
@@ -23,25 +24,25 @@ public:
     {
         //Pod-specific initialization
         //...
-	this->powerAdjust.tBiasPDO;
-	this->powerAdjust.yBiasPDO;
-	this->powerAdjust.pBiasPDO;
-	this->powerAdjust.rBiasPDO;
+	this->powerAdjust.tBiasPDO = INITBIASPDO;
+	this->powerAdjust.yBiasPDO = INITYBIASPDO;
+	this->powerAdjust.pBiasPDO = INITPBIASPDO;
+	this->powerAdjust.rBiasPDO = INITRBIASPDO;
 
-	this->powerAdjust.pyAdjustPDO;
-	this->powerAdjust.dyAdjustPDO;
-	this->powerAdjust.ppAdjustPDO;
-	this->powerAdjust.dpAdjustPDO;
-	this->powerAdjust.prAdjustPDO;
-	this->powerAdjust.drAdjustPDO;
-	this->powerAdjust.ptAdjustPDO;
-	this->powerAdjust.dtAdjustPDO;
+	this->powerAdjust.pyAdjustPDO = INITPDGAINADJUST_YZ;
+	this->powerAdjust.dyAdjustPDO = INITPDGAINADJUST_YZ;
+	this->powerAdjust.ppAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.dpAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.prAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.drAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.ptAdjustPDO = INITPDGAINADJUST_PRX;
+	this->powerAdjust.dtAdjustPDO = INITPDGAINADJUST_PRX;
 
 
-	this->powerAdjust.pXYAdjustPDPOS;
-	this->powerAdjust.dXYAdjustPDPOS;
-	this->powerAdjust.pZAdjustPDPOS;
-	this->powerAdjust.dZAdjustPDPOS;
+	this->powerAdjust.pXYAdjustPDPOS = INITPDGAINADJUST_PRX;
+	this->powerAdjust.dXYAdjustPDPOS = INITPDGAINADJUST_PRX;
+	this->powerAdjust.pZAdjustPDPOS = INITPDGAINADJUST_YZ;
+	this->powerAdjust.dZAdjustPDPOS = INITPDGAINADJUST_YZ;
 
 	this->poseRef.position[0] = 0.0;
 	this->poseRef.position[1] = 0.0;

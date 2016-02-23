@@ -39,20 +39,20 @@ public:
         powerAdjust.rBiasPDO    = INITRBIASPDO;
 
         //Adjustments of PD-gains in PDOrientController
-        powerAdjust.pyAdjustPDO = 1.0;
-        powerAdjust.dyAdjustPDO = 1.0;
-        powerAdjust.ppAdjustPDO = INITPDGAINADJUST;
-        powerAdjust.dpAdjustPDO = INITPDGAINADJUST;
-        powerAdjust.prAdjustPDO = INITPDGAINADJUST;
-        powerAdjust.drAdjustPDO = INITPDGAINADJUST;
-        powerAdjust.ptAdjustPDO = 1.0;
-        powerAdjust.dtAdjustPDO = 1.0;
+        powerAdjust.pyAdjustPDO = INITPDGAINADJUST_YZ;
+        powerAdjust.dyAdjustPDO = INITPDGAINADJUST_YZ;
+        powerAdjust.ppAdjustPDO = INITPDGAINADJUST_PRX;
+        powerAdjust.dpAdjustPDO = INITPDGAINADJUST_PRX;
+        powerAdjust.prAdjustPDO = INITPDGAINADJUST_PRX;
+        powerAdjust.drAdjustPDO = INITPDGAINADJUST_PRX;
+        powerAdjust.ptAdjustPDO = INITPDGAINADJUST_YZ;
+        powerAdjust.dtAdjustPDO = INITPDGAINADJUST_YZ;
 
         //Adjustments of PD-gains in position loop of PDPose-controller (inner orientation loop gains come from PDOrientcontroller!)
-        powerAdjust.pXYAdjustPDPOS = 1.0;
-        powerAdjust.dXYAdjustPDPOS = 1.0;
-        powerAdjust.pZAdjustPDPOS  = 1.0;
-        powerAdjust.dZAdjustPDPOS  = 1.0;
+        powerAdjust.pXYAdjustPDPOS = INITPDGAINADJUST_PRX;
+        powerAdjust.dXYAdjustPDPOS = INITPDGAINADJUST_PRX;
+        powerAdjust.pZAdjustPDPOS  = INITPDGAINADJUST_YZ;
+        powerAdjust.dZAdjustPDPOS  = INITPDGAINADJUST_YZ;
 
         //Initial reference pose
         poseRef.position[0] = 0.0;
