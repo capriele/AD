@@ -3,7 +3,11 @@
 using namespace std;
 
 
-
+double negativeSaturate(double value)
+{
+	if (value<0) value=0;
+	return value;
+}
 
 
 /*
@@ -24,6 +28,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     double yaw_hat, pitch_hat, roll_hat;
     quat2Euler(podWorker->stateVariances.orient, &(yaw_hat), &(pitch_hat), &(roll_hat));
 
+    //printf("orient estim: %f %f %f\n",yaw_hat,pitch_hat,roll_hat);
 
     double tau_p 		= podWorker->powerAdjust.ppAdjustPDO * Pp * (podWorker->poseRef.orientEuler[1] - pitch_hat) - podWorker->powerAdjust.dpAdjustPDO * Dp * podWorker->stateVariances.veloOrientBody[1] + podWorker->powerAdjust.pBiasPDO; //@TODO check convention, see PODdescriptions!
     double tau_r 		= podWorker->powerAdjust.prAdjustPDO * Pr * (podWorker->poseRef.orientEuler[2] - roll_hat)  - podWorker->powerAdjust.drAdjustPDO * Dr * podWorker->stateVariances.veloOrientBody[0] + podWorker->powerAdjust.rBiasPDO;
@@ -38,11 +43,11 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     //printf("delay estimated state to now: %f\n",(GetTimeStamp()-podWorker->stateVariances.timestampJetson)/1000000.0);
 
-    podWorker->motorsWsRef.wsRef[0] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * tau_y - ATAUPR * tau_p - ATAUPR * tau_r));
-    podWorker->motorsWsRef.wsRef[1] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * tau_y - ATAUPR * tau_p + ATAUPR * tau_r));
-    podWorker->motorsWsRef.wsRef[2] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * tau_y + ATAUPR * tau_p + ATAUPR * tau_r));
-    podWorker->motorsWsRef.wsRef[3] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * tau_y + ATAUPR * tau_p - ATAUPR * tau_r));
-
+    podWorker->motorsWsRef.wsRef[0] = sqrt(negativeSaturate(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * tau_y - ATAUPR * tau_p - ATAUPR * tau_r)));
+    podWorker->motorsWsRef.wsRef[1] = sqrt(negativeSaturate(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * tau_y - ATAUPR * tau_p + ATAUPR * tau_r)));
+    podWorker->motorsWsRef.wsRef[2] = sqrt(negativeSaturate(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * tau_y + ATAUPR * tau_p + ATAUPR * tau_r)));
+    podWorker->motorsWsRef.wsRef[3] = sqrt(negativeSaturate(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * tau_y + ATAUPR * tau_p - ATAUPR * tau_r)));
+   
 
     podWorker->motorsWsRef.timestampJetson = GetTimeStamp();
 

@@ -133,7 +133,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     // publish
     podWorker->lcm.publish("motorsPwms", &podWorker->motorsPwms);
 
-
+    //printf("motors: %d %d %d %d\n",podWorker->motorsPwms.pwms[0],podWorker->motorsPwms.pwms[1],podWorker->motorsPwms.pwms[2],podWorker->motorsPwms.pwms[3]);
 
     //Print to arduino
     char buf[32];
