@@ -272,6 +272,7 @@ void loop()
     {
 
 
+        /*
         if(Serial.available() > 16)
         {
 
@@ -293,6 +294,25 @@ void loop()
             while(Serial.read() != -1);   // serial print from jetson should be faster, clear jetson-printed stuff
 
         }
+        */
+        while ((Serial.available() <= 16) || (Serial.read() != 'a') ) {};
+
+        for(int i = 0; i < 4; i++)
+            {
+                tmp = (Serial.read() - '0');
+                tmp = 10 * tmp + (Serial.read() - '0');
+                tmp = 10 * tmp + (Serial.read() - '0');
+                tmp = 10 * tmp + (Serial.read() - '0');
+                if(tmp < 2001 && tmp > 999)
+                    pwm_out[i] = tmp;
+                //        Serial.print(pwm_out[i]);
+            }
+            //Serial.println();
+          
+
+         while(Serial.read() != -1);   // serial print from jetson should be faster, clear jetson-printed stuff
+
+
 
         if((micros() - lastJetson) > 10000) //Jetson updates at 200Hz, expected udpate every 5ms. if nothing after 10ms set zero
         {
@@ -302,6 +322,7 @@ void loop()
             pwm_out[2] = 1000;
             pwm_out[3] = 1000;
         }
+        lastJetson = micros();
 
         //Serial.println(pwm_out[0]);
         unGapPWM = pwm_out[0] + pwm_out[1] + pwm_out[2] + pwm_out[3];
