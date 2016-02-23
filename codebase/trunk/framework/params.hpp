@@ -14,7 +14,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 //Drone Motor parameters
 #define ZERORPMPWM 1000		//PWM value for no rotation of motors (0 RPM)
 #define MAXPWM 1900		//PWM max value
-#define IDLERPMPWM 1200		//PWM value to see motors spinning slowly
+#define IDLERPMPWM 1150		//PWM value to see motors spinning slowly
 
 
 #define AW2PWM 2.6673e-4   //omega = sqrt((pwm-BPWM2W)/APWM2W)+CPWM2W :: pwm = AW2PWM*(w-CW2PWM)^2+BW2PWM
