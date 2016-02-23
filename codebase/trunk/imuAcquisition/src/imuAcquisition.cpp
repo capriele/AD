@@ -206,36 +206,17 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 		
     }
 
-    //finalize "calibration procedure" in case no calibration requested
-    if ((podWorker->statusCalib<0 ) && (podWorker->noCalib))
-	{
-            podWorker->stateVariances.imuBiasGyro[0] = podWorker->defaultBias[0];
-            podWorker->stateVariances.imuBiasGyro[1] = podWorker->defaultBias[1];
-            podWorker->stateVariances.imuBiasGyro[2] = podWorker->defaultBias[2];
-
-            podWorker->stateVariances.imuBiasAccel[0] = podWorker->defaultBias[3];
-            podWorker->stateVariances.imuBiasAccel[1] = podWorker->defaultBias[4];
-            podWorker->stateVariances.imuBiasAccel[2] = podWorker->defaultBias[5] - GRAVITY; //@TODO warning: this assumes planar calibration!
-
-            podWorker->stateVariances.imuVarianceGyro[0] = podWorker->defaultBias[6];
-            podWorker->stateVariances.imuVarianceGyro[1] = podWorker->defaultBias[7];
-            podWorker->stateVariances.imuVarianceGyro[2] = podWorker->defaultBias[8];
-
-            podWorker->stateVariances.imuVarianceAccel[0] = podWorker->defaultBias[9];
-            podWorker->stateVariances.imuVarianceAccel[1] = podWorker->defaultBias[10];
-            podWorker->stateVariances.imuVarianceAccel[2] = podWorker->defaultBias[11];
-
-            podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
-            podWorker->statusCalib = 0;    
-	}
-
     //set stage of calibration procedure to wait for data
     if(podWorker->statusCalib == -2)
         printf("Waiting for data to calibrate...\n");
 
+
+
     //process data if existent
     if((readFromArdStatus == 0) && (podWorker->buf != NULL) && (podWorker->buf[0] != 10))	//check if buf has imu-data
     {	
+
+	//read data
         vec = char2vector(podWorker->buf); //@TODO warning, using th strtok routine empties the buffer!
 
         imuRaw.timestampArduino = vec[0]; // microseconds
@@ -255,163 +236,193 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         imuRaw.baro = 0;          //not using barometer with the current imu because it drops imu rate to 24Hz
 
 
-	//set stage of calibration procedure to calibrting and init values
-	if(podWorker->statusCalib == -2)
-        {
-            printf("Starting calibration...\n");
-            podWorker->starttimeCalib = GetTimeStamp();
-            podWorker->statusCalib = -1;
 
-            podWorker->imuCalib.gyro[0]  = imuRaw.gyro[0];
-            podWorker->imuCalib.gyro[1]  = imuRaw.gyro[1];
-            podWorker->imuCalib.gyro[2]  = imuRaw.gyro[2];
-            podWorker->imuCalib.accel[0] = imuRaw.accel[0];
-            podWorker->imuCalib.accel[1] = imuRaw.accel[1];
-            podWorker->imuCalib.accel[2] = imuRaw.accel[2];
-            podWorker->imuCalib.magn[0]  = imuRaw.magn[0];
-            podWorker->imuCalib.magn[1]  = imuRaw.magn[1];
-            podWorker->imuCalib.magn[2]  = imuRaw.magn[2];
-            podWorker->imuCalib.baro = imuRaw.baro;
+        //finalize "calibration procedure" in case no calibration requested
+        if (podWorker->noCalib)
+	{
+	    if (podWorker->statusCalib<0 )
+            {
+            podWorker->stateVariances.imuBiasGyro[0] = podWorker->defaultBias[0];
+            podWorker->stateVariances.imuBiasGyro[1] = podWorker->defaultBias[1];
+            podWorker->stateVariances.imuBiasGyro[2] = podWorker->defaultBias[2];
 
-            podWorker->stateVariances.imuVarianceGyro[0] = 0.0;
-            podWorker->stateVariances.imuVarianceGyro[1] = 0.0;
-            podWorker->stateVariances.imuVarianceGyro[2] = 0.0;
+            podWorker->stateVariances.imuBiasAccel[0] = podWorker->defaultBias[3];
+            podWorker->stateVariances.imuBiasAccel[1] = podWorker->defaultBias[4];
+            podWorker->stateVariances.imuBiasAccel[2] = podWorker->defaultBias[5] - GRAVITY; //@TODO warning: this assumes planar calibration!
 
-            podWorker->stateVariances.imuVarianceAccel[0] = 0.0;
-            podWorker->stateVariances.imuVarianceAccel[1] = 0.0;
-            podWorker->stateVariances.imuVarianceAccel[2] = 0.0;
+            podWorker->stateVariances.imuVarianceGyro[0] = podWorker->defaultBias[6];
+            podWorker->stateVariances.imuVarianceGyro[1] = podWorker->defaultBias[7];
+            podWorker->stateVariances.imuVarianceGyro[2] = podWorker->defaultBias[8];
 
-            podWorker->deltaGyro[0] = imuRaw.gyro[0];
-            podWorker->deltaGyro[1] = imuRaw.gyro[1];
-            podWorker->deltaGyro[2] = imuRaw.gyro[2];
-            podWorker->meanGyro[0] = imuRaw.gyro[0];
-            podWorker->meanGyro[1] = imuRaw.gyro[1];
-            podWorker->meanGyro[2] = imuRaw.gyro[2];
-
-            podWorker->deltaAccel[0] = imuRaw.accel[0];
-            podWorker->deltaAccel[1] = imuRaw.accel[1];
-            podWorker->deltaAccel[2] = imuRaw.accel[2];
-            podWorker->meanAccel[0] = imuRaw.accel[0];
-            podWorker->meanAccel[1] = imuRaw.accel[1];
-            podWorker->meanAccel[2] = imuRaw.accel[2];
-
-            podWorker->nMeasurements = 1;
-
-        }
-	//collecting data over CALIBINTERVAL time
-        else if((podWorker->statusCalib == -1) && ((GetTimeStamp() - podWorker->starttimeCalib) < CALIBINTERVAL_IMU * MS2US))
-        {
-            int n = podWorker->nMeasurements;
-
-            podWorker->imuCalib.gyro[0]  = podWorker->imuCalib.gyro[0] * n / (n + 1) + imuRaw.gyro[0] / (n + 1);
-            podWorker->imuCalib.gyro[1]  = podWorker->imuCalib.gyro[1] * n / (n + 1) + imuRaw.gyro[1] / (n + 1);
-            podWorker->imuCalib.gyro[2]  = podWorker->imuCalib.gyro[2] * n / (n + 1) + imuRaw.gyro[2] / (n + 1);
-            podWorker->imuCalib.accel[0] = podWorker->imuCalib.accel[0] * n / (n + 1) + imuRaw.accel[0] / (n + 1);
-            podWorker->imuCalib.accel[1] = podWorker->imuCalib.accel[1] * n / (n + 1) + imuRaw.accel[1] / (n + 1);
-            podWorker->imuCalib.accel[2] = podWorker->imuCalib.accel[2] * n / (n + 1) + imuRaw.accel[2] / (n + 1);
-            podWorker->imuCalib.magn[0]  = podWorker->imuCalib.magn[0] * n / (n + 1) + imuRaw.magn[0] / (n + 1);
-            podWorker->imuCalib.magn[1]  = podWorker->imuCalib.magn[1] * n / (n + 1) + imuRaw.magn[1] / (n + 1);
-            podWorker->imuCalib.magn[2]  = podWorker->imuCalib.magn[2] * n / (n + 1) + imuRaw.magn[2] / (n + 1);
-            podWorker->imuCalib.baro = podWorker->imuCalib.baro * n / (n + 1) + imuRaw.baro / (n + 1);
-
-	    //gyro variance
-            podWorker->deltaGyro[0] = imuRaw.gyro[0] - podWorker->meanGyro[0];
-            podWorker->deltaGyro[1] = imuRaw.gyro[1] - podWorker->meanGyro[1];
-            podWorker->deltaGyro[2] = imuRaw.gyro[2] - podWorker->meanGyro[2];
-            podWorker->meanGyro[0] = podWorker->meanGyro[0] + podWorker->deltaGyro[0] / n; //@TODO why not n+1? or above n instead of n+1? link/reference would be awesome. check where to put n=n+1
-            podWorker->meanGyro[1] = podWorker->meanGyro[1] + podWorker->deltaGyro[1] / n;
-            podWorker->meanGyro[2] = podWorker->meanGyro[2] + podWorker->deltaGyro[2] / n;
-
-            podWorker->stateVariances.imuVarianceGyro[0] = podWorker->stateVariances.imuVarianceGyro[0] + podWorker->deltaGyro[0] * (imuRaw.gyro[0] - podWorker->meanGyro[0]);
-            podWorker->stateVariances.imuVarianceGyro[1] = podWorker->stateVariances.imuVarianceGyro[1] + podWorker->deltaGyro[1] * (imuRaw.gyro[1] - podWorker->meanGyro[1]);
-            podWorker->stateVariances.imuVarianceGyro[2] = podWorker->stateVariances.imuVarianceGyro[2] + podWorker->deltaGyro[2] * (imuRaw.gyro[2] - podWorker->meanGyro[2]);
-
-	    //accel variance
-            podWorker->deltaAccel[0] = imuRaw.accel[0] - podWorker->meanAccel[0];
-            podWorker->deltaAccel[1] = imuRaw.accel[1] - podWorker->meanAccel[1];
-            podWorker->deltaAccel[2] = imuRaw.accel[2] - podWorker->meanAccel[2];
-            podWorker->meanAccel[0] = podWorker->meanAccel[0] + podWorker->deltaAccel[0] / n; //@TODO why not n+1? or above n instead of n+1? link/reference would be awesome. check where to put n=n+1
-            podWorker->meanAccel[1] = podWorker->meanAccel[1] + podWorker->deltaAccel[1] / n;
-            podWorker->meanAccel[2] = podWorker->meanAccel[2] + podWorker->deltaAccel[2] / n;
-
-            podWorker->stateVariances.imuVarianceAccel[0] = podWorker->stateVariances.imuVarianceAccel[0] + podWorker->deltaAccel[0] * (imuRaw.accel[0] - podWorker->meanAccel[0]);
-            podWorker->stateVariances.imuVarianceAccel[1] = podWorker->stateVariances.imuVarianceAccel[1] + podWorker->deltaAccel[1] * (imuRaw.accel[1] - podWorker->meanAccel[1]);
-            podWorker->stateVariances.imuVarianceAccel[2] = podWorker->stateVariances.imuVarianceAccel[2] + podWorker->deltaAccel[2] * (imuRaw.accel[2] - podWorker->meanAccel[2]);
-
-
-
-            podWorker->nMeasurements += 1;
-        }
-        else if(podWorker->statusCalib == -1)
-        {
-
-
-            //finishing up calib
-            podWorker->stateVariances.imuBiasGyro[0] = podWorker->imuCalib.gyro[0];
-            podWorker->stateVariances.imuBiasGyro[1] = podWorker->imuCalib.gyro[1];
-            podWorker->stateVariances.imuBiasGyro[2] = podWorker->imuCalib.gyro[2];
-
-            //@TODO ok to also store this here?
-            podWorker->stateVariances.imuBiasAccel[0] = podWorker->imuCalib.accel[0];
-            podWorker->stateVariances.imuBiasAccel[1] = podWorker->imuCalib.accel[1];
-            podWorker->stateVariances.imuBiasAccel[2] = podWorker->imuCalib.accel[2] - GRAVITY; //@TODO warning: this assumes planar calibration!
-
-
-            podWorker->stateVariances.imuVarianceGyro[0] = podWorker->stateVariances.imuVarianceGyro[0] / (podWorker->nMeasurements - 2);
-            podWorker->stateVariances.imuVarianceGyro[1] = podWorker->stateVariances.imuVarianceGyro[1] / (podWorker->nMeasurements - 2);
-            podWorker->stateVariances.imuVarianceGyro[2] = podWorker->stateVariances.imuVarianceGyro[2] / (podWorker->nMeasurements - 2);
-
-            podWorker->stateVariances.imuVarianceAccel[0] = podWorker->stateVariances.imuVarianceAccel[0] / (podWorker->nMeasurements - 2);
-            podWorker->stateVariances.imuVarianceAccel[1] = podWorker->stateVariances.imuVarianceAccel[1] / (podWorker->nMeasurements - 2);
-            podWorker->stateVariances.imuVarianceAccel[2] = podWorker->stateVariances.imuVarianceAccel[2] / (podWorker->nMeasurements - 2);
-
-            /*//stateEstimatorOrientV1 uses calib reslts as 0-reference vector
-            podWorker->features.featureDirectionVersor[0][0] = podWorker->imuCalib.accel[0];
-            podWorker->features.featureDirectionVersor[0][1] = podWorker->imuCalib.accel[1];
-            podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2];
-
-            podWorker->features.featureDirectionVersor[1][0] = podWorker->imuCalib.magn[0];
-            podWorker->features.featureDirectionVersor[1][1] = podWorker->imuCalib.magn[1];
-            podWorker->features.featureDirectionVersor[1][2] = podWorker->imuCalib.magn[2];
-            */
-
-            //ATTENTION: we publish the calibration data over estimation channels! -> estimator waits for this first message on this channel!
-            //podWorker->lcm.publish ("features", &podWorker->features);
-            //podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances);
-
-            printf("Calibration DONE...\n >> %f %f %f %f %f %f %f %f %f %f :: %f %f %f %f %f %f <<\n",
-                   podWorker->imuCalib.gyro[0], podWorker->imuCalib.gyro[1],
-                   podWorker->imuCalib.gyro[2], podWorker->imuCalib.accel[0],
-                   podWorker->imuCalib.accel[1], podWorker->imuCalib.accel[2],
-                   podWorker->imuCalib.magn[0], podWorker->imuCalib.magn[1],
-                   podWorker->imuCalib.magn[2], podWorker->imuCalib.baro,
-		   podWorker->stateVariances.imuVarianceGyro[0],
-			podWorker->stateVariances.imuVarianceGyro[1],
-			podWorker->stateVariances.imuVarianceGyro[2],
-			podWorker->stateVariances.imuVarianceAccel[0],
-			podWorker->stateVariances.imuVarianceAccel[1],
-			podWorker->stateVariances.imuVarianceAccel[2]);
-
+            podWorker->stateVariances.imuVarianceAccel[0] = podWorker->defaultBias[9];
+            podWorker->stateVariances.imuVarianceAccel[1] = podWorker->defaultBias[10];
+            podWorker->stateVariances.imuVarianceAccel[2] = podWorker->defaultBias[11];
+		
+            printf("Calibration... DONE\n");
             podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
+            podWorker->statusCalib = 0; 
+            }   
+	}
 
-            podWorker->statusCalib = 0;
+	else //do static calib procedure
+	{
+		//set stage of calibration procedure to calibrting and init values
+		if(podWorker->statusCalib == -2)
+		{
+		    printf("Starting calibration...\n");
+		    podWorker->starttimeCalib = GetTimeStamp();
+		    podWorker->statusCalib = -1;
 
-        }
-        else if(podWorker->statusCalib == 0)
-        {
-            /*
-            //This publishes accelerometer and magnetometervectors as featureDirectionVersors; later this job will be done by vectors pointing to the visual markers!
-            podWorker->features.featureDirectionVersor[0][0] = imuRaw.accel[0];
-            podWorker->features.featureDirectionVersor[0][1] = imuRaw.accel[1];
-            podWorker->features.featureDirectionVersor[0][2] = imuRaw.accel[2];
+		    podWorker->imuCalib.gyro[0]  = imuRaw.gyro[0];
+		    podWorker->imuCalib.gyro[1]  = imuRaw.gyro[1];
+		    podWorker->imuCalib.gyro[2]  = imuRaw.gyro[2];
+		    podWorker->imuCalib.accel[0] = imuRaw.accel[0];
+		    podWorker->imuCalib.accel[1] = imuRaw.accel[1];
+		    podWorker->imuCalib.accel[2] = imuRaw.accel[2];
+		    podWorker->imuCalib.magn[0]  = imuRaw.magn[0];
+		    podWorker->imuCalib.magn[1]  = imuRaw.magn[1];
+		    podWorker->imuCalib.magn[2]  = imuRaw.magn[2];
+		    podWorker->imuCalib.baro = imuRaw.baro;
 
-            podWorker->features.featureDirectionVersor[1][0] = imuRaw.magn[0];
-            podWorker->features.featureDirectionVersor[1][1] = imuRaw.magn[1];
-            podWorker->features.featureDirectionVersor[1][2] = imuRaw.magn[2];
-            podWorker->lcm.publish ("features", &podWorker->features);
-            */
-        };
+		    podWorker->stateVariances.imuVarianceGyro[0] = 0.0;
+		    podWorker->stateVariances.imuVarianceGyro[1] = 0.0;
+		    podWorker->stateVariances.imuVarianceGyro[2] = 0.0;
 
+		    podWorker->stateVariances.imuVarianceAccel[0] = 0.0;
+		    podWorker->stateVariances.imuVarianceAccel[1] = 0.0;
+		    podWorker->stateVariances.imuVarianceAccel[2] = 0.0;
+
+		    podWorker->deltaGyro[0] = imuRaw.gyro[0];
+		    podWorker->deltaGyro[1] = imuRaw.gyro[1];
+		    podWorker->deltaGyro[2] = imuRaw.gyro[2];
+		    podWorker->meanGyro[0] = imuRaw.gyro[0];
+		    podWorker->meanGyro[1] = imuRaw.gyro[1];
+		    podWorker->meanGyro[2] = imuRaw.gyro[2];
+
+		    podWorker->deltaAccel[0] = imuRaw.accel[0];
+		    podWorker->deltaAccel[1] = imuRaw.accel[1];
+		    podWorker->deltaAccel[2] = imuRaw.accel[2];
+		    podWorker->meanAccel[0] = imuRaw.accel[0];
+		    podWorker->meanAccel[1] = imuRaw.accel[1];
+		    podWorker->meanAccel[2] = imuRaw.accel[2];
+
+		    podWorker->nMeasurements = 1;
+
+		}
+		//collecting data over CALIBINTERVAL time
+		else if((podWorker->statusCalib == -1) && ((GetTimeStamp() - podWorker->starttimeCalib) < CALIBINTERVAL_IMU * MS2US))
+		{
+		    int n = podWorker->nMeasurements;
+
+		    podWorker->imuCalib.gyro[0]  = podWorker->imuCalib.gyro[0] * n / (n + 1) + imuRaw.gyro[0] / (n + 1);
+		    podWorker->imuCalib.gyro[1]  = podWorker->imuCalib.gyro[1] * n / (n + 1) + imuRaw.gyro[1] / (n + 1);
+		    podWorker->imuCalib.gyro[2]  = podWorker->imuCalib.gyro[2] * n / (n + 1) + imuRaw.gyro[2] / (n + 1);
+		    podWorker->imuCalib.accel[0] = podWorker->imuCalib.accel[0] * n / (n + 1) + imuRaw.accel[0] / (n + 1);
+		    podWorker->imuCalib.accel[1] = podWorker->imuCalib.accel[1] * n / (n + 1) + imuRaw.accel[1] / (n + 1);
+		    podWorker->imuCalib.accel[2] = podWorker->imuCalib.accel[2] * n / (n + 1) + imuRaw.accel[2] / (n + 1);
+		    podWorker->imuCalib.magn[0]  = podWorker->imuCalib.magn[0] * n / (n + 1) + imuRaw.magn[0] / (n + 1);
+		    podWorker->imuCalib.magn[1]  = podWorker->imuCalib.magn[1] * n / (n + 1) + imuRaw.magn[1] / (n + 1);
+		    podWorker->imuCalib.magn[2]  = podWorker->imuCalib.magn[2] * n / (n + 1) + imuRaw.magn[2] / (n + 1);
+		    podWorker->imuCalib.baro = podWorker->imuCalib.baro * n / (n + 1) + imuRaw.baro / (n + 1);
+
+		    //gyro variance
+		    podWorker->deltaGyro[0] = imuRaw.gyro[0] - podWorker->meanGyro[0];
+		    podWorker->deltaGyro[1] = imuRaw.gyro[1] - podWorker->meanGyro[1];
+		    podWorker->deltaGyro[2] = imuRaw.gyro[2] - podWorker->meanGyro[2];
+		    podWorker->meanGyro[0] = podWorker->meanGyro[0] + podWorker->deltaGyro[0] / n; //@TODO why not n+1? or above n instead of n+1? link/reference would be awesome. check where to put n=n+1
+		    podWorker->meanGyro[1] = podWorker->meanGyro[1] + podWorker->deltaGyro[1] / n;
+		    podWorker->meanGyro[2] = podWorker->meanGyro[2] + podWorker->deltaGyro[2] / n;
+
+		    podWorker->stateVariances.imuVarianceGyro[0] = podWorker->stateVariances.imuVarianceGyro[0] + podWorker->deltaGyro[0] * (imuRaw.gyro[0] - podWorker->meanGyro[0]);
+		    podWorker->stateVariances.imuVarianceGyro[1] = podWorker->stateVariances.imuVarianceGyro[1] + podWorker->deltaGyro[1] * (imuRaw.gyro[1] - podWorker->meanGyro[1]);
+		    podWorker->stateVariances.imuVarianceGyro[2] = podWorker->stateVariances.imuVarianceGyro[2] + podWorker->deltaGyro[2] * (imuRaw.gyro[2] - podWorker->meanGyro[2]);
+
+		    //accel variance
+		    podWorker->deltaAccel[0] = imuRaw.accel[0] - podWorker->meanAccel[0];
+		    podWorker->deltaAccel[1] = imuRaw.accel[1] - podWorker->meanAccel[1];
+		    podWorker->deltaAccel[2] = imuRaw.accel[2] - podWorker->meanAccel[2];
+		    podWorker->meanAccel[0] = podWorker->meanAccel[0] + podWorker->deltaAccel[0] / n; //@TODO why not n+1? or above n instead of n+1? link/reference would be awesome. check where to put n=n+1
+		    podWorker->meanAccel[1] = podWorker->meanAccel[1] + podWorker->deltaAccel[1] / n;
+		    podWorker->meanAccel[2] = podWorker->meanAccel[2] + podWorker->deltaAccel[2] / n;
+
+		    podWorker->stateVariances.imuVarianceAccel[0] = podWorker->stateVariances.imuVarianceAccel[0] + podWorker->deltaAccel[0] * (imuRaw.accel[0] - podWorker->meanAccel[0]);
+		    podWorker->stateVariances.imuVarianceAccel[1] = podWorker->stateVariances.imuVarianceAccel[1] + podWorker->deltaAccel[1] * (imuRaw.accel[1] - podWorker->meanAccel[1]);
+		    podWorker->stateVariances.imuVarianceAccel[2] = podWorker->stateVariances.imuVarianceAccel[2] + podWorker->deltaAccel[2] * (imuRaw.accel[2] - podWorker->meanAccel[2]);
+
+
+
+		    podWorker->nMeasurements += 1;
+		}
+		else if(podWorker->statusCalib == -1)
+		{
+
+
+		    //finishing up calib
+		    podWorker->stateVariances.imuBiasGyro[0] = podWorker->imuCalib.gyro[0];
+		    podWorker->stateVariances.imuBiasGyro[1] = podWorker->imuCalib.gyro[1];
+		    podWorker->stateVariances.imuBiasGyro[2] = podWorker->imuCalib.gyro[2];
+
+		    //@TODO ok to also store this here?
+		    podWorker->stateVariances.imuBiasAccel[0] = podWorker->imuCalib.accel[0];
+		    podWorker->stateVariances.imuBiasAccel[1] = podWorker->imuCalib.accel[1];
+		    podWorker->stateVariances.imuBiasAccel[2] = podWorker->imuCalib.accel[2] - GRAVITY; //@TODO warning: this assumes planar calibration!
+
+
+		    podWorker->stateVariances.imuVarianceGyro[0] = podWorker->stateVariances.imuVarianceGyro[0] / (podWorker->nMeasurements - 2);
+		    podWorker->stateVariances.imuVarianceGyro[1] = podWorker->stateVariances.imuVarianceGyro[1] / (podWorker->nMeasurements - 2);
+		    podWorker->stateVariances.imuVarianceGyro[2] = podWorker->stateVariances.imuVarianceGyro[2] / (podWorker->nMeasurements - 2);
+
+		    podWorker->stateVariances.imuVarianceAccel[0] = podWorker->stateVariances.imuVarianceAccel[0] / (podWorker->nMeasurements - 2);
+		    podWorker->stateVariances.imuVarianceAccel[1] = podWorker->stateVariances.imuVarianceAccel[1] / (podWorker->nMeasurements - 2);
+		    podWorker->stateVariances.imuVarianceAccel[2] = podWorker->stateVariances.imuVarianceAccel[2] / (podWorker->nMeasurements - 2);
+
+		    /*//stateEstimatorOrientV1 uses calib reslts as 0-reference vector
+		    podWorker->features.featureDirectionVersor[0][0] = podWorker->imuCalib.accel[0];
+		    podWorker->features.featureDirectionVersor[0][1] = podWorker->imuCalib.accel[1];
+		    podWorker->features.featureDirectionVersor[0][2] = podWorker->imuCalib.accel[2];
+
+		    podWorker->features.featureDirectionVersor[1][0] = podWorker->imuCalib.magn[0];
+		    podWorker->features.featureDirectionVersor[1][1] = podWorker->imuCalib.magn[1];
+		    podWorker->features.featureDirectionVersor[1][2] = podWorker->imuCalib.magn[2];
+		    */
+
+		    //ATTENTION: we publish the calibration data over estimation channels! -> estimator waits for this first message on this channel!
+		    //podWorker->lcm.publish ("features", &podWorker->features);
+		    //podWorker->lcm.publish ("stateVariancesOrientV1", &podWorker->stateVariances);
+
+		    printf("Calibration DONE...\n >> %f %f %f %f %f %f %f %f %f %f :: %f %f %f %f %f %f <<\n",
+		           podWorker->imuCalib.gyro[0], podWorker->imuCalib.gyro[1],
+		           podWorker->imuCalib.gyro[2], podWorker->imuCalib.accel[0],
+		           podWorker->imuCalib.accel[1], podWorker->imuCalib.accel[2],
+		           podWorker->imuCalib.magn[0], podWorker->imuCalib.magn[1],
+		           podWorker->imuCalib.magn[2], podWorker->imuCalib.baro,
+			   podWorker->stateVariances.imuVarianceGyro[0],
+				podWorker->stateVariances.imuVarianceGyro[1],
+				podWorker->stateVariances.imuVarianceGyro[2],
+				podWorker->stateVariances.imuVarianceAccel[0],
+				podWorker->stateVariances.imuVarianceAccel[1],
+				podWorker->stateVariances.imuVarianceAccel[2]);
+
+		    podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
+
+		    podWorker->statusCalib = 0;
+
+		}
+		else if(podWorker->statusCalib == 0)
+		{
+		    /*
+		    //This publishes accelerometer and magnetometervectors as featureDirectionVersors; later this job will be done by vectors pointing to the visual markers!
+		    podWorker->features.featureDirectionVersor[0][0] = imuRaw.accel[0];
+		    podWorker->features.featureDirectionVersor[0][1] = imuRaw.accel[1];
+		    podWorker->features.featureDirectionVersor[0][2] = imuRaw.accel[2];
+
+		    podWorker->features.featureDirectionVersor[1][0] = imuRaw.magn[0];
+		    podWorker->features.featureDirectionVersor[1][1] = imuRaw.magn[1];
+		    podWorker->features.featureDirectionVersor[1][2] = imuRaw.magn[2];
+		    podWorker->lcm.publish ("features", &podWorker->features);
+		    */
+		};
+	};
         /* Publishing computation result */
         //imuRaw.timestampJetson = GetTimeStamp(); //moved to closer when actually read from USB @TODO estimators should work with arduino clock when figuring out dt to last measurement, however: pay attention to clocksync!
 

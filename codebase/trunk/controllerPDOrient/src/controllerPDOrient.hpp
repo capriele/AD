@@ -23,6 +23,34 @@ public:
     {
         //Pod-specific initialization
         //...
+	this->powerAdjust.tBiasPDO;
+	this->powerAdjust.yBiasPDO;
+	this->powerAdjust.pBiasPDO;
+	this->powerAdjust.rBiasPDO;
+
+	this->powerAdjust.pyAdjustPDO;
+	this->powerAdjust.dyAdjustPDO;
+	this->powerAdjust.ppAdjustPDO;
+	this->powerAdjust.dpAdjustPDO;
+	this->powerAdjust.prAdjustPDO;
+	this->powerAdjust.drAdjustPDO;
+	this->powerAdjust.ptAdjustPDO;
+	this->powerAdjust.dtAdjustPDO;
+
+
+	this->powerAdjust.pXYAdjustPDPOS;
+	this->powerAdjust.dXYAdjustPDPOS;
+	this->powerAdjust.pZAdjustPDPOS;
+	this->powerAdjust.dZAdjustPDPOS;
+
+	this->poseRef.position[0] = 0.0;
+	this->poseRef.position[1] = 0.0;
+	this->poseRef.position[2] = -1.0;
+
+	this->poseRef.orientEuler[0] = 0.0;
+	this->poseRef.orientEuler[1] = 0.0;
+	this->poseRef.orientEuler[2] = 0.0;
+
     }
 
     //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call
