@@ -1,7 +1,15 @@
-
-#include "examplePod.hpp"
+#include "detectorVIS.hpp"
 
 using namespace std;
+
+/* TODO
+- april tag detection and publishing
+- camera initialization
+- sub function locations??
+- parameters file
+- update header file with needed info
+*/
+
 
 
 /*
@@ -12,43 +20,34 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 {
 
     /* General Infrastructure (keep this infrastructure!) */
-    examplePod_t* podWorker = reinterpret_cast<examplePod_t*>(data);
+    detectorVIS_t* podWorker = reinterpret_cast<detectorVIS_t*>(data);
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
 
 
     /* Computations */
-    /*---example that does not really compute anything---*/
 
-    //displays data from channel "testdata"
-    printf(" data: %f\n", podWorker->testdata.position[2]);
+    // Set time stamps
+    podWorker->features.timestampJetson = GetTimeStamp();
+    podWorker->featuers.timestampCamera = 0; // @TODO: figure out how to get timestamp from camera
 
-    // statusDrone - computation via stateMachine
-    agile::statusDrone_t statusDrone_old = podWorker->statusDrone;
-    podWorker->statusDrone = agile::statusDrone_t ();
+    // Retrieve image
 
+    // Detect april tags
 
-    switch(statusDrone_old.status)
-    {
-    //implement safety statemachine
-    case DRONE_WAITPODS: ; break;
-    case DRONE_IDLE: ; break;
-    case DRONE_TAKEOFF: ; break;
-    case DRONE_FLY: ; break;
-    case DRONE_CRITICAL: ; break;
-    case DRONE_FATAL: ; break;
-    }
-    podWorker->statusDrone.status = DRONE_WAITPODS;
-    podWorker->statusDrone.timestampJetson = GetTimeStamp();
+    // Get relative positions
+
+    // Get uncertainty
+    // @TODO: Uncertainty figures for april tag detections
 
     /*---------*/
 
 
-    /* Publishing computation result, in case of this example, the status update of drone status */
+    /* Publishing computation result, in this case the feature locations */
 
     // statusDrone - publish
-    podWorker->lcm.publish("statusDronePUBLISHONEXMAPLECHANNEL", &podWorker->statusDrone); 	//choose channelName here!
+    podWorker->lcm.publish("features", &podWorker->features); 	//choose channelName here!
 
     /*---------*/
 
@@ -73,7 +72,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
 {
 
     /*General Infrastructure (keep this infrastructure!)*/
-    examplePod_t* podWorker = reinterpret_cast<examplePod_t*>(data);
+    detectorVIS_t* podWorker = reinterpret_cast<detectorVIS_t*>(data);
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
@@ -128,36 +127,35 @@ int main(int argc, char** argv)
     /* General Infrastructure: setup (keep this infrastructure!)  */
 
     // 1) Create the app
-    examplePod_t podWorker = examplePod_t("examplePod", CALLINTERVAL_EXAMPLEPOD); 	//provide your PODname here!
+    detectorVIS_t podWorker = detectorVIS_t("detectorVIS", CALLINTERVAL_DETECTORVISPOD); 	//provide your PODname here!
 
     // 2) Create LCM
     if(!podWorker.lcm.good())
         return 1;
 
     // 3) Subscribe this POD to channels
-    podWorker.subscribe("testdata", 	CALLINTERVAL_TESTSENDER,  &(podWorker.testdata), 	&podBase_t::handleMessage<agile::pose_t>);
-    podWorker.subscribe("statusTestsender", CALLINTERVAL_TESTSENDER, &(podWorker.statusTestsender), &podBase_t::handleMessage<agile::statusPod_t>);
-    //podWorker.subscribe("statusWatchdog",  CALLINTERVAL_WATCHDOG, &(podWorker.statusWatchdog),   &podBase_t::handleMessage<agile::statusPod_t>); // IMPORTANT -> POD is autosubscribed to this (and statusDrone) via constructor of Pod-base-class!
-
-    //podWorker.unsubscribe("statusTestsender"); //this is an example how to unsubscribe!
-
-
-
-
-
+    // No channels to subscribe to for feature detection
     /*---------*/
 
 
 
 
     /*  POD-specific init procedures  */
-    // Update and publish status of examplePod (keep this infrastructure!)
+    // Update and publish status of detectorVIS (keep this infrastructure!)
     printf("Initializing POD...\n");
     podWorker.publishStatus(POD_INITING);
 
     //Initialization stuff
-    //...
+    podWorker.parseOptions(argc, argv); // parse options, i.e. get environment we're in
+    initEnvironment(environment, m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
 
+    // Initialize detector and video
+    m_tagDetector = new AprilTags::TagDetector(m_tagCodes);
+    
+    m_cap = cv::VideoCapture(m_deviceId);
+    if (!m_cap.isOpened()) {
+      
+    }
     printf("Initializing POD... DONE\n");
     /*---------*/
 
