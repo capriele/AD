@@ -33,10 +33,24 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     podWorker->featuers.timestampCamera = 0; // @TODO: figure out how to get timestamp from camera
 
     // Retrieve image
+    cv::Mat image;
+    cv::Mat image_gray;
+
+    m_cap >> image;
+    cv::cvtColor(image, image_gray, CVBGR2GRAY);
 
     // Detect april tags
+    vector<AprilTags::TagDetection> detections = m_tagDetector->extractTags(image_gray);
 
     // Get relative positions
+    podWorker->features.numFeat = detections.size();
+    Eigen::Matrix3d relRot;
+    Eigen::Vector3d relPos;
+    double x,y,z,yaw,pitch,roll;
+    for (int i=0; i<detections.size(); i++) {
+	detections[i].getRelativeTranslationRotation(APRIL_TAG_SIZE, M_FX, M_FY, M_PX, M_PY, relPos, relRot);
+	wRo_to_euler(relRot, yaw, pitch, roll);
+	
 
     // Get uncertainty
     // @TODO: Uncertainty figures for april tag detections
@@ -154,8 +168,12 @@ int main(int argc, char** argv)
     
     m_cap = cv::VideoCapture(m_deviceId);
     if (!m_cap.isOpened()) {
-      
+	printf("ERROR: Can't find video device...\n");
+	return EXIT_FAILURE;
     }
+    m_cap.set(CV_CAP_PROP_FRAME_WIDTH, VIDEO_FRAME_WIDTH);
+    m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, VIDEO_FRAME_HEIGHT);
+    
     printf("Initializing POD... DONE\n");
     /*---------*/
 
