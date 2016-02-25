@@ -1,6 +1,6 @@
 
-INCS = 
-LIBS = 
+INCS = -I/usr/local/include/opencv
+LIBS = -L/usr/local/lib
 
 
 DEFINCS = -I/usr/include -I/usr/include/opencv2

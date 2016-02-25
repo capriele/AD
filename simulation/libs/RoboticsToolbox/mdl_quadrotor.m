@@ -83,7 +83,7 @@ quad.rho = 1.2041;               %   rho     Density of air                     
 quad.muv = 1.5e-5;               %   muv     Viscosity of air                    1x1
 
 % Airframe
-quad.M = 0.949;            	%   M       Mass, one battery 0.949kg two batteries (1.0971)                                1x1
+quad.M = 1.277;            	%   M       Mass, two bats+cage 1.277// one battery no cage 0.949kg                                1x1
 
 % Inertia in our (Agile Drone) body frame
 Ixx = 0.0057846;                

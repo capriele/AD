@@ -121,6 +121,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 	//printf("imu raw-body: %f %f %f %f %f %f ::%f %f %f %f %f %f\n",podWorker->imuFiltered[0],podWorker->imuFiltered[1],podWorker->imuFiltered[2],podWorker->imuFiltered[3],podWorker->imuFiltered[4],podWorker->imuFiltered[5],imuTrafo[0],imuTrafo[1],imuTrafo[2],imuTrafo[3],imuTrafo[4],imuTrafo[5]);
 
 
+
         //prepare current estimates
         double yaw_cur, pitch_cur, roll_cur;
         quat2Euler(podWorker->stateVariances.orient, &(yaw_cur), &(pitch_cur), &(roll_cur));
