@@ -5,12 +5,12 @@
 //Controller parameters
 
 #define Py 0.08
-#define Pp 0.5
-#define Pr 0.5
+#define Pp 0.32
+#define Pr 0.32
 
 #define Dy 0.06
-#define Dp 0.1
-#define Dr 0.1
+#define Dp 0.075
+#define Dr 0.075
 
 
 //static error gain test of PWM seems to yield same results as flight controller

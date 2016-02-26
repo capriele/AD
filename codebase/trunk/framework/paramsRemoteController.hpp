@@ -11,7 +11,7 @@
 #define INITBIASPDO -4.0
 #define MINTBIASPDO -4.0
 #define MAXTBIASPDO 4.0
-#define STEPSTBIASPDO 0.5
+#define STEPSTBIASPDO 1.0
 
 //yaw  bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITYBIASPDO 0.0
@@ -43,7 +43,7 @@
 
 //reference values
 #define STEPSALTITUDE 0.2 //[m]
-#define STEPSPITCHROLL 0.02 //[euler]
+#define STEPSPITCHROLL 0.1 //[euler]
 #define STEPSYAW 0.1 //[euler]
 
 //epsilon

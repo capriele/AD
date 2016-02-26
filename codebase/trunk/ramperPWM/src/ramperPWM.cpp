@@ -81,6 +81,49 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
                     printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[i], i);
                 }
             break;
+	//spcific pwm
+        case 'u':
+            if(podWorker->motorIdxToRamp <= 3)
+            {
+                podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp] = 1300;
+                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+            }
+            else if(podWorker->motorIdxToRamp == 9)
+                for(i = 0; i < 4; i++)
+                {
+		podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp] = 1300;
+                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+                }
+            break;
+
+        case 'i':
+            if(podWorker->motorIdxToRamp <= 3)
+            {
+                podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp] = 1500;
+                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+            }
+            else if(podWorker->motorIdxToRamp == 9)
+                for(i = 0; i < 4; i++)
+                {
+		podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp] = 1500;
+                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+                }
+            break;
+
+        case 'o':
+            if(podWorker->motorIdxToRamp <= 3)
+            {
+                podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp] = 1700;
+                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+            }
+            else if(podWorker->motorIdxToRamp == 9)
+                for(i = 0; i < 4; i++)
+                {
+		podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp] = 1700;
+                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+                }
+            break;
+
         case '0':
             podWorker->motorIdxToRamp = 0;
             printf("selected motorindex: %d\n", podWorker->motorIdxToRamp);
