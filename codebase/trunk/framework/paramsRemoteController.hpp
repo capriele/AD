@@ -32,7 +32,7 @@
 #define STEPSRBIASPDO 0.1
 
 //PD-gain tuner (totalthrust-ypr)
-#define INITPDGAINADJUST_PRX 0.3 //pitch, roll, X, Y
+#define INITPDGAINADJUST_PRX 1.0 //pitch, roll, X, Y
 #define INITPDGAINADJUST_YZ 1.0 //yaw, Z
 #define MINPDGAINADJUST 0.0
 #define MAXPDGAINADJUST 2.0
