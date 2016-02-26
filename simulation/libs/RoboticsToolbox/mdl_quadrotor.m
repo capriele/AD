@@ -86,9 +86,9 @@ quad.muv = 1.5e-5;               %   muv     Viscosity of air                   
 quad.M = 1.277;            	%   M       Mass, two bats+cage 1.277// one battery no cage 0.949kg                                1x1
 
 % Inertia in our (Agile Drone) body frame
-Ixx = 0.0057846;                
-Iyy = 0.0058361;                
-Izz = 0.010355; 
+Ixx = 0.0057846*1.2; %crude adjustment, weight increased by 20%. @TODO
+Iyy = 0.0058361*1.2; %crude adjustment, weight increased by 20%. @TODO                
+Izz = 0.010355*1.2; %crude adjustment, weight increased by 20%. @TODO 
 
 % Compute intertia in RTBframe       Flyer rotational inertia matrix     3x3
 quad.J = diag([Ixx Iyy Izz]);

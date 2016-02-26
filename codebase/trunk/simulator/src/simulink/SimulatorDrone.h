@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'SimulatorDrone'.
  *
- * Model version                  : 1.3236
+ * Model version                  : 1.3303
  * Simulink Coder version         : 8.8 (R2015a) 09-Feb-2015
- * C/C++ source code generated on : Thu Jan 21 14:45:11 2016
+ * C/C++ source code generated on : Fri Feb 26 16:52:15 2016
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: 32-bit Generic
@@ -65,8 +65,9 @@ typedef struct {
   real_T Delay1_DSTATE[12];            /* '<S11>/Delay1' */
   real_T IntPosestates_DSTATE[12];     /* '<S11>/IntPosestates' */
   real_T IntMotors_DSTATE[4];          /* '<S11>/IntMotors' */
-  real_T Delay3_DSTATE_b[3];           /* '<S6>/Delay3' */
-  real_T Delay2_DSTATE[8];             /* '<S5>/Delay2' */
+  real_T simualterandomusbdelays_DSTATE[8];/* '<S5>/simualte random usbdelays' */
+  real_T Delay1_DSTATE_j[4];           /* '<S1>/Delay1' */
+  real_T simulatedsensorupdateratedelays[8];/* '<S5>/simulated sensorupdaterate delays' */
   real_T NextOutput[12];               /* '<S10>/Random Number' */
   real_T TimeStampA;                   /* '<S5>/Derivative' */
   real_T LastUAtTimeA[3];              /* '<S5>/Derivative' */
@@ -81,6 +82,7 @@ struct P_SimulatorDrone_T_ {
   struct_95VAVvBkBJA0GNbz7i38n quadEDT;/* Variable: quadEDT
                                         * Referenced by:
                                         *   '<S1>/sensordataCalib'
+                                        *   '<S1>/Delay1'
                                         *   '<S3>/Constant'
                                         *   '<S3>/Constant1'
                                         *   '<S3>/Constant2'
@@ -142,8 +144,11 @@ struct P_SimulatorDrone_T_ {
   real_T u_Gain;                       /* Expression: 0.5
                                         * Referenced by: '<S4>/1//2'
                                         */
-  real_T Delay3_InitialCondition_p;    /* Expression: 0
-                                        * Referenced by: '<S6>/Delay3'
+  real_T Gain1_Gain[2];                /* Expression: 0.8*[-1,1]
+                                        * Referenced by: '<S6>/Gain1'
+                                        */
+  real_T Gain2_Gain;                   /* Expression: -1
+                                        * Referenced by: '<S6>/Gain2'
                                         */
   real_T zeroconst_Value;              /* Expression: 0
                                         * Referenced by: '<S5>/zeroconst'
@@ -151,9 +156,9 @@ struct P_SimulatorDrone_T_ {
   real_T Assumestakeoffwaslevel_Bias[8];/* Expression: [0 0 quad.g 0 0 0 0 0]
                                          * Referenced by: '<S5>/Assumes takeoff was level'
                                          */
-  real_T Delay2_InitialCondition[8];   /* Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
-                                        * Referenced by: '<S5>/Delay2'
-                                        */
+  real_T simualterandomusbdelays_Initial[8];/* Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
+                                             * Referenced by: '<S5>/simualte random usbdelays'
+                                             */
   real_T RandomNumber_Mean;            /* Expression: 0
                                         * Referenced by: '<S10>/Random Number'
                                         */
@@ -178,12 +183,9 @@ struct P_SimulatorDrone_T_ {
   real_T gravity_Value[3];             /* Expression: [0 0 -quad.g]
                                         * Referenced by: '<S5>/gravity'
                                         */
-  real_T Gain1_Gain[2];                /* Expression: 0.8*[-1,1]
-                                        * Referenced by: '<S6>/Gain1'
-                                        */
-  real_T Gain2_Gain;                   /* Expression: -1
-                                        * Referenced by: '<S6>/Gain2'
-                                        */
+  real_T simulatedsensorupdateratedelays[8];/* Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
+                                             * Referenced by: '<S5>/simulated sensorupdaterate delays'
+                                             */
   real_T omegaSaturation_LowerSat;     /* Expression: 100
                                         * Referenced by: '<S3>/omegaSaturation'
                                         */
@@ -196,12 +198,15 @@ struct P_SimulatorDrone_T_ {
   uint32_T Delay1_DelayLength;         /* Computed Parameter: Delay1_DelayLength
                                         * Referenced by: '<S11>/Delay1'
                                         */
-  uint32_T Delay3_DelayLength_p;       /* Computed Parameter: Delay3_DelayLength_p
-                                        * Referenced by: '<S6>/Delay3'
+  uint32_T simualterandomusbdelays_DelayLe;/* Computed Parameter: simualterandomusbdelays_DelayLe
+                                            * Referenced by: '<S5>/simualte random usbdelays'
+                                            */
+  uint32_T Delay1_DelayLength_n;       /* Computed Parameter: Delay1_DelayLength_n
+                                        * Referenced by: '<S1>/Delay1'
                                         */
-  uint32_T Delay2_DelayLength;         /* Expression: quadEDT.sensordelay
-                                        * Referenced by: '<S5>/Delay2'
-                                        */
+  uint32_T simulatedsensorupdateratedela_g;/* Computed Parameter: simulatedsensorupdateratedela_g
+                                            * Referenced by: '<S5>/simulated sensorupdaterate delays'
+                                            */
 };
 
 /* Real-time Model Data Structure */
@@ -237,27 +242,25 @@ struct tag_RTM_SimulatorDrone_T {
 
 /* Model entry point functions */
 extern void SimulatorDrone_initialize(RT_MODEL_SimulatorDrone_T *const
-  SimulatorDrone_M, real_T SimulatorDrone_U_motorsPWM_datin[4], real_T
-  *SimulatorDrone_Y_X, real_T *SimulatorDrone_Y_Y, real_T *SimulatorDrone_Y_Z,
-  real_T *SimulatorDrone_Y_dx, real_T *SimulatorDrone_Y_dy, real_T
-  *SimulatorDrone_Y_dz, real_T *SimulatorDrone_Y_yaw, real_T
-  *SimulatorDrone_Y_pitch, real_T *SimulatorDrone_Y_roll, real_T
-  SimulatorDrone_Y_quaternions_datout[4], real_T *SimulatorDrone_Y_p, real_T
-  *SimulatorDrone_Y_q, real_T *SimulatorDrone_Y_r, real_T
-  SimulatorDrone_Y_opticalFlow_datout[3], real_T
+  SimulatorDrone_M, real_T SimulatorDrone_U_y[4], real_T *SimulatorDrone_Y_X,
+  real_T *SimulatorDrone_Y_Y, real_T *SimulatorDrone_Y_Z, real_T
+  *SimulatorDrone_Y_dx, real_T *SimulatorDrone_Y_dy, real_T *SimulatorDrone_Y_dz,
+  real_T *SimulatorDrone_Y_yaw, real_T *SimulatorDrone_Y_pitch, real_T
+  *SimulatorDrone_Y_roll, real_T SimulatorDrone_Y_quaternions_datout[4], real_T *
+  SimulatorDrone_Y_p, real_T *SimulatorDrone_Y_q, real_T *SimulatorDrone_Y_r,
+  real_T SimulatorDrone_Y_opticalFlow_datout[3], real_T
   SimulatorDrone_Y_sensordataCalib_daout[7], real_T *SimulatorDrone_Y_ddx,
   real_T *SimulatorDrone_Y_ddy, real_T *SimulatorDrone_Y_ddz, real_T
   *SimulatorDrone_Y_pb, real_T *SimulatorDrone_Y_qb, real_T *SimulatorDrone_Y_rb,
   real_T *SimulatorDrone_Y_altitude_sonar, real_T *SimulatorDrone_Y_prs);
 extern void SimulatorDrone_step(RT_MODEL_SimulatorDrone_T *const
-  SimulatorDrone_M, real_T SimulatorDrone_U_motorsPWM_datin[4], real_T
-  *SimulatorDrone_Y_X, real_T *SimulatorDrone_Y_Y, real_T *SimulatorDrone_Y_Z,
-  real_T *SimulatorDrone_Y_dx, real_T *SimulatorDrone_Y_dy, real_T
-  *SimulatorDrone_Y_dz, real_T *SimulatorDrone_Y_yaw, real_T
-  *SimulatorDrone_Y_pitch, real_T *SimulatorDrone_Y_roll, real_T
-  SimulatorDrone_Y_quaternions_datout[4], real_T *SimulatorDrone_Y_p, real_T
-  *SimulatorDrone_Y_q, real_T *SimulatorDrone_Y_r, real_T
-  SimulatorDrone_Y_opticalFlow_datout[3], real_T
+  SimulatorDrone_M, real_T SimulatorDrone_U_y[4], real_T *SimulatorDrone_Y_X,
+  real_T *SimulatorDrone_Y_Y, real_T *SimulatorDrone_Y_Z, real_T
+  *SimulatorDrone_Y_dx, real_T *SimulatorDrone_Y_dy, real_T *SimulatorDrone_Y_dz,
+  real_T *SimulatorDrone_Y_yaw, real_T *SimulatorDrone_Y_pitch, real_T
+  *SimulatorDrone_Y_roll, real_T SimulatorDrone_Y_quaternions_datout[4], real_T *
+  SimulatorDrone_Y_p, real_T *SimulatorDrone_Y_q, real_T *SimulatorDrone_Y_r,
+  real_T SimulatorDrone_Y_opticalFlow_datout[3], real_T
   SimulatorDrone_Y_sensordataCalib_daout[7], real_T *SimulatorDrone_Y_ddx,
   real_T *SimulatorDrone_Y_ddy, real_T *SimulatorDrone_Y_ddz, real_T
   *SimulatorDrone_Y_pb, real_T *SimulatorDrone_Y_qb, real_T *SimulatorDrone_Y_rb,
