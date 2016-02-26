@@ -10,7 +10,7 @@ void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  do
 
 
     double gyroAngleUpdate_acc_threshold   = sqrt(3 * pow(0.003, 2)); //@TODO this seems to work for the real IMU, note, for simulated one might use different!
-    double gyroAngleUpdate_acc_weight      = 0.001;
+    double gyroAngleUpdate_acc_weight      = 0.0005;
 
 
 //Rotation of angular velocity vector from Bodyframe to Worldframe, inverted Wronskian (body rates p-q-r to euler rates yaw pitch roll)
