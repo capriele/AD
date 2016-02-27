@@ -44,6 +44,9 @@ public:
 
     std::string imuRawChannel;
     std::string stateVariancesChannel;    
+
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

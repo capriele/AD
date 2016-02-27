@@ -24,6 +24,8 @@ public:
 
     //Pod-specific member functions
 
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

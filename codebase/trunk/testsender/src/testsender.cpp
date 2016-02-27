@@ -57,6 +57,8 @@ public:
         isControllerSOCOrient = false;
     }
 
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

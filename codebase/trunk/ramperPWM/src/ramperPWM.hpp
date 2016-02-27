@@ -89,6 +89,8 @@ public:
 
     }
 
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

@@ -158,6 +158,9 @@ public:
     //Pod-specifc members and functions for computations and storing results over more than 1 function cycle call
     agile::stateVariances_t       stateVariances;
     std::string imuRawChannel;
+
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 
