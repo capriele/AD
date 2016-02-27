@@ -60,11 +60,9 @@ bool checkPODstati(statusPod_t statusPod,watchdog_t* watchdog) //this is nasty, 
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool watchdog_t::doComputations()
 {
-
-    /* General Infrastructure (maintain this structure!) */
-    watchdog_t* podWorker = reinterpret_cast<watchdog_t*>(data);
+    watchdog_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
     /*--------*/
 
@@ -211,11 +209,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool watchdog_t::updateStatus()
 {
-
-    /*General Infrastructure (maintain this infrastructure!)*/
-    watchdog_t* podWorker = reinterpret_cast<watchdog_t*>(data);
+    watchdog_t* podWorker = this;
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/

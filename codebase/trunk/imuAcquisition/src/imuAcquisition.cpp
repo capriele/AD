@@ -153,11 +153,9 @@ Implementation of loop function for computations in this specific POD
 
 
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool imuAcquisition_t::doComputations()
 {
-
-    /* General Infrastructure (maintain this structure!) */
-    imuAcquisition_t* podWorker = reinterpret_cast<imuAcquisition_t*>(data);
+    imuAcquisition_t* podWorker = this;
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
 
@@ -454,11 +452,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool imuAcquisition_t::updateStatus()
 {
-
-    /*General Infrastructure (maintain this infrastructure!)*/
-    imuAcquisition_t* podWorker = reinterpret_cast<imuAcquisition_t*>(data);
+    imuAcquisition_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     /*---------*/

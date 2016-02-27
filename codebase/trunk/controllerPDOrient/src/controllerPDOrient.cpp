@@ -14,11 +14,9 @@ double negativeSaturate(double value)
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool controllerPDOrient_t::doComputations()
 {
-
-    /* General Infrastructure (maintain this structure!) */
-    controllerPDOrient_t* podWorker = reinterpret_cast<controllerPDOrient_t*>(data);
+    controllerPDOrient_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
     /*--------*/
 
@@ -78,11 +76,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool controllerPDOrient_t::updateStatus()
 {
-
-    /*General Infrastructure (maintain this infrastructure!)*/
-    controllerPDOrient_t* podWorker = reinterpret_cast<controllerPDOrient_t*>(data);
+    controllerPDOrient_t* podWorker = this;
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/

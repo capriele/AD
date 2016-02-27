@@ -10,11 +10,9 @@ using namespace std;
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool controllerSOCOrient_t::doComputations()
 {
-
-    /* General Infrastructure (maintain this structure!) */
-    controllerSOCOrient_t* podWorker = reinterpret_cast<controllerSOCOrient_t*>(data);
+    controllerSOCOrient_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
     /*--------*/
 
@@ -76,11 +74,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool controllerSOCOrient_t::updateStatus()
 {
-
-    /*General Infrastructure (maintain this infrastructure!)*/
-    controllerSOCOrient_t* podWorker = reinterpret_cast<controllerSOCOrient_t*>(data);
+    controllerSOCOrient_t* podWorker = this;
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/

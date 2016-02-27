@@ -54,10 +54,9 @@ void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  do
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool stateEstimatorOrientCF_t::doComputations()
 {
-    /* General Infrastructure (maintain this structure!) */
-    stateEstimatorOrientCF_t* podWorker = reinterpret_cast<stateEstimatorOrientCF_t*>(data);
+    stateEstimatorOrientCF_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -174,11 +173,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool stateEstimatorOrientCF_t::updateStatus()
 {
-
-    /*General Infrastructure (maintain this infrastructure!)*/
-    stateEstimatorOrientCF_t* podWorker = reinterpret_cast<stateEstimatorOrientCF_t*>(data);
+    stateEstimatorOrientCF_t* podWorker = this;
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/

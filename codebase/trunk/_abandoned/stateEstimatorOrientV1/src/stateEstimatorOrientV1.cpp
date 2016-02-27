@@ -19,11 +19,9 @@ NOT UPDATED/WORKED ON ANY LONGER
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool stateEstimatorOrientV1_t::doComputations()
 {
-
-    /* General Infrastructure (maintain this structure!) */
-    stateEstimatorOrientV1_t* podWorker = reinterpret_cast<stateEstimatorOrientV1_t*>(data);
+    stateEstimatorOrientV1_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
 
 
@@ -101,11 +99,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool stateEstimatorOrientV1_t::updateStatus()
 {
-
-    /*General Infrastructure (maintain this infrastructure!)*/
-    stateEstimatorOrientV1_t* podWorker = reinterpret_cast<stateEstimatorOrientV1_t*>(data);
+    stateEstimatorOrientV1_t* podWorker = this;
     /*---------*/
 
 

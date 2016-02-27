@@ -8,11 +8,9 @@ using namespace std;
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool examplePod_t::doComputations()
 {
-
-    /* General Infrastructure (keep this infrastructure!) */
-    examplePod_t* podWorker = reinterpret_cast<examplePod_t*>(data);
+    examplePod_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -69,11 +67,9 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool examplePod_t::updateStatus()
 {
-
-    /*General Infrastructure (keep this infrastructure!)*/
-    examplePod_t* podWorker = reinterpret_cast<examplePod_t*>(data);
+    examplePod_t* podWorker = this;
     messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
