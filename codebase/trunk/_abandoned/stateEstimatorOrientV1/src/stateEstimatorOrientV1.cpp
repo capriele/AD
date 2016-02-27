@@ -27,65 +27,65 @@ bool stateEstimatorOrientV1_t::doComputations()
 
     /*--------*/
 
-    if(podWorker->statusPod.status == POD_OK)
+    if(statusPod.status == POD_OK)
     {
         /* Computations */
 
-        podWorker->imudata.timestampJetson = GetTimeStamp();
-        podWorker->B[0] = podWorker->imudata.timestampJetson / 1000000.0;
+        imudata.timestampJetson = GetTimeStamp();
+        B[0] = imudata.timestampJetson / 1000000.0;
 
 
         //@TODO alignment/rotation of sensor measurements with body frame axes!
-        podWorker->B[1] = podWorker->imudata.gyro[0];
-        podWorker->B[2] = podWorker->imudata.gyro[1];
-        podWorker->B[3] = podWorker->imudata.gyro[2];
+        B[1] = imudata.gyro[0];
+        B[2] = imudata.gyro[1];
+        B[3] = imudata.gyro[2];
 
         /*hacked trafo*/
         /*
-        podWorker->B[1] = podWorker->imudata.gyro[2];
-        podWorker->B[2] = -podWorker->imudata.gyro[1];
-        podWorker->B[3] = -podWorker->imudata.gyro[0];
+        B[1] = imudata.gyro[2];
+        B[2] = -imudata.gyro[1];
+        B[3] = -imudata.gyro[0];
         */
 
 
-        podWorker->length1 = pow(podWorker->imudata.accel[0], 2);
-        podWorker->length1 += pow(podWorker->imudata.accel[1], 2);
-        podWorker->length1 += pow(podWorker->imudata.accel[2], 2);
-        podWorker->length1 = sqrt(podWorker->length1);
+        length1 = pow(imudata.accel[0], 2);
+        length1 += pow(imudata.accel[1], 2);
+        length1 += pow(imudata.accel[2], 2);
+        length1 = sqrt(length1);
 
-        podWorker->B[4] = podWorker->imudata.accel[0] / podWorker->length1;
-        podWorker->B[5] = podWorker->imudata.accel[1] / podWorker->length1;
-        podWorker->B[6] = podWorker->imudata.accel[2] / podWorker->length1;
+        B[4] = imudata.accel[0] / length1;
+        B[5] = imudata.accel[1] / length1;
+        B[6] = imudata.accel[2] / length1;
 
-        podWorker->length2 = pow(podWorker->imudata.magn[0], 2);
-        podWorker->length2 += pow(podWorker->imudata.magn[1], 2);
-        podWorker->length2 += pow(podWorker->imudata.magn[2], 2);
-        podWorker->length2 = sqrt(podWorker->length2);
+        length2 = pow(imudata.magn[0], 2);
+        length2 += pow(imudata.magn[1], 2);
+        length2 += pow(imudata.magn[2], 2);
+        length2 = sqrt(length2);
 
-        podWorker->B[7] = podWorker->imudata.magn[0] / podWorker->length2;
-        podWorker->B[8] = podWorker->imudata.magn[1] / podWorker->length2;
-        podWorker->B[9] = podWorker->imudata.magn[2] / podWorker->length2;
+        B[7] = imudata.magn[0] / length2;
+        B[8] = imudata.magn[1] / length2;
+        B[9] = imudata.magn[2] / length2;
 
-        qekf(podWorker->q, podWorker->cov_matrixes, podWorker->w_stats, podWorker->reference_versors, podWorker->B, &podWorker->prev_T, podWorker->cov_matrixes->P);
+        qekf(q, cov_matrixes, w_stats, reference_versors, B, &prev_T, cov_matrixes->P);
 
 
         //Note: estimator works with q=[0,0,0,1] quaternion convention, everything else with [1,0,0,0]
-        podWorker->stateVariances.orient[0] = podWorker->q[3];
-        podWorker->stateVariances.orient[1] = podWorker->q[0];
-        podWorker->stateVariances.orient[2] = podWorker->q[1];
-        podWorker->stateVariances.orient[3] = podWorker->q[2];
+        stateVariances.orient[0] = q[3];
+        stateVariances.orient[1] = q[0];
+        stateVariances.orient[2] = q[1];
+        stateVariances.orient[3] = q[2];
 
-        podWorker->stateVariances.timestampJetson = GetTimeStamp();
+        stateVariances.timestampJetson = GetTimeStamp();
 
         /* Publishing computation result, here status update of drone status */
 
         // statusDrone - publish
-        podWorker->lcm.publish("stateVariancesOrientV1", &podWorker->stateVariances);
+        lcm.publish("stateVariancesOrientV1", &stateVariances);
 
         /*---------*/
     }
 
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -107,127 +107,127 @@ bool stateEstimatorOrientV1_t::updateStatus()
 
 
     /*Computation statusPOD*/
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US)
     {
         printf("stateEstimatorOrientV1: delay occured; comp interval % " PRId64 "us!\n",
-               podWorker->computationInterval);
-        podWorker->statusPod.status = POD_FATAL;
+               computationInterval);
+        statusPod.status = POD_FATAL;
     }
-    else if((podWorker->checkMessagesUptodate() == MSGS_LATE))
+    else if((checkMessagesUptodate() == MSGS_LATE))
     {
-        podWorker->statusPod.status = POD_CRITICAL;
+        statusPod.status = POD_CRITICAL;
     }
-    else if((podWorker->checkMessagesUptodate() == MSGS_DEAD))
+    else if((checkMessagesUptodate() == MSGS_DEAD))
     {
-        podWorker->statusPod.status = POD_FATAL;
+        statusPod.status = POD_FATAL;
     }
     else
     {
-        if(podWorker->got_initial_features == -1)
+        if(got_initial_features == -1)
         {
             printf("Waiting for IMU Calibration to end...\n");
-            podWorker->got_initial_features = 0;
+            got_initial_features = 0;
         }
-        else if(podWorker->got_initial_features == 0)
+        else if(got_initial_features == 0)
         {
-            if(podWorker->features.featureDirectionVersor[0][0] != 0 ||
-                    podWorker->features.featureDirectionVersor[0][1] != 0 ||
-                    podWorker->features.featureDirectionVersor[0][2] != 0)
+            if(features.featureDirectionVersor[0][0] != 0 ||
+                    features.featureDirectionVersor[0][1] != 0 ||
+                    features.featureDirectionVersor[0][2] != 0)
             {
                 printf("IMU calibration ok! Continuing...\n");
-                podWorker->got_initial_features == 1;
+                got_initial_features == 1;
 
                 //@TODO: generalize for n-versors when using the camera
-                podWorker->reference_versors->r1[0] = podWorker->features.featureDirectionVersor[0][0];
-                podWorker->reference_versors->r1[1] = podWorker->features.featureDirectionVersor[0][1];
-                podWorker->reference_versors->r1[2] = podWorker->features.featureDirectionVersor[0][2];
+                reference_versors->r1[0] = features.featureDirectionVersor[0][0];
+                reference_versors->r1[1] = features.featureDirectionVersor[0][1];
+                reference_versors->r1[2] = features.featureDirectionVersor[0][2];
 
-                podWorker->reference_versors->r2[0] = podWorker->features.featureDirectionVersor[1][0];
-                podWorker->reference_versors->r2[1] = podWorker->features.featureDirectionVersor[1][1];
-                podWorker->reference_versors->r2[2] = podWorker->features.featureDirectionVersor[1][2];
+                reference_versors->r2[0] = features.featureDirectionVersor[1][0];
+                reference_versors->r2[1] = features.featureDirectionVersor[1][1];
+                reference_versors->r2[2] = features.featureDirectionVersor[1][2];
 
                 //@TODO: this could be removed after uptading the imu calibration
                 //(still need to be implemented)
-                podWorker->sigma_b1 = 0.007;
-                podWorker->sigma_b2 = 0.005;
+                sigma_b1 = 0.007;
+                sigma_b2 = 0.005;
 
 
                 //@TODO alignment/rotation of sensor measurements with body frame axes!
-                podWorker->w_stats->sigma.x = podWorker->stateVariances.imuVarianceGyro[0];
-                podWorker->w_stats->sigma.y = podWorker->stateVariances.imuVarianceGyro[1];
-                podWorker->w_stats->sigma.z = podWorker->stateVariances.imuVarianceGyro[2];
+                w_stats->sigma.x = stateVariances.imuVarianceGyro[0];
+                w_stats->sigma.y = stateVariances.imuVarianceGyro[1];
+                w_stats->sigma.z = stateVariances.imuVarianceGyro[2];
 
-                podWorker->w_stats->bias.x = podWorker->stateVariances.imuBiasGyro[0];
-                podWorker->w_stats->bias.y = podWorker->stateVariances.imuBiasGyro[1];
-                podWorker->w_stats->bias.z = podWorker->stateVariances.imuBiasGyro[2]; //@TODO gravity"bias?"
+                w_stats->bias.x = stateVariances.imuBiasGyro[0];
+                w_stats->bias.y = stateVariances.imuBiasGyro[1];
+                w_stats->bias.z = stateVariances.imuBiasGyro[2]; //@TODO gravity"bias?"
 
 
                 /*
                 //hacked trafo
-                podWorker->w_stats->sigma.x = podWorker->stateVariances.imuVarianceGyro[2];
-                podWorker->w_stats->sigma.y = podWorker->stateVariances.imuVarianceGyro[1];
-                podWorker->w_stats->sigma.z = podWorker->stateVariances.imuVarianceGyro[0];
+                w_stats->sigma.x = stateVariances.imuVarianceGyro[2];
+                w_stats->sigma.y = stateVariances.imuVarianceGyro[1];
+                w_stats->sigma.z = stateVariances.imuVarianceGyro[0];
 
-                podWorker->w_stats->bias.x = podWorker->stateVariances.imuBiasGyro[2];
-                podWorker->w_stats->bias.y = -podWorker->stateVariances.imuBiasGyro[1];
-                podWorker->w_stats->bias.z = -podWorker->stateVariances.imuBiasGyro[0];
+                w_stats->bias.x = stateVariances.imuBiasGyro[2];
+                w_stats->bias.y = -stateVariances.imuBiasGyro[1];
+                w_stats->bias.z = -stateVariances.imuBiasGyro[0];
                 */
 
 
 
-                podWorker->cov_matrixes->Q[0] = pow(podWorker->w_stats->sigma.x, 2);
-                podWorker->cov_matrixes->Q[4] = pow(podWorker->w_stats->sigma.y, 2);
-                podWorker->cov_matrixes->Q[8] = pow(podWorker->w_stats->sigma.z, 2);
+                cov_matrixes->Q[0] = pow(w_stats->sigma.x, 2);
+                cov_matrixes->Q[4] = pow(w_stats->sigma.y, 2);
+                cov_matrixes->Q[8] = pow(w_stats->sigma.z, 2);
 
-                podWorker->cov_matrixes->R[0] = pow(podWorker->sigma_b1, 2);
-                podWorker->cov_matrixes->R[7] = pow(podWorker->sigma_b1, 2);
-                podWorker->cov_matrixes->R[14] = pow(podWorker->sigma_b1, 2);
-                podWorker->cov_matrixes->R[21] = pow(podWorker->sigma_b2, 2);
-                podWorker->cov_matrixes->R[28] = pow(podWorker->sigma_b2, 2);
-                podWorker->cov_matrixes->R[35] = pow(podWorker->sigma_b2, 2);
+                cov_matrixes->R[0] = pow(sigma_b1, 2);
+                cov_matrixes->R[7] = pow(sigma_b1, 2);
+                cov_matrixes->R[14] = pow(sigma_b1, 2);
+                cov_matrixes->R[21] = pow(sigma_b2, 2);
+                cov_matrixes->R[28] = pow(sigma_b2, 2);
+                cov_matrixes->R[35] = pow(sigma_b2, 2);
 
-                podWorker->imudata.timestampJetson = GetTimeStamp();
-                podWorker->B[0] = podWorker->imudata.timestampJetson;
+                imudata.timestampJetson = GetTimeStamp();
+                B[0] = imudata.timestampJetson;
 
                 //@TODO alignment/rotation of sensor measurements with body frame axes!
-                podWorker->B[1] = podWorker->imudata.gyro[0];
-                podWorker->B[2] = podWorker->imudata.gyro[1];
-                podWorker->B[3] = podWorker->imudata.gyro[2];
+                B[1] = imudata.gyro[0];
+                B[2] = imudata.gyro[1];
+                B[3] = imudata.gyro[2];
 
 
                 /*
                 //hacked trafo
-                podWorker->B[1] = podWorker->imudata.gyro[2];
-                podWorker->B[2] = -podWorker->imudata.gyro[1];
-                podWorker->B[3] = -podWorker->imudata.gyro[0];
+                B[1] = imudata.gyro[2];
+                B[2] = -imudata.gyro[1];
+                B[3] = -imudata.gyro[0];
                 */
 
-                podWorker->length1 = pow(podWorker->imudata.accel[0], 2);
-                podWorker->length1 += pow(podWorker->imudata.accel[1], 2);
-                podWorker->length1 += pow(podWorker->imudata.accel[2], 2);
-                podWorker->length1 = sqrt(podWorker->length1);
+                length1 = pow(imudata.accel[0], 2);
+                length1 += pow(imudata.accel[1], 2);
+                length1 += pow(imudata.accel[2], 2);
+                length1 = sqrt(length1);
 
-                podWorker->B[4] = podWorker->imudata.accel[0] / podWorker->length1;
-                podWorker->B[5] = podWorker->imudata.accel[1] / podWorker->length1;
-                podWorker->B[6] = podWorker->imudata.accel[2] / podWorker->length1;
+                B[4] = imudata.accel[0] / length1;
+                B[5] = imudata.accel[1] / length1;
+                B[6] = imudata.accel[2] / length1;
 
-                podWorker->length2 = pow(podWorker->imudata.magn[0], 2);
-                podWorker->length2 += pow(podWorker->imudata.magn[1], 2);
-                podWorker->length2 += pow(podWorker->imudata.magn[2], 2);
-                podWorker->length2 = sqrt(podWorker->length2);
+                length2 = pow(imudata.magn[0], 2);
+                length2 += pow(imudata.magn[1], 2);
+                length2 += pow(imudata.magn[2], 2);
+                length2 = sqrt(length2);
 
-                podWorker->B[7] = podWorker->imudata.magn[0] / podWorker->length2;
-                podWorker->B[8] = podWorker->imudata.magn[1] / podWorker->length2;
-                podWorker->B[9] = podWorker->imudata.magn[2] / podWorker->length2;
+                B[7] = imudata.magn[0] / length2;
+                B[8] = imudata.magn[1] / length2;
+                B[9] = imudata.magn[2] / length2;
 
-                podWorker->prev_T = podWorker->imudata.timestampJetson / 1000000.0;
+                prev_T = imudata.timestampJetson / 1000000.0;
 
                 //after getting the initial versors, unsubscribe
-                podWorker->unsubscribe("stateVariancesOrientV1");
+                unsubscribe("stateVariancesOrientV1");
 
-                podWorker->got_initial_features = true;
+                got_initial_features = true;
 
-                podWorker->statusPod.status = POD_OK;
+                statusPod.status = POD_OK;
 
             }
         };
@@ -240,7 +240,7 @@ bool stateEstimatorOrientV1_t::updateStatus()
     /*---------*/
 
     /*Publishing statusPOD*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;

@@ -72,30 +72,30 @@ bool watchdog_t::doComputations()
     // statusDrone - computation via stateMachine (see statusDrone_StateMachine.pdf)
 
     //compute safety variables //@TODO replace this hardcoded mess: cycle through subscribed messages, check if .status available and then check that for ok/...
-    agile::statusDrone_t statusDrone_old = podWorker->statusDrone;
+    agile::statusDrone_t statusDrone_old = statusDrone;
 
-    /*bool isSomePodCritical = ((podWorker->statusPod.status == POD_CRITICAL) || (podWorker->statusImuAcquisition.status == POD_CRITICAL) || (podWorker->statusStateEstimatorOrientCF.status == POD_CRITICAL) || (podWorker->statusDetectorVis.status == POD_CRITICAL) || (podWorker->statusRemoteController.status == POD_CRITICAL) || (podWorker->statusControllerPDPose.status == POD_CRITICAL) || (podWorker->statusControllerPDOrient.status == POD_CRITICAL) || (podWorker->statusControllerSOCOrient.status == POD_CRITICAL) || (podWorker->statusControllerSOCPose.status == POD_CRITICAL) || (podWorker->statusMotorCommander.status == POD_CRITICAL));*/
+    /*bool isSomePodCritical = ((statusPod.status == POD_CRITICAL) || (statusImuAcquisition.status == POD_CRITICAL) || (statusStateEstimatorOrientCF.status == POD_CRITICAL) || (statusDetectorVis.status == POD_CRITICAL) || (statusRemoteController.status == POD_CRITICAL) || (statusControllerPDPose.status == POD_CRITICAL) || (statusControllerPDOrient.status == POD_CRITICAL) || (statusControllerSOCOrient.status == POD_CRITICAL) || (statusControllerSOCPose.status == POD_CRITICAL) || (statusMotorCommander.status == POD_CRITICAL));*/
 
    bool isSomePodCritical = checkPODstati(POD_CRITICAL,podWorker);
 
-   /* bool isSomePodFatal = ((podWorker->statusPod.status == POD_FATAL) || (podWorker->statusImuAcquisition.status == POD_FATAL) ||  (podWorker->statusStateEstimatorOrientCF.status == POD_FATAL) || (podWorker->statusDetectorVis.status == POD_FATAL) || (podWorker->statusRemoteController.status == POD_FATAL) || (podWorker->statusControllerPDPose.status == POD_FATAL) || (podWorker->statusControllerPDOrient.status == POD_FATAL) || (podWorker->statusControllerSOCOrient.status == POD_FATAL) || (podWorker->statusControllerSOCPose.status == POD_FATAL) || (podWorker->statusMotorCommander.status == POD_FATAL));*/
+   /* bool isSomePodFatal = ((statusPod.status == POD_FATAL) || (statusImuAcquisition.status == POD_FATAL) ||  (statusStateEstimatorOrientCF.status == POD_FATAL) || (statusDetectorVis.status == POD_FATAL) || (statusRemoteController.status == POD_FATAL) || (statusControllerPDPose.status == POD_FATAL) || (statusControllerPDOrient.status == POD_FATAL) || (statusControllerSOCOrient.status == POD_FATAL) || (statusControllerSOCPose.status == POD_FATAL) || (statusMotorCommander.status == POD_FATAL));*/
 
    bool isSomePodFatal = checkPODstati(POD_FATAL,podWorker);
 
-    bool isAllPodsOK = ((podWorker->statusPod.status == POD_OK) && (podWorker->statusImuAcquisition.status == POD_OK) && (podWorker->statusStateEstimatorOrientCF.status == POD_OK) && (podWorker->statusDetectorVis.status == POD_OK) && (podWorker->statusRemoteController.status == POD_OK) && (podWorker->statusControllerPDPose.status == POD_OK) && (podWorker->statusControllerPDOrient.status == POD_OK) && (podWorker->statusControllerSOCOrient.status == POD_OK) && (podWorker->statusControllerSOCPose.status == POD_OK) && (podWorker->statusMotorCommander.status == POD_OK));
+    bool isAllPodsOK = ((statusPod.status == POD_OK) && (statusImuAcquisition.status == POD_OK) && (statusStateEstimatorOrientCF.status == POD_OK) && (statusDetectorVis.status == POD_OK) && (statusRemoteController.status == POD_OK) && (statusControllerPDPose.status == POD_OK) && (statusControllerPDOrient.status == POD_OK) && (statusControllerSOCOrient.status == POD_OK) && (statusControllerSOCPose.status == POD_OK) && (statusMotorCommander.status == POD_OK));
 
 
     double yaw = 0.0;
     double pitch = 0.0;
     double roll = 0.0;
-    quat2Euler(podWorker->stateVariances.orient, &(yaw), &(pitch), &(roll));
+    quat2Euler(stateVariances.orient, &(yaw), &(pitch), &(roll));
 
     //@TODO anguarl rates in pqr bodyframe?
     //Check for critical state @TODO pqr rates or [0..2]?
 
-    bool isStateCritical = ((abs(podWorker->stateVariances.position[0]) > MAXPOS_CRITICAL) || (abs(podWorker->stateVariances.position[1]) > MAXPOS_CRITICAL) || (abs(podWorker->stateVariances.position[3]) > MAXALT_CRITICAL) || (abs(yaw) > MAXORIENT_Y_CRITICAL)  || (abs(pitch) > MAXORIENT_RP_CRITICAL) || (abs(roll) > MAXORIENT_RP_CRITICAL) || (abs(podWorker->stateVariances.veloPositionBody[0]) > MAXVELPOS_CRITICAL) || (abs(podWorker->stateVariances.veloPositionBody[1]) > MAXVELPOS_CRITICAL) || (abs(podWorker->stateVariances.veloPositionBody[2]) > MAXVELPOS_CRITICAL)  || (abs(podWorker->stateVariances.veloOrientBody[0]) > MAXVELORIENT_PQ_CRITICAL) || (abs(podWorker->stateVariances.veloOrientBody[1]) > MAXVELORIENT_PQ_CRITICAL)  || (abs(podWorker->stateVariances.veloOrientBody[2]) > MAXVELORIENT_R_CRITICAL) || (abs(podWorker->imuRaw.accel[0]) > MAXACC_CRITICAL) || (abs(podWorker->imuRaw.accel[1]) > MAXACC_CRITICAL) || (abs(podWorker->imuRaw.accel[2]) > MAXACC_CRITICAL));
+    bool isStateCritical = ((abs(stateVariances.position[0]) > MAXPOS_CRITICAL) || (abs(stateVariances.position[1]) > MAXPOS_CRITICAL) || (abs(stateVariances.position[3]) > MAXALT_CRITICAL) || (abs(yaw) > MAXORIENT_Y_CRITICAL)  || (abs(pitch) > MAXORIENT_RP_CRITICAL) || (abs(roll) > MAXORIENT_RP_CRITICAL) || (abs(stateVariances.veloPositionBody[0]) > MAXVELPOS_CRITICAL) || (abs(stateVariances.veloPositionBody[1]) > MAXVELPOS_CRITICAL) || (abs(stateVariances.veloPositionBody[2]) > MAXVELPOS_CRITICAL)  || (abs(stateVariances.veloOrientBody[0]) > MAXVELORIENT_PQ_CRITICAL) || (abs(stateVariances.veloOrientBody[1]) > MAXVELORIENT_PQ_CRITICAL)  || (abs(stateVariances.veloOrientBody[2]) > MAXVELORIENT_R_CRITICAL) || (abs(imuRaw.accel[0]) > MAXACC_CRITICAL) || (abs(imuRaw.accel[1]) > MAXACC_CRITICAL) || (abs(imuRaw.accel[2]) > MAXACC_CRITICAL));
 
-    bool isStateFatal = ((abs(podWorker->stateVariances.position[0]) > MAXPOS_FATAL) || (abs(podWorker->stateVariances.position[1]) > MAXPOS_FATAL) || (abs(podWorker->stateVariances.position[3]) > MAXALT_FATAL) || (abs(yaw) > MAXORIENT_Y_FATAL)  || (abs(pitch) > MAXORIENT_RP_FATAL) || (abs(roll) > MAXORIENT_RP_FATAL) || (abs(podWorker->stateVariances.veloPositionBody[0]) > MAXVELPOS_FATAL) || (abs(podWorker->stateVariances.veloPositionBody[1]) > MAXVELPOS_FATAL) || (abs(podWorker->stateVariances.veloPositionBody[2]) > MAXVELPOS_FATAL)  || (abs(podWorker->stateVariances.veloOrientBody[0]) > MAXVELORIENT_PQ_FATAL) || (abs(podWorker->stateVariances.veloOrientBody[1]) > MAXVELORIENT_PQ_FATAL)  || (abs(podWorker->stateVariances.veloOrientBody[2]) > MAXVELORIENT_R_FATAL) || (abs(podWorker->imuRaw.accel[0]) > MAXACC_FATAL) || (abs(podWorker->imuRaw.accel[1]) > MAXACC_FATAL) || (abs(podWorker->imuRaw.accel[2]) > MAXACC_FATAL));
+    bool isStateFatal = ((abs(stateVariances.position[0]) > MAXPOS_FATAL) || (abs(stateVariances.position[1]) > MAXPOS_FATAL) || (abs(stateVariances.position[3]) > MAXALT_FATAL) || (abs(yaw) > MAXORIENT_Y_FATAL)  || (abs(pitch) > MAXORIENT_RP_FATAL) || (abs(roll) > MAXORIENT_RP_FATAL) || (abs(stateVariances.veloPositionBody[0]) > MAXVELPOS_FATAL) || (abs(stateVariances.veloPositionBody[1]) > MAXVELPOS_FATAL) || (abs(stateVariances.veloPositionBody[2]) > MAXVELPOS_FATAL)  || (abs(stateVariances.veloOrientBody[0]) > MAXVELORIENT_PQ_FATAL) || (abs(stateVariances.veloOrientBody[1]) > MAXVELORIENT_PQ_FATAL)  || (abs(stateVariances.veloOrientBody[2]) > MAXVELORIENT_R_FATAL) || (abs(imuRaw.accel[0]) > MAXACC_FATAL) || (abs(imuRaw.accel[1]) > MAXACC_FATAL) || (abs(imuRaw.accel[2]) > MAXACC_FATAL));
 
 
     //"state machine"
@@ -104,83 +104,83 @@ bool watchdog_t::doComputations()
     case DRONE_WAITPODS:
         if(isAllPodsOK)
         {
-            podWorker->statusDrone.status = DRONE_IDLE;
+            statusDrone.status = DRONE_IDLE;
             printf("++drone from waitPodsOK to IDLE++\n");
         };
         break;
 
     case DRONE_IDLE:
-        if(isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL) || isSomePodCritical || (podWorker->controlMode.controlMode == CMODE_CRITICAL))
+        if(isSomePodFatal || (controlMode.controlMode == CMODE_FATAL) || isSomePodCritical || (controlMode.controlMode == CMODE_CRITICAL))
         {
-            podWorker->statusDrone.status = DRONE_FATAL;
+            statusDrone.status = DRONE_FATAL;
             printf("++drone from IDLE to FATAL++\n");
-            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
+            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, controlMode.controlMode);
         }
 
-        else if(isAllPodsOK && (podWorker->controlMode.controlMode > CMODE_NULL))
+        else if(isAllPodsOK && (controlMode.controlMode > CMODE_NULL))
         {
-            podWorker->statusDrone.status = DRONE_TAKEOFF;
-            podWorker->takeoffMoment = GetTimeStamp();
+            statusDrone.status = DRONE_TAKEOFF;
+            takeoffMoment = GetTimeStamp();
             printf("++drone from IDLE to TAKEOFF++\n");
         }
         break;
 
     case DRONE_TAKEOFF:
-        if(isStateFatal || isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL))
+        if(isStateFatal || isSomePodFatal || (controlMode.controlMode == CMODE_FATAL))
         {
-            podWorker->statusDrone.status = DRONE_FATAL;
+            statusDrone.status = DRONE_FATAL;
             printf("++drone from TAKEOFF to FATAL++\n");
-            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
+            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, controlMode.controlMode);
         }
-        else if(isStateCritical || isSomePodCritical || (podWorker->controlMode.controlMode == CMODE_CRITICAL))
+        else if(isStateCritical || isSomePodCritical || (controlMode.controlMode == CMODE_CRITICAL))
         {
-            podWorker->statusDrone.status = DRONE_CRITICAL;
+            statusDrone.status = DRONE_CRITICAL;
             printf("++drone from TAKEOFF to CRITICAL++\n");
-            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
+            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, controlMode.controlMode);
         }
-        else if((GetTimeStamp() - podWorker->takeoffMoment) > TAKEOFFINTERVAL * MS2US)
+        else if((GetTimeStamp() - takeoffMoment) > TAKEOFFINTERVAL * MS2US)
         {
-            podWorker->statusDrone.status = DRONE_FLY;
+            statusDrone.status = DRONE_FLY;
             printf("++drone from TAKEOFF to FLY++\n");
         }
 
         break;
     case DRONE_FLY:
-        if(isStateFatal || isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL))
+        if(isStateFatal || isSomePodFatal || (controlMode.controlMode == CMODE_FATAL))
         {
-            podWorker->statusDrone.status = DRONE_FATAL;
+            statusDrone.status = DRONE_FATAL;
             printf("++drone from FLY to FATAL++\n");
-            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
+            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, controlMode.controlMode);
         }
-        else if(isStateCritical || isSomePodCritical || (podWorker->controlMode.controlMode == CMODE_CRITICAL))
+        else if(isStateCritical || isSomePodCritical || (controlMode.controlMode == CMODE_CRITICAL))
         {
-            podWorker->statusDrone.status = DRONE_CRITICAL;
+            statusDrone.status = DRONE_CRITICAL;
             printf("++drone from FLY to CRITICAL\n");
-            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
+            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, controlMode.controlMode);
         }
 
         break;
 
     case DRONE_CRITICAL:
-        if(isStateFatal || isSomePodFatal || (podWorker->controlMode.controlMode == CMODE_FATAL))
+        if(isStateFatal || isSomePodFatal || (controlMode.controlMode == CMODE_FATAL))
         {
-            podWorker->statusDrone.status = DRONE_FATAL;
+            statusDrone.status = DRONE_FATAL;
             printf("++drone from CRITICAL to FATAL++\n");
-            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, podWorker->controlMode.controlMode);
+            errorPrint(isSomePodCritical, isSomePodFatal, isStateCritical, isStateFatal, controlMode.controlMode);
         }
-        else if(!isStateCritical && !isSomePodCritical && (podWorker->controlMode.controlMode > CMODE_FATAL))
+        else if(!isStateCritical && !isSomePodCritical && (controlMode.controlMode > CMODE_FATAL))
         {
-            podWorker->statusDrone.status = DRONE_FLY;
+            statusDrone.status = DRONE_FLY;
             printf("++drone from CRITICAL to FLY\n");
         }
         break;
 
     case DRONE_FATAL: ; break;
 
-    default: podWorker->statusDrone.status = DRONE_FATAL;
+    default: statusDrone.status = DRONE_FATAL;
     }
 
-    podWorker->statusDrone.timestampJetson = GetTimeStamp();
+    statusDrone.timestampJetson = GetTimeStamp();
 
     /*---------*/
 
@@ -188,14 +188,14 @@ bool watchdog_t::doComputations()
     /* Publishing */
 
     // statusDrone - publish
-    podWorker->lcm.publish("statusDrone", &podWorker->statusDrone);
+    lcm.publish("statusDrone", &statusDrone);
 
     /*---------*/
 
 
 
     /*General Infrastructure (maintain this structure!)*/
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -212,31 +212,31 @@ Implementation of loop function for publishing statusPod
 bool watchdog_t::updateStatus()
 {
     watchdog_t* podWorker = this;
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    messageStatus_t messageStatus = checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
 
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US)
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
     else 
     {
 
 	if(messageStatus == MSGS_LATE)
     	{
-		podWorker->statusPod.status = POD_CRITICAL;
+		statusPod.status = POD_CRITICAL;
 	}
 	else if(messageStatus == MSGS_DEAD)
 	{
-		podWorker->statusPod.status = POD_FATAL;
+		statusPod.status = POD_FATAL;
 	}
 	else
 	{
-		podWorker->statusPod.status = POD_OK;
+		statusPod.status = POD_OK;
 	};
 
     }
@@ -244,7 +244,7 @@ bool watchdog_t::updateStatus()
     /*---------*/
 
     /*Publishing statusPOD (keep this infrastructure!)*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     /*---------*/

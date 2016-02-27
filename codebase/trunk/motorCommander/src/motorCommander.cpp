@@ -35,74 +35,74 @@ bool motorCommander_t::doComputations()
     /*--------*/
 
     /* Computations */
-    double powerGain = podWorker->powerAdjust.powerGain;
+    double powerGain = powerAdjust.powerGain;
 
     //Delay check
-    //printf("%"PRId64"\n",enterComputationloop-podWorker->motorsWsRefPDOrient.timestampJetson);
+    //printf("%"PRId64"\n",enterComputationloop-motorsWsRefPDOrient.timestampJetson);
 
     //point motorsWsRefControlerToUse to values from contoller that control mode chooses
-    switch(podWorker->controlMode.controlMode)
+    switch(controlMode.controlMode)
     {
     case CMODE_PIDORIENT:
-        podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDOrient);
+        motorsWsRefControlerToUse = &(motorsWsRefPDOrient);
         break;
     case CMODE_PIDPOSE:
         //@TODO add PID pose controller
-        podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDPose);
+        motorsWsRefControlerToUse = &(motorsWsRefPDPose);
         break;
     case CMODE_SOCORIENT:
         //@TODO add SOCOrient controller
         printf("no SOCOrient controller available, uses PD-orient!\n");
-        podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDOrient);
+        motorsWsRefControlerToUse = &(motorsWsRefPDOrient);
         break;
     case CMODE_SOCPOSE:
         //@TODO add SOCPose controller
         printf("no SOCPose controller available, uses PD-orient!\n");
-        podWorker->motorsWsRefControlerToUse = &(podWorker->motorsWsRefPDOrient);
+        motorsWsRefControlerToUse = &(motorsWsRefPDOrient);
         break;
     }
-    switch(podWorker->statusDrone.status)
+    switch(statusDrone.status)
     {
     case DRONE_WAITPODS: //outputs PWM 0
-        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
         break;
 
     case DRONE_IDLE:   //outputs PWM idle spin
-        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(IDLERPMPWM);
-        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(IDLERPMPWM);
-        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(IDLERPMPWM);
-        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(IDLERPMPWM);
+        motorsPwms.pwms[0] = static_cast<int16_t>(IDLERPMPWM);
+        motorsPwms.pwms[1] = static_cast<int16_t>(IDLERPMPWM);
+        motorsPwms.pwms[2] = static_cast<int16_t>(IDLERPMPWM);
+        motorsPwms.pwms[3] = static_cast<int16_t>(IDLERPMPWM);
         break;
 
     case DRONE_TAKEOFF: //outputs PWM suggested by PD-pose controller
-        podWorker->motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[0]);
-        podWorker->motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[1]);
-        podWorker->motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[2]);
-        podWorker->motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[3]);
+        motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[0]);
+        motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[1]);
+        motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[2]);
+        motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[3]);
         break;
 
     case DRONE_FLY:    //outputs PWM suggested by controller selecetd by controlMode
-        podWorker->motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[0]);
-        podWorker->motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[1]);
-        podWorker->motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[2]);
-        podWorker->motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefControlerToUse->wsRef[3]);
+        motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * motorsWsRefControlerToUse->wsRef[0]);
+        motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * motorsWsRefControlerToUse->wsRef[1]);
+        motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * motorsWsRefControlerToUse->wsRef[2]);
+        motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * motorsWsRefControlerToUse->wsRef[3]);
         break;
 
     case DRONE_CRITICAL://outputs PWM suggested by PD-pose controller //@TODO change this to PD-pose once available
-        podWorker->motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[0]);
-        podWorker->motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[1]);
-        podWorker->motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[2]);
-        podWorker->motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * podWorker->motorsWsRefPDOrient.wsRef[3]);
+        motorsPwms.pwms[0] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[0]);
+        motorsPwms.pwms[1] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[1]);
+        motorsPwms.pwms[2] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[2]);
+        motorsPwms.pwms[3] = omegaToPwm(powerGain / 100 * motorsWsRefPDOrient.wsRef[3]);
         break;
 
     case DRONE_FATAL:
-        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
         break;
 
     default:
@@ -111,17 +111,17 @@ bool motorCommander_t::doComputations()
     }
 
     //Shortcut emergecency without going throught watchdog
-    if((podWorker->statusPod.status < POD_INITING) && (podWorker->statusDrone.status > DRONE_WAITPODS))
+    if((statusPod.status < POD_INITING) && (statusDrone.status > DRONE_WAITPODS))
     {
         printf("motorCommanderStatus bad (emergency status this Pod -> motor stop) !\n"); //watchdog would also do, since this pod status is not OK anymore, but might take longer than shutting motors in here!
-        podWorker->motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
-        podWorker->motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[0] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[1] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[2] = static_cast<int16_t>(ZERORPMPWM);
+        motorsPwms.pwms[3] = static_cast<int16_t>(ZERORPMPWM);
     }
 
     //add timestamp
-    podWorker->motorsPwms.timestampJetson = GetTimeStamp();
+    motorsPwms.timestampJetson = GetTimeStamp();
 
     /*---------*/
 
@@ -129,19 +129,19 @@ bool motorCommander_t::doComputations()
     /* Publishing compuation result */
 
     // publish
-    podWorker->lcm.publish("motorsPwms", &podWorker->motorsPwms);
+    lcm.publish("motorsPwms", &motorsPwms);
 
-    //printf("motors: %d %d %d %d\n",podWorker->motorsPwms.pwms[0],podWorker->motorsPwms.pwms[1],podWorker->motorsPwms.pwms[2],podWorker->motorsPwms.pwms[3]);
+    //printf("motors: %d %d %d %d\n",motorsPwms.pwms[0],motorsPwms.pwms[1],motorsPwms.pwms[2],motorsPwms.pwms[3]);
 
     //Print to arduino
     char buf[32];
     //@TODO pay attention to mapping for model motors and real motors order:!!!!
     //model/sim -> flightcontorller: 3->1, 2->2, 4->3, 1->4
-    sprintf(buf, "a%4d%4d%4d%4d", podWorker->motorsPwms.pwms[2], podWorker->motorsPwms.pwms[1], podWorker->motorsPwms.pwms[3], podWorker->motorsPwms.pwms[0]); //a is used as a flag for the arduino!
+    sprintf(buf, "a%4d%4d%4d%4d", motorsPwms.pwms[2], motorsPwms.pwms[1], motorsPwms.pwms[3], motorsPwms.pwms[0]); //a is used as a flag for the arduino!
     //printf("this is to arduino %s\n",buf);
-    if(podWorker->isWriteToArduino)
+    if(isWriteToArduino)
     {
-        podWorker->writeToArdStatus = write(podWorker->fd, buf, 18);
+        writeToArdStatus = write(fd, buf, 18);
     };
 
 
@@ -150,7 +150,7 @@ bool motorCommander_t::doComputations()
 
 
     /*General Infrastructure (maintain this structure!)*/
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -167,37 +167,37 @@ Implementation of loop function for publishing statusPod
 bool motorCommander_t::updateStatus()
 {
     motorCommander_t* podWorker = this;
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    messageStatus_t messageStatus = checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*---------*/
 
     /*Computation statusPOD*/
 
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time //@TODO why has this POD delays oftentimes?
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time //@TODO why has this POD delays oftentimes?
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
-    else if((podWorker->isWriteToArduino) && (podWorker->writeToArdStatus < 0))
+    else if((isWriteToArduino) && (writeToArdStatus < 0))
     {
         printf("motorCommander: error in write to arduino!\n");
-        podWorker->statusPod.status = POD_FATAL;
+        statusPod.status = POD_FATAL;
     }
     else 
     {
 
 	if(messageStatus == MSGS_LATE)
     	{
-		podWorker->statusPod.status = POD_CRITICAL;
+		statusPod.status = POD_CRITICAL;
 	}
 	else if(messageStatus == MSGS_DEAD)
 	{
-		podWorker->statusPod.status = POD_FATAL;
+		statusPod.status = POD_FATAL;
 	}
 	else
 	{
-		podWorker->statusPod.status = POD_OK;
+		statusPod.status = POD_OK;
 	};
 
     };
@@ -206,7 +206,7 @@ bool motorCommander_t::updateStatus()
     /*---------*/
 
     /*Publishing statusPOD*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;

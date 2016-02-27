@@ -61,7 +61,7 @@ bool stateEstimatorOrientCF_t::doComputations()
 
     /*--------*/
 
-    if(podWorker->statusPod.status == POD_OK)
+    if(statusPod.status == POD_OK)
     {
         /* Computations */
 
@@ -71,22 +71,22 @@ bool stateEstimatorOrientCF_t::doComputations()
 
         double imuOrig[6];
 
-        imuOrig[0] = podWorker->imudata.accel[0] - podWorker->biases.accel[0]; 
-        imuOrig[1] = podWorker->imudata.accel[1] - podWorker->biases.accel[1];
-        imuOrig[2] = podWorker->imudata.accel[2] - podWorker->biases.accel[2]; //printf("%f %f\n",podWorker->imudata.accel[2],podWorker->biases.accel[2]);
-        imuOrig[3] = podWorker->imudata.gyro[0] - podWorker->biases.gyro[0];
-        imuOrig[4] = podWorker->imudata.gyro[1] - podWorker->biases.gyro[1];
-        imuOrig[5] = podWorker->imudata.gyro[2] - podWorker->biases.gyro[2];
+        imuOrig[0] = imudata.accel[0] - biases.accel[0]; 
+        imuOrig[1] = imudata.accel[1] - biases.accel[1];
+        imuOrig[2] = imudata.accel[2] - biases.accel[2]; //printf("%f %f\n",imudata.accel[2],biases.accel[2]);
+        imuOrig[3] = imudata.gyro[0] - biases.gyro[0];
+        imuOrig[4] = imudata.gyro[1] - biases.gyro[1];
+        imuOrig[5] = imudata.gyro[2] - biases.gyro[2];
 
 
         //Apply IIR filter to Accel
         double imuFiltered[6];
-        podWorker->imuFiltered[0] = IIRIMU * podWorker->imuFiltered[0] + (1.0 - IIRIMU) * imuOrig[0];
-        podWorker->imuFiltered[1] = IIRIMU * podWorker->imuFiltered[1] + (1.0 - IIRIMU) * imuOrig[1];
-        podWorker->imuFiltered[2] = IIRIMU * podWorker->imuFiltered[2] + (1.0 - IIRIMU) * imuOrig[2];
-        podWorker->imuFiltered[3] = imuOrig[3];
-        podWorker->imuFiltered[4] = imuOrig[4];
-        podWorker->imuFiltered[5] = imuOrig[5];
+        imuFiltered[0] = IIRIMU * imuFiltered[0] + (1.0 - IIRIMU) * imuOrig[0];
+        imuFiltered[1] = IIRIMU * imuFiltered[1] + (1.0 - IIRIMU) * imuOrig[1];
+        imuFiltered[2] = IIRIMU * imuFiltered[2] + (1.0 - IIRIMU) * imuOrig[2];
+        imuFiltered[3] = imuOrig[3];
+        imuFiltered[4] = imuOrig[4];
+        imuFiltered[5] = imuOrig[5];
 
 
         //Rotate measurements from IMU system to body-frame (assuming it is first 90deg yaw, then 180 to take vectorin IMUsyste to represent in bodyframe sys!
@@ -94,42 +94,42 @@ bool stateEstimatorOrientCF_t::doComputations()
         //accels
         double imuTrafo[6];
 
-        if(podWorker->imuRawChannel == "imuRaw")
+        if(imuRawChannel == "imuRaw")
         {
-            imuTrafo[0] = -podWorker->imuFiltered[1];
-            imuTrafo[1] = -podWorker->imuFiltered[0];
-            imuTrafo[2] = -podWorker->imuFiltered[2];
+            imuTrafo[0] = -imuFiltered[1];
+            imuTrafo[1] = -imuFiltered[0];
+            imuTrafo[2] = -imuFiltered[2];
 
             //rot
-            imuTrafo[3] = -podWorker->imuFiltered[4];
-            imuTrafo[4] = -podWorker->imuFiltered[3];
-            imuTrafo[5] = -podWorker->imuFiltered[5];
+            imuTrafo[3] = -imuFiltered[4];
+            imuTrafo[4] = -imuFiltered[3];
+            imuTrafo[5] = -imuFiltered[5];
         }
         else //imuRawData from simulation
         {
-            imuTrafo[0] = podWorker->imuFiltered[0];
-            imuTrafo[1] = podWorker->imuFiltered[1];
-            imuTrafo[2] = podWorker->imuFiltered[2];
+            imuTrafo[0] = imuFiltered[0];
+            imuTrafo[1] = imuFiltered[1];
+            imuTrafo[2] = imuFiltered[2];
 
             //rot
-            imuTrafo[3] = podWorker->imuFiltered[3];
-            imuTrafo[4] = podWorker->imuFiltered[4];
-            imuTrafo[5] = podWorker->imuFiltered[5];
+            imuTrafo[3] = imuFiltered[3];
+            imuTrafo[4] = imuFiltered[4];
+            imuTrafo[5] = imuFiltered[5];
         }
 
-	//printf("imu raw-body: %f %f %f %f %f %f ::%f %f %f %f %f %f\n",podWorker->imuFiltered[0],podWorker->imuFiltered[1],podWorker->imuFiltered[2],podWorker->imuFiltered[3],podWorker->imuFiltered[4],podWorker->imuFiltered[5],imuTrafo[0],imuTrafo[1],imuTrafo[2],imuTrafo[3],imuTrafo[4],imuTrafo[5]);
+	//printf("imu raw-body: %f %f %f %f %f %f ::%f %f %f %f %f %f\n",imuFiltered[0],imuFiltered[1],imuFiltered[2],imuFiltered[3],imuFiltered[4],imuFiltered[5],imuTrafo[0],imuTrafo[1],imuTrafo[2],imuTrafo[3],imuTrafo[4],imuTrafo[5]);
 
 
 
         //prepare current estimates
         double yaw_cur, pitch_cur, roll_cur;
-        quat2Euler(podWorker->stateVariances.orient, &(yaw_cur), &(pitch_cur), &(roll_cur));
+        quat2Euler(stateVariances.orient, &(yaw_cur), &(pitch_cur), &(roll_cur));
 
         //feed complimentary filter
         double euler_hat[3];
         int64_t nowCompUpdate = GetTimeStamp();		
 
-        double dt = (nowCompUpdate - podWorker->stateVariances.timestampJetson) / (1000000.0); //printf("dt: %f\n",dt); //@TODO should probably refer to Arduino clock, but then we need some sort of clock sync!
+        double dt = (nowCompUpdate - stateVariances.timestampJetson) / (1000000.0); //printf("dt: %f\n",dt); //@TODO should probably refer to Arduino clock, but then we need some sort of clock sync!
 
 
         if(dt > 10) dt = 0.01; //initial timestamp
@@ -137,29 +137,29 @@ bool stateEstimatorOrientCF_t::doComputations()
 
         //transform to quaternions and update stateVariances
 	//printf("%f\n",roll_cur/3.14*180);
-        Euler2quat(podWorker->stateVariances.orient, &(euler_hat[0]), &(euler_hat[1]), &(euler_hat[2]));
-        podWorker->stateVariances.veloOrientBody[0] = imuTrafo[3];
-        podWorker->stateVariances.veloOrientBody[1] = imuTrafo[4];
-        podWorker->stateVariances.veloOrientBody[2] = imuTrafo[5];
+        Euler2quat(stateVariances.orient, &(euler_hat[0]), &(euler_hat[1]), &(euler_hat[2]));
+        stateVariances.veloOrientBody[0] = imuTrafo[3];
+        stateVariances.veloOrientBody[1] = imuTrafo[4];
+        stateVariances.veloOrientBody[2] = imuTrafo[5];
 
-        podWorker->stateVariances.timestampJetson = nowCompUpdate;
+        stateVariances.timestampJetson = nowCompUpdate;
 
         /* Publishing computation result*/
 
 	
-	//printf("imuRaw-msgage: \t%" PRId64 "\n",podWorker->messageAdmin["imuRaw"].timestampJetsonLastReceived-podWorker->imudata.timestampJetson);
-	//printf("msg received last to pub now: \t%" PRId64 "\n",GetTimeStamp()-podWorker->messageAdmin["imuRaw"].timestampJetsonLastReceived);
-	//printf("dt imuraw got from serial - estimate being published: \t%" PRId64 "\n",GetTimeStamp()-podWorker->imudata.timestampJetson);
+	//printf("imuRaw-msgage: \t%" PRId64 "\n",messageAdmin["imuRaw"].timestampJetsonLastReceived-imudata.timestampJetson);
+	//printf("msg received last to pub now: \t%" PRId64 "\n",GetTimeStamp()-messageAdmin["imuRaw"].timestampJetsonLastReceived);
+	//printf("dt imuraw got from serial - estimate being published: \t%" PRId64 "\n",GetTimeStamp()-imudata.timestampJetson);
 
-	podWorker->stateVariances.deltaSensAcquiToEstimPub = GetTimeStamp()-podWorker->imudata.timestampJetson;
+	stateVariances.deltaSensAcquiToEstimPub = GetTimeStamp()-imudata.timestampJetson;
 
         // - publish
-        podWorker->lcm.publish("stateVariancesOrientCF", &podWorker->stateVariances);
+        lcm.publish("stateVariancesOrientCF", &stateVariances);
 
         /*---------*/
     }
 
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -176,154 +176,154 @@ Implementation of loop function for publishing statusPod
 bool stateEstimatorOrientCF_t::updateStatus()
 {
     stateEstimatorOrientCF_t* podWorker = this;
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    messageStatus_t messageStatus = checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US)
     {
-      printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+      printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
     else if((messageStatus == MSGS_LATE))
     {
-        podWorker->statusPod.status = POD_CRITICAL;
+        statusPod.status = POD_CRITICAL;
     }
     else if((messageStatus == MSGS_DEAD))
     {
-        podWorker->statusPod.status = POD_FATAL;
+        statusPod.status = POD_FATAL;
     }
     else
     {
-        if(podWorker->isGotBiases == -1)
+        if(isGotBiases == -1)
         {
             printf("Waiting for IMU Calibration to end...\n");
-            podWorker->isGotBiases = 0;
+            isGotBiases = 0;
         }
-        else if(podWorker->isGotBiases == 0)
+        else if(isGotBiases == 0)
         {
-            if(podWorker->stateVariances.imuBiasAccel[0] != 0 ||
-                    podWorker->stateVariances.imuBiasAccel[1] != 0 ||
-                    podWorker->stateVariances.imuBiasAccel[2] != 0)
+            if(stateVariances.imuBiasAccel[0] != 0 ||
+                    stateVariances.imuBiasAccel[1] != 0 ||
+                    stateVariances.imuBiasAccel[2] != 0)
             {
                 printf("IMU calibration ok! Continuing...\n");                
 
-                podWorker->biases.accel[0] = podWorker->stateVariances.imuBiasAccel[0];
-                podWorker->biases.accel[1] = podWorker->stateVariances.imuBiasAccel[1];
-                podWorker->biases.accel[2] = podWorker->stateVariances.imuBiasAccel[2];
+                biases.accel[0] = stateVariances.imuBiasAccel[0];
+                biases.accel[1] = stateVariances.imuBiasAccel[1];
+                biases.accel[2] = stateVariances.imuBiasAccel[2];
 
-                podWorker->biases.gyro[0] = podWorker->stateVariances.imuBiasGyro[0];
-                podWorker->biases.gyro[1] = podWorker->stateVariances.imuBiasGyro[1];
-                podWorker->biases.gyro[2] = podWorker->stateVariances.imuBiasGyro[2];
+                biases.gyro[0] = stateVariances.imuBiasGyro[0];
+                biases.gyro[1] = stateVariances.imuBiasGyro[1];
+                biases.gyro[2] = stateVariances.imuBiasGyro[2];
 
                 //initial values for IIR-IMU filter
-                podWorker->imuFiltered[0] = podWorker->biases.accel[0];
-                podWorker->imuFiltered[1] = podWorker->biases.accel[1];
-                podWorker->imuFiltered[2] = podWorker->biases.accel[2] - GRAVITY;
-                podWorker->imuFiltered[0] = podWorker->biases.gyro[0];
-                podWorker->imuFiltered[1] = podWorker->biases.gyro[1];
-                podWorker->imuFiltered[2] = podWorker->biases.gyro[2];
+                imuFiltered[0] = biases.accel[0];
+                imuFiltered[1] = biases.accel[1];
+                imuFiltered[2] = biases.accel[2] - GRAVITY;
+                imuFiltered[0] = biases.gyro[0];
+                imuFiltered[1] = biases.gyro[1];
+                imuFiltered[2] = biases.gyro[2];
                 /*
-                podWorker->imuRawLast[0] = podWorker->biases.accel[0];
-                podWorker->imuRawLast[1] = podWorker->biases.accel[1];
-                podWorker->imuRawLast[2] = podWorker->biases.accel[2]-GRAVITY;
-                podWorker->imuRawLast[0] = podWorker->biases.gyro[0];
-                podWorker->imuRawLast[1] = podWorker->biases.gyro[1];
-                podWorker->imuRawLast[2] = podWorker->biases.gyro[2];
+                imuRawLast[0] = biases.accel[0];
+                imuRawLast[1] = biases.accel[1];
+                imuRawLast[2] = biases.accel[2]-GRAVITY;
+                imuRawLast[0] = biases.gyro[0];
+                imuRawLast[1] = biases.gyro[1];
+                imuRawLast[2] = biases.gyro[2];
                 */
                 //set estimates to intial value
-                podWorker->stateVariances.orient[0] = 1.0;
-                podWorker->stateVariances.orient[1] = 0.0;
-                podWorker->stateVariances.orient[2] = 0.0;
-                podWorker->stateVariances.orient[3] = 0.0;
+                stateVariances.orient[0] = 1.0;
+                stateVariances.orient[1] = 0.0;
+                stateVariances.orient[2] = 0.0;
+                stateVariances.orient[3] = 0.0;
 
-                podWorker->stateVariances.position[0] = 0.0;
-                podWorker->stateVariances.position[1] = 0.0;
-                podWorker->stateVariances.position[2] = 0.0;
+                stateVariances.position[0] = 0.0;
+                stateVariances.position[1] = 0.0;
+                stateVariances.position[2] = 0.0;
 
-                podWorker->stateVariances.veloPositionBody[0] = 0.0;
-                podWorker->stateVariances.veloPositionBody[1] = 0.0;
-                podWorker->stateVariances.veloPositionBody[2] = 0.0;
+                stateVariances.veloPositionBody[0] = 0.0;
+                stateVariances.veloPositionBody[1] = 0.0;
+                stateVariances.veloPositionBody[2] = 0.0;
 
-                podWorker->stateVariances.veloOrientBody[0] = 0.0;
-                podWorker->stateVariances.veloOrientBody[1] = 0.0;
-                podWorker->stateVariances.veloOrientBody[2] = 0.0;
+                stateVariances.veloOrientBody[0] = 0.0;
+                stateVariances.veloOrientBody[1] = 0.0;
+                stateVariances.veloOrientBody[2] = 0.0;
 
 
                 //after getting the initial versors, unsubscribe
-                podWorker->unsubscribe("stateVariancesOrientCF");
+                unsubscribe("stateVariancesOrientCF");
 
-                podWorker->isGotBiases = 1;
+                isGotBiases = 1;
 
-                //podWorker->statusPod.status = POD_OK;
+                //statusPod.status = POD_OK;
 
             }
-            else if(podWorker->imuRawChannel == "imuRawSim")
+            else if(imuRawChannel == "imuRawSim")
             {
                 printf("IMU calibration ok! Continuing...it's only simulated anyway!\n");
-                podWorker->isGotBiases == 1;
+                isGotBiases == 1;
 
-                podWorker->biases.accel[0] = 0.0;
-                podWorker->biases.accel[1] = 0.0;
-                podWorker->biases.accel[2] = 0.0;
+                biases.accel[0] = 0.0;
+                biases.accel[1] = 0.0;
+                biases.accel[2] = 0.0;
 
-                podWorker->biases.gyro[0] = 0.0;
-                podWorker->biases.gyro[1] = 0.0;
-                podWorker->biases.gyro[2] = 0.0;
+                biases.gyro[0] = 0.0;
+                biases.gyro[1] = 0.0;
+                biases.gyro[2] = 0.0;
 
 
                 //initial values for IIR-IMU filter
-                podWorker->imuFiltered[0] = 0.0;
-                podWorker->imuFiltered[1] = 0.0;
-                podWorker->imuFiltered[2] = -GRAVITY;
-                podWorker->imuFiltered[0] = 0.0;
-                podWorker->imuFiltered[1] = 0.0;
-                podWorker->imuFiltered[2] = 0.0;
+                imuFiltered[0] = 0.0;
+                imuFiltered[1] = 0.0;
+                imuFiltered[2] = -GRAVITY;
+                imuFiltered[0] = 0.0;
+                imuFiltered[1] = 0.0;
+                imuFiltered[2] = 0.0;
                 /*
-                podWorker->imuRawLast[0] = 0.0;
-                podWorker->imuRawLast[1] = 0.0;
-                podWorker->imuRawLast[2] = -GRAVITY;
-                podWorker->imuRawLast[0] = 0.0;
-                podWorker->imuRawLast[1] = 0.0;
-                podWorker->imuRawLast[2] = 0.0;
+                imuRawLast[0] = 0.0;
+                imuRawLast[1] = 0.0;
+                imuRawLast[2] = -GRAVITY;
+                imuRawLast[0] = 0.0;
+                imuRawLast[1] = 0.0;
+                imuRawLast[2] = 0.0;
                 */
                 //set estimates to intial value
-                podWorker->stateVariances.orient[0] = 1.0;
-                podWorker->stateVariances.orient[1] = 0.0;
-                podWorker->stateVariances.orient[2] = 0.0;
-                podWorker->stateVariances.orient[3] = 0.0;
+                stateVariances.orient[0] = 1.0;
+                stateVariances.orient[1] = 0.0;
+                stateVariances.orient[2] = 0.0;
+                stateVariances.orient[3] = 0.0;
 
-                podWorker->stateVariances.position[0] = 0.0;
-                podWorker->stateVariances.position[1] = 0.0;
-                podWorker->stateVariances.position[2] = 0.0;
+                stateVariances.position[0] = 0.0;
+                stateVariances.position[1] = 0.0;
+                stateVariances.position[2] = 0.0;
 
-                podWorker->stateVariances.veloPositionBody[0] = 0.0;
-                podWorker->stateVariances.veloPositionBody[1] = 0.0;
-                podWorker->stateVariances.veloPositionBody[2] = 0.0;
+                stateVariances.veloPositionBody[0] = 0.0;
+                stateVariances.veloPositionBody[1] = 0.0;
+                stateVariances.veloPositionBody[2] = 0.0;
 
-                podWorker->stateVariances.veloOrientBody[0] = 0.0;
-                podWorker->stateVariances.veloOrientBody[1] = 0.0;
-                podWorker->stateVariances.veloOrientBody[2] = 0.0;
+                stateVariances.veloOrientBody[0] = 0.0;
+                stateVariances.veloOrientBody[1] = 0.0;
+                stateVariances.veloOrientBody[2] = 0.0;
 
 
                 //after getting the initial versors, unsubscribe
-                podWorker->unsubscribe("stateVariancesOrientCF");
-                //podWorker->unsubscribe("features");
+                unsubscribe("stateVariancesOrientCF");
+                //unsubscribe("features");
 
-                podWorker->isGotBiases = true;
-		//podWorker->statusPod.status = POD_OK;
+                isGotBiases = true;
+		//statusPod.status = POD_OK;
                 
             };	
         }
 
-    else if(podWorker->isGotBiases == 1) podWorker->statusPod.status = POD_OK;	
+    else if(isGotBiases == 1) statusPod.status = POD_OK;	
     };
 
     /*---------*/
 
     /*Publishing statusPOD*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;

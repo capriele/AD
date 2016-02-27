@@ -413,12 +413,12 @@ bool simulator_t::doComputations()
 
     //Update inputs to simulink model
 
-    SimulatorDrone_U_motorsPWM_datin[0] = static_cast<int>(podWorker->motorsPwms.pwms[0] / PWMDISCRESC + 0.5) * PWMDISCRESC; //NOTE: +0.5 to make cast as semi-rounding procedure
-    SimulatorDrone_U_motorsPWM_datin[1] = static_cast<int>(podWorker->motorsPwms.pwms[1] / PWMDISCRESC + 0.5) * PWMDISCRESC;
-    SimulatorDrone_U_motorsPWM_datin[2] = static_cast<int>(podWorker->motorsPwms.pwms[2] / PWMDISCRESC + 0.5) * PWMDISCRESC;
-    SimulatorDrone_U_motorsPWM_datin[3] = static_cast<int>(podWorker->motorsPwms.pwms[3] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[0] = static_cast<int>(motorsPwms.pwms[0] / PWMDISCRESC + 0.5) * PWMDISCRESC; //NOTE: +0.5 to make cast as semi-rounding procedure
+    SimulatorDrone_U_motorsPWM_datin[1] = static_cast<int>(motorsPwms.pwms[1] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[2] = static_cast<int>(motorsPwms.pwms[2] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[3] = static_cast<int>(motorsPwms.pwms[3] / PWMDISCRESC + 0.5) * PWMDISCRESC;
 
-    //printf("in %d, act int %f\n",podWorker->motorsPwms.pwms[0],SimulatorDrone_U_motorsPWM_datin[0]);
+    //printf("in %d, act int %f\n",motorsPwms.pwms[0],SimulatorDrone_U_motorsPWM_datin[0]);
 
 
     if((rtmGetErrorStatus(SimulatorDrone_M) == (NULL)))
@@ -432,39 +432,39 @@ bool simulator_t::doComputations()
 
     //Pack outputs from simulink model
 
-    podWorker->stateVariancesSim.position[0] = SimulatorDrone_Y_X;
-    podWorker->stateVariancesSim.position[1] = SimulatorDrone_Y_Y;
-    podWorker->stateVariancesSim.position[2] = SimulatorDrone_Y_Z;
+    stateVariancesSim.position[0] = SimulatorDrone_Y_X;
+    stateVariancesSim.position[1] = SimulatorDrone_Y_Y;
+    stateVariancesSim.position[2] = SimulatorDrone_Y_Z;
 
-    podWorker->stateVariancesSim.veloPositionBody[0] = SimulatorDrone_Y_dx;
-    podWorker->stateVariancesSim.veloPositionBody[1] = SimulatorDrone_Y_dy;
-    podWorker->stateVariancesSim.veloPositionBody[2] = SimulatorDrone_Y_dz;
+    stateVariancesSim.veloPositionBody[0] = SimulatorDrone_Y_dx;
+    stateVariancesSim.veloPositionBody[1] = SimulatorDrone_Y_dy;
+    stateVariancesSim.veloPositionBody[2] = SimulatorDrone_Y_dz;
 
-    podWorker->stateVariancesSim.orient[0] = SimulatorDrone_Y_quaternions_datout[0];
-    podWorker->stateVariancesSim.orient[1] = SimulatorDrone_Y_quaternions_datout[1];
-    podWorker->stateVariancesSim.orient[2] = SimulatorDrone_Y_quaternions_datout[2];
-    podWorker->stateVariancesSim.orient[3] = SimulatorDrone_Y_quaternions_datout[3];
+    stateVariancesSim.orient[0] = SimulatorDrone_Y_quaternions_datout[0];
+    stateVariancesSim.orient[1] = SimulatorDrone_Y_quaternions_datout[1];
+    stateVariancesSim.orient[2] = SimulatorDrone_Y_quaternions_datout[2];
+    stateVariancesSim.orient[3] = SimulatorDrone_Y_quaternions_datout[3];
 
-    podWorker->stateVariancesSim.veloOrientBody[0] = SimulatorDrone_Y_p;
-    podWorker->stateVariancesSim.veloOrientBody[1] = SimulatorDrone_Y_q;
-    podWorker->stateVariancesSim.veloOrientBody[2] = SimulatorDrone_Y_r;
+    stateVariancesSim.veloOrientBody[0] = SimulatorDrone_Y_p;
+    stateVariancesSim.veloOrientBody[1] = SimulatorDrone_Y_q;
+    stateVariancesSim.veloOrientBody[2] = SimulatorDrone_Y_r;
 
-    podWorker->stateVariancesSim.timestampJetson = GetTimeStamp();
+    stateVariancesSim.timestampJetson = GetTimeStamp();
 
-    podWorker->imuRawSim.accel[0] = SimulatorDrone_Y_ddx;
-    podWorker->imuRawSim.accel[1] = SimulatorDrone_Y_ddy;
-    podWorker->imuRawSim.accel[2] = SimulatorDrone_Y_ddz;
-    podWorker->imuRawSim.gyro[0] = SimulatorDrone_Y_pb;
-    podWorker->imuRawSim.gyro[1] = SimulatorDrone_Y_qb;
-    podWorker->imuRawSim.gyro[2] = SimulatorDrone_Y_rb;
+    imuRawSim.accel[0] = SimulatorDrone_Y_ddx;
+    imuRawSim.accel[1] = SimulatorDrone_Y_ddy;
+    imuRawSim.accel[2] = SimulatorDrone_Y_ddz;
+    imuRawSim.gyro[0] = SimulatorDrone_Y_pb;
+    imuRawSim.gyro[1] = SimulatorDrone_Y_qb;
+    imuRawSim.gyro[2] = SimulatorDrone_Y_rb;
 
-    podWorker->imuRawSim.timestampJetson = GetTimeStamp();	//@TODO timestamp arduino
+    imuRawSim.timestampJetson = GetTimeStamp();	//@TODO timestamp arduino
 
     //printf("%f %f %f\n",SimulatorDrone_Y_eulerangles_global_RS_datout[0],SimulatorDrone_Y_eulerangles_global_RS_datout[1],SimulatorDrone_Y_eulerangles_global_RS_datout[2]);
-    podWorker->stateEulerSim.orientEuler[0] = SimulatorDrone_Y_yaw;
-    podWorker->stateEulerSim.orientEuler[1] = SimulatorDrone_Y_pitch;
-    podWorker->stateEulerSim.orientEuler[2] = SimulatorDrone_Y_roll;
-    podWorker->stateEulerSim.timestampJetson = GetTimeStamp();
+    stateEulerSim.orientEuler[0] = SimulatorDrone_Y_yaw;
+    stateEulerSim.orientEuler[1] = SimulatorDrone_Y_pitch;
+    stateEulerSim.orientEuler[2] = SimulatorDrone_Y_roll;
+    stateEulerSim.timestampJetson = GetTimeStamp();
 
 
 
@@ -475,17 +475,17 @@ bool simulator_t::doComputations()
     /* Publishing computation result, in this case, the status update of drone status */
 
     // statusDrone - publish
-    podWorker->lcm.publish("imuRawSim", &podWorker->imuRawSim);
-    podWorker->lcm.publish("stateVariancesSim", &podWorker->stateVariancesSim);
+    lcm.publish("imuRawSim", &imuRawSim);
+    lcm.publish("stateVariancesSim", &stateVariancesSim);
 
-    podWorker->lcm.publish("stateEulerSim", &podWorker->stateEulerSim);
+    lcm.publish("stateEulerSim", &stateEulerSim);
 
     /*---------*/
 
 
 
     /*General Infrastructure (keep this infrastructure!)*/
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -502,38 +502,38 @@ Implementation of loop function for publishing statusPod
 bool simulator_t::updateStatus()
 {
     simulator_t* podWorker = this;
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    messageStatus_t messageStatus = checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
 
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US)
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
     else 
     {
 
 	if(messageStatus == MSGS_LATE)
     	{
-		podWorker->statusPod.status = POD_CRITICAL;
+		statusPod.status = POD_CRITICAL;
 	}
 	else if(messageStatus == MSGS_DEAD)
 	{
-		podWorker->statusPod.status = POD_FATAL;
+		statusPod.status = POD_FATAL;
 	}
 	else
 	{
-		podWorker->statusPod.status = POD_OK;
+		statusPod.status = POD_OK;
 	};
 
     };
 
 
     /*Publishing statusPOD (keep this infrastructure!)*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;

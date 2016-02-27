@@ -20,7 +20,7 @@ bool controllerSOCOrient_t::doComputations()
 
     //compute euler angle estimate from quaternion estimates
     double yaw_hat, pitch_hat, roll_hat;
-    quat2Euler(podWorker->stateVariances.orient, &(yaw_hat), &(pitch_hat), &(roll_hat));
+    quat2Euler(stateVariances.orient, &(yaw_hat), &(pitch_hat), &(roll_hat));
 
     double torquesRefs[3]; //output of Alex orientation-controller: torques about body-axes x,y,z (see Dropbox (MIT)\AgileDrones\writeups_docs\architecture\controlarchitecture\orientation_model/quadrotordynamics.pdf)
 
@@ -28,24 +28,24 @@ bool controllerSOCOrient_t::doComputations()
     orientState[0] = yaw_hat; //@TODO replace this by error (angle_hat - angle_ref) if we want to enable the user to control the angles for non-zero references
     orientState[1] = pitch_hat;
     orientState[2] = roll_hat;
-    orientState[3] = podWorker->stateVariances.veloOrientBody[0];
-    orientState[4] = podWorker->stateVariances.veloOrientBody[1];
-    orientState[5] = podWorker->stateVariances.veloOrientBody[2];
+    orientState[3] = stateVariances.veloOrientBody[0];
+    orientState[4] = stateVariances.veloOrientBody[1];
+    orientState[5] = stateVariances.veloOrientBody[2];
 
     //get optimal torque references from Alex controller
     getResultsControllerSOCOrient(orientState, podWorker.controllerLookup, torquesRefs);
 
     //compute total thrust as function of user-requested thrust
-    double totalThrust = - QUADMASS * GRAVITY - podWorker->powerAdjust.tBiasPDO;
+    double totalThrust = - QUADMASS * GRAVITY - powerAdjust.tBiasPDO;
 
     //convert [totalthrust;body torque references] into the four motor speeds
-    podWorker->motorsWsRef.wsRef[0] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0]));
-    podWorker->motorsWsRef.wsRef[1] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
-    podWorker->motorsWsRef.wsRef[2] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
-    podWorker->motorsWsRef.wsRef[3] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0]));
+    motorsWsRef.wsRef[0] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0]));
+    motorsWsRef.wsRef[1] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] - ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
+    motorsWsRef.wsRef[2] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust + ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] + ATAUPR * torquesRefs[0]));
+    motorsWsRef.wsRef[3] = sqrt(-THRUST2OMEGA2 * (ATOTALTHRUST * totalThrust - ATAUYAW * torquesRefs[2] + ATAUPR * torquesRefs[1] - ATAUPR * torquesRefs[0]));
 
 
-    podWorker->motorsWsRef.timestampJetson = GetTimeStamp();
+    motorsWsRef.timestampJetson = GetTimeStamp();
 
     /*---------*/
 
@@ -53,14 +53,14 @@ bool controllerSOCOrient_t::doComputations()
     /* Publishing */
 
     // statusDrone - publish
-    podWorker->lcm.publish("motorsWsRefSOCOrient", &podWorker->motorsWsRef); 	//choose channelName here!
+    lcm.publish("motorsWsRefSOCOrient", &motorsWsRef); 	//choose channelName here!
 
     /*---------*/
 
 
 
     /*General Infrastructure (maintain this structure!)*/
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -77,31 +77,31 @@ Implementation of loop function for publishing statusPod
 bool controllerSOCOrient_t::updateStatus()
 {
     controllerSOCOrient_t* podWorker = this;
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    messageStatus_t messageStatus = checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
 
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US)
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
     else 
     {
 
 	if(messageStatus == MSGS_LATE)
     	{
-		podWorker->statusPod.status = POD_CRITICAL;
+		statusPod.status = POD_CRITICAL;
 	}
 	else if(messageStatus == MSGS_DEAD)
 	{
-		podWorker->statusPod.status = POD_FATAL;
+		statusPod.status = POD_FATAL;
 	}
 	else
 	{
-		podWorker->statusPod.status = POD_OK;
+		statusPod.status = POD_OK;
 	};
 
     };
@@ -111,7 +111,7 @@ bool controllerSOCOrient_t::updateStatus()
     /*---------*/
 
     /*Publishing statusPOD (keep this infrastructure!)*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;
