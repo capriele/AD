@@ -299,13 +299,20 @@ public:
     /*
     abstract function for loop function for computations in this specific POD, requires implementation in yourPOD.cpp!
      */
-    static gboolean gtimerfuncComputations(gpointer data);
+    virtual bool doComputations() = 0;
+    static gboolean podBase_t::gtimerfuncComputations(gpointer data) {
+        podBase_t* obj = reinterpret_cast<podBase_t*>(data);
+        return obj->doComputations();
+    }
 
     /*
     abstract function for loop function for publishing statusPod, requires implementation in yourPOD.cpp!
      */
-    static gboolean gtimerfuncStatusPod(gpointer data);
-
+    virtual bool updateStatus() = 0;
+    static gboolean gtimerfuncStatusPod(gpointer data) {
+        podBase_t* obj = reinterpret_cast<podBase_t*>(data);
+        return obj->updateStatus();
+    }
 };
 
 
