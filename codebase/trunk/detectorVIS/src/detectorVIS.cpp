@@ -25,36 +25,36 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     podWorker->features.timestampCamera = 0; // @TODO: figure out how to get timestamp from camera
 
     // Retrieve image
-    cv::Mat image;
-    cv::Mat image_gray;
+    // cv::Mat image;
+    // cv::Mat image_gray;
 
-    podWorker->m_cap >> image;
-    cv::cvtColor(image, image_gray, CV_BGR2GRAY);
+    // podWorker->m_cap >> image;
+    // cv::cvtColor(image, image_gray, CV_BGR2GRAY);
 
-    // Detect april tags
-    vector<AprilTags::TagDetection> detections = podWorker->m_tagDetector->extractTags(image_gray);
+    // // Detect april tags
+    // vector<AprilTags::TagDetection> detections = podWorker->m_tagDetector->extractTags(image_gray);
 
-    // Get relative positions
-    podWorker->features.numFeat = detections.size();
-    Eigen::Matrix3d relRot;	// @TODO should these be declared here?
-    Eigen::Vector3d relPos;
-    double x,y,z,yaw,pitch,roll;
-    for (int i=0; i<detections.size(); i++) {
-	// Get position and location of tags in quadcopter frame, place in features LCM message
-	detections[i].getRelativeTranslationRotation(APRIL_TAG_SIZE, M_FX, M_FY, M_PX, M_PY, relPos, relRot);
-	wRo_to_euler(relRot, yaw, pitch, roll);
-	podWorker->features.featLoc[i][0] = relPos[0];
-	podWorker->features.featLoc[i][1] = relPos[1];
-	podWorker->features.featLoc[i][2] = relPos[2];
-	podWorker->features.featDirEuler[i][0] = yaw;
-	podWorker->features.featDirEuler[i][1] = pitch;
-	podWorker->features.featDirEuler[i][2] = roll;
-	for (int j=0; 9; j++) {
-	    // Uncertainty 0 for now
-	    podWorker->features.featLocVar[i][j] = 0;
-	    podWorker->features.featDirEulerVar[i][j] = 0;
-	}
-    }	
+    // // Get relative positions
+    // podWorker->features.numFeat = detections.size();
+    // Eigen::Matrix3d relRot;	// @TODO should these be declared here?
+    // Eigen::Vector3d relPos;
+    // double x,y,z,yaw,pitch,roll;
+    // for (int i=0; i<detections.size(); i++) {
+    // 	// Get position and location of tags in quadcopter frame, place in features LCM message
+    // 	detections[i].getRelativeTranslationRotation(APRIL_TAG_SIZE, M_FX, M_FY, M_PX, M_PY, relPos, relRot);
+    // 	wRo_to_euler(relRot, yaw, pitch, roll);
+    // 	podWorker->features.featLoc[i][0] = relPos[0];
+    // 	podWorker->features.featLoc[i][1] = relPos[1];
+    // 	podWorker->features.featLoc[i][2] = relPos[2];
+    // 	podWorker->features.featDirEuler[i][0] = yaw;
+    // 	podWorker->features.featDirEuler[i][1] = pitch;
+    // 	podWorker->features.featDirEuler[i][2] = roll;
+    // 	for (int j=0; 9; j++) {
+    // 	    // Uncertainty 0 for now
+    // 	    podWorker->features.featLocVar[i][j] = 0;
+    // 	    podWorker->features.featDirEulerVar[i][j] = 0;
+    // 	}
+    // }	
 
     // Get uncertainty
     // @TODO: Uncertainty figures for april tag detections
@@ -160,26 +160,26 @@ int main(int argc, char** argv)
 
     /*  POD-specific init procedures  */
     // Update and publish status of detectorVIS (keep this infrastructure!)
-    printf("Initializing POD...\n");
-    podWorker.publishStatus(POD_INITING);
+    // printf("Initializing POD...\n");
+    // podWorker.publishStatus(POD_INITING);
 
-    //Initialization stuff
-    podWorker.parseOptions(argc, argv); // parse options, i.e. get environment we're in
-    initEnvironment(podWorker.environment, podWorker.m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
+    // //Initialization stuff
+    // podWorker.parseOptions(argc, argv); // parse options, i.e. get environment we're in
+    // initEnvironment(podWorker.environment, podWorker.m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
 
-    // Initialize detector and video
-    podWorker.m_tagDetector = new AprilTags::TagDetector(podWorker.m_tagCodes);
+    // // Initialize detector and video
+    // podWorker.m_tagDetector = new AprilTags::TagDetector(podWorker.m_tagCodes);
     
-    podWorker.m_cap = cv::VideoCapture(podWorker.m_deviceId);
-    if (!podWorker.m_cap.isOpened()) {
-	printf("ERROR: Can't find video device...\n");
-	return EXIT_FAILURE;
-    }
-    podWorker.m_cap.set(CV_CAP_PROP_FRAME_WIDTH, VIDEO_FRAME_WIDTH);
-    podWorker.m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, VIDEO_FRAME_HEIGHT);
+    // podWorker.m_cap = cv::VideoCapture(podWorker.m_deviceId);
+    // if (!podWorker.m_cap.isOpened()) {
+    // 	printf("ERROR: Can't find video device...\n");
+    // 	return EXIT_FAILURE;
+    // }
+    // podWorker.m_cap.set(CV_CAP_PROP_FRAME_WIDTH, VIDEO_FRAME_WIDTH);
+    // podWorker.m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, VIDEO_FRAME_HEIGHT);
     
-    printf("Initializing POD... DONE\n");
-    /*---------*/
+    // printf("Initializing POD... DONE\n");
+    // /*---------*/
 
 
 
