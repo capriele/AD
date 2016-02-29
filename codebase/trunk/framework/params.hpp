@@ -61,7 +61,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 #define CALLINTERVAL_IMUACQUISITION 10		//IMU set to run at 100hz
 #define CALLINTERVAL_STATEESTIMATORORIENTV1 10
 #define CALLINTERVAL_STATEESTIMATORORIENTCF 10
-#define CALLINTERVAL_DETECTORVIS 20
+#define CALLINTERVAL_DETECTORVIS 5
 #define CALLINTERVAL_POSEESTIMVIS 20
 #define CALLINTERVAL_REMOTECONTROLLER 20
 #define CALLINTERVAL_WATCHDOG 10
@@ -71,7 +71,6 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 #define CALLINTERVAL_CONTROLLERSOCPOSE 10
 #define CALLINTERVAL_MOTORCOMMANDER 5
 #define CALLINTERVAL_SIMULATOR 5
-#define CALLINTERVAL_DETECTORVIS 5
 
 
 //multi-POD communication, timing
