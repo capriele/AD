@@ -55,8 +55,8 @@ public:
     agile::motorsPwms_t   motorsPwms;
     agile::motorsWsRef_t*  motorsWsRefControlerToUse;
 
-
-
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

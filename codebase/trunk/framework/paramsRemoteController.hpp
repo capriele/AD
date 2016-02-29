@@ -11,7 +11,7 @@
 #define INITBIASPDO -4.0
 #define MINTBIASPDO -4.0
 #define MAXTBIASPDO 4.0
-#define STEPSTBIASPDO 0.5
+#define STEPSTBIASPDO 1.0
 
 //yaw  bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps
 #define INITYBIASPDO 0.0
@@ -32,7 +32,7 @@
 #define STEPSRBIASPDO 0.1
 
 //PD-gain tuner (totalthrust-ypr)
-#define INITPDGAINADJUST_PRX 0.0 //pitch, roll, X, Y
+#define INITPDGAINADJUST_PRX 1.0 //pitch, roll, X, Y
 #define INITPDGAINADJUST_YZ 1.0 //yaw, Z
 #define MINPDGAINADJUST 0.0
 #define MAXPDGAINADJUST 2.0
@@ -43,8 +43,8 @@
 
 //reference values
 #define STEPSALTITUDE 0.2 //[m]
-#define STEPSPITCHROLL 0.02 //[euler]
-#define STEPSYAW 0.05 //[euler]
+#define STEPSPITCHROLL 0.1 //[euler]
+#define STEPSYAW 0.1 //[euler]
 
 //epsilon
 #define EPSREMOTE 0.00001

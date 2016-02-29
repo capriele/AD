@@ -8,11 +8,9 @@ using namespace std;
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool examplePod_t::doComputations()
 {
-
-    /* General Infrastructure (keep this infrastructure!) */
-    examplePod_t* podWorker = reinterpret_cast<examplePod_t*>(data);
+    examplePod_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -22,11 +20,11 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     /*---example that does not really compute anything---*/
 
     //displays data from channel "testdata"
-    printf(" data: %f\n", podWorker->testdata.position[2]);
+    printf(" data: %f\n", testdata.position[2]);
 
     // statusDrone - computation via stateMachine
-    agile::statusDrone_t statusDrone_old = podWorker->statusDrone;
-    podWorker->statusDrone = agile::statusDrone_t ();
+    agile::statusDrone_t statusDrone_old = statusDrone;
+    statusDrone = agile::statusDrone_t ();
 
 
     switch(statusDrone_old.status)
@@ -39,8 +37,8 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     case DRONE_CRITICAL: ; break;
     case DRONE_FATAL: ; break;
     }
-    podWorker->statusDrone.status = DRONE_WAITPODS;
-    podWorker->statusDrone.timestampJetson = GetTimeStamp();
+    statusDrone.status = DRONE_WAITPODS;
+    statusDrone.timestampJetson = GetTimeStamp();
 
     /*---------*/
 
@@ -48,14 +46,14 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     /* Publishing computation result, in case of this example, the status update of drone status */
 
     // statusDrone - publish
-    podWorker->lcm.publish("statusDronePUBLISHONEXMAPLECHANNEL", &podWorker->statusDrone); 	//choose channelName here!
+    lcm.publish("statusDronePUBLISHONEXMAPLECHANNEL", &statusDrone); 	//choose channelName here!
 
     /*---------*/
 
 
 
     /*General Infrastructure (keep this infrastructure!)*/
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -69,36 +67,34 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool examplePod_t::updateStatus()
 {
-
-    /*General Infrastructure (keep this infrastructure!)*/
-    examplePod_t* podWorker = reinterpret_cast<examplePod_t*>(data);
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    examplePod_t* podWorker = this;
+    messageStatus_t messageStatus = checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
 
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US)
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
     else 
     {
 
 	if(messageStatus == MSGS_LATE)
     	{
-		podWorker->statusPod.status = POD_CRITICAL;
+		statusPod.status = POD_CRITICAL;
 	}
 	else if(messageStatus == MSGS_DEAD)
 	{
-		podWorker->statusPod.status = POD_FATAL;
+		statusPod.status = POD_FATAL;
 	}
 	else
 	{
-		podWorker->statusPod.status = POD_OK;
+		statusPod.status = POD_OK;
 	};
 
     };
@@ -108,7 +104,7 @@ gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
     /*---------*/
 
     /*Publishing statusPOD (keep this infrastructure!)*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;

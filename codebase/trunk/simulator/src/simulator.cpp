@@ -5,68 +5,66 @@
 
 static RT_MODEL_SimulatorDrone_T SimulatorDrone_M_;
 static RT_MODEL_SimulatorDrone_T *const SimulatorDrone_M = &SimulatorDrone_M_;/* Real-time model */
-static P_SimulatorDrone_T SimulatorDrone_P =
-{
+static P_SimulatorDrone_T SimulatorDrone_P = {
+  {
+    2.1959176351571146e-6,
+    1750.0,
+    0.00026673,
+    1009.0,
+    -200.2,
+    1900.0,
+    0.06,
+
+    { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0165195073635001, 0.0152648883285633,
+      0.0215786550496705, 0.000652733165165932, 0.000721701528439517,
+      0.000690781425279554 },
+
+    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.05, 0.05, 1.0, 1.0, 1.0 },
+    1.0,
+
+    { 0.0, 0.0, -9.81, 0.0, 0.0, 0.0, 101270.95 },
+
+    { 1.0, 1.0, 1.0 },
+
+    { 1.0, 1.0, 1.0 },
+    1.225,
+    12.01725,
+
+    { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 },
+    0.44,
+
     {
-        2.1959176351571146e-6,
-        1750.0,
-        0.00026673,
-        1009.0,
-        -200.2,
-        1900.0,
-        0.06,
+      { 3.5, 70.0 },
 
-        {
-            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0165195073635001, 0.0152648883285633,
-            0.0215786550496705, 0.000652733165165932, 0.000721701528439517,
-            0.000690781425279554
-        },
-
-        { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.05, 0.05, 1.0, 1.0, 1.0 },
-        1.0,
-
-        { 0.0, 0.0, -9.81, 0.0, 0.0, 0.0, 101270.95 },
-
-        { 1.0, 1.0, 1.0 },
-
-        { 1.0, 1.0, 1.0 },
-        1.225,
-        12.01725,
-
-        { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 },
-        0.44,
-
-        {
-            { 3.5, 70.0 },
-
-            { -99.0, 0.0, 0.0, -9.0 },
-            0.0
-        },
-        0.05,
-        0.005,
-        0.1,
-        5.5,
-        2.5,
-        0.0,
-        3.0,
-        1.0,
-        0.1,
-        3.0,
-        1.0,
-        1.0,
-        -1.1,
-        -99.0,
-        -9.0,
-        10.0,
-        0.05,
-        0.0,
-        0.0,
-        -30.0,
-        20.0,
-        1.0
-    },                                   /* Variable: quadEDT
+      { -99.0, 0.0, 0.0, -9.0 },
+      0.0
+    },
+    0.05,
+    0.005,
+    0.17,
+    5.5,
+    2.5,
+    0.0,
+    3.0,
+    1.0,
+    0.17,
+    3.0,
+    1.0,
+    1.0,
+    -1.1,
+    -99.0,
+    -9.0,
+    12.0,
+    0.05,
+    0.0,
+    0.0,
+    -30.0,
+    20.0,
+    1.0
+  },                                   /* Variable: quadEDT
                                         * Referenced by:
                                         *   '<S1>/sensordataCalib'
+                                        *   '<S1>/Delay1'
                                         *   '<S3>/Constant'
                                         *   '<S3>/Constant1'
                                         *   '<S3>/Constant2'
@@ -82,42 +80,42 @@ static P_SimulatorDrone_T SimulatorDrone_P =
                                         *   '<S7>/noiseWeights'
                                         */
 
-    {
-        4.0,
-        9.81,
-        1.2041,
-        1.5e-5,
-        0.949,
+  {
+    4.0,
+    9.81,
+    1.2041,
+    1.5e-5,
+    1.277,
 
-        { 0.0057846, 0.0, 0.0, 0.0, 0.0058361, 0.0, 0.0, 0.0, 0.010355 },
-        -0.012,
-        0.165,
-        2.0,
-        0.076,
-        0.016,
-        0.0,
-        0.0035,
-        0.007,
-        0.0074,
-        4.117715e-6,
-        9.583e-8,
-        0.0015588090000000002,
-        8.42709e-6,
-        0.0174,
-        0.0016229639552374536,
-        0.1340252152352803,
-        0.17453292519943295,
-        0.52359877559829882,
-        -0.34906585039886584,
-        0.26179938779914946,
-        10000.0,
-        5.5,
-        0.018145839167134643,
-        0.83898068222857458,
-        2.1959176351571146e-6,
-        1.5566438675879322e-8,
-        0.0
-    },                                   /* Variable: quad
+    { 0.00694152, 0.0, 0.0, 0.0, 0.00700332, 0.0, 0.0, 0.0, 0.012426 },
+    -0.012,
+    0.165,
+    2.0,
+    0.076,
+    0.016,
+    0.0,
+    0.0035,
+    0.007,
+    0.0074,
+    4.117715e-6,
+    9.583e-8,
+    0.0015588090000000002,
+    8.42709e-6,
+    0.0174,
+    0.0016229639552374536,
+    0.1340252152352803,
+    0.17453292519943295,
+    0.52359877559829882,
+    -0.34906585039886584,
+    0.26179938779914946,
+    10000.0,
+    5.5,
+    0.018145839167134643,
+    0.83898068222857458,
+    2.1959176351571146e-6,
+    1.5566438675879322e-8,
+    0.0
+  },                                   /* Variable: quad
                                         * Referenced by:
                                         *   '<S11>/Constant'
                                         *   '<S11>/Constant1'
@@ -134,129 +132,132 @@ static P_SimulatorDrone_T SimulatorDrone_P =
                                         *   '<S11>/Constant8'
                                         *   '<S11>/Constant9'
                                         */
-    0.0,                                 /* Mask Parameter: CompareToConstant1_const
+  0.0,                                 /* Mask Parameter: CompareToConstant1_const
                                         * Referenced by: '<S14>/Constant'
                                         */
-    0.0,                                 /* Mask Parameter: CompareToConstant_const
+  0.0,                                 /* Mask Parameter: CompareToConstant_const
                                         * Referenced by: '<S13>/Constant'
                                         */
-    0.0,                                 /* Mask Parameter: GaussianNoiseGenerator_m
+  0.0,                                 /* Mask Parameter: GaussianNoiseGenerator_m
                                         * Referenced by: '<S10>/Constant'
                                         */
-    0.0,                                 /* Expression: 0
+  0.0,                                 /* Expression: 0
                                         * Referenced by: '<S11>/Delay3'
                                         */
 
-    /*  Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
-     * Referenced by: '<S11>/Delay1'
-     */
-    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+  /*  Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
+   * Referenced by: '<S11>/Delay1'
+   */
+  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
 
-    /*  Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
-     * Referenced by: '<S11>/Constant14'
-     */
-    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
-    0.005,                               /* Computed Parameter: IntPosestates_gainval
+  /*  Expression: [0 0 0.0 0 0 0 0 0 0 0 0 0]
+   * Referenced by: '<S11>/Constant14'
+   */
+  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
+  0.005,                               /* Computed Parameter: IntPosestates_gainval
                                         * Referenced by: '<S11>/IntPosestates'
                                         */
-    0.005,                               /* Computed Parameter: IntMotors_gainval
+  0.005,                               /* Computed Parameter: IntMotors_gainval
                                         * Referenced by: '<S11>/IntMotors'
                                         */
 
-    /*  Expression: [10 -10 10 -10]
-     * Referenced by: '<S11>/IntMotors'
-     */
-    { 10.0, -10.0, 10.0, -10.0 },
-    0.5,                                 /* Expression: 0.5
+  /*  Expression: [10 -10 10 -10]
+   * Referenced by: '<S11>/IntMotors'
+   */
+  { 10.0, -10.0, 10.0, -10.0 },
+  0.5,                                 /* Expression: 0.5
                                         * Referenced by: '<S4>/1//2'
                                         */
-    0.0,                                 /* Expression: 0
-                                        * Referenced by: '<S6>/Delay3'
+
+  /*  Expression: 0.8*[-1,1]
+   * Referenced by: '<S6>/Gain1'
+   */
+  { -0.8, 0.8 },
+  -1.0,                                /* Expression: -1
+                                        * Referenced by: '<S6>/Gain2'
                                         */
-    0.0,                                 /* Expression: 0
+  0.0,                                 /* Expression: 0
                                         * Referenced by: '<S5>/zeroconst'
                                         */
 
-    /*  Expression: [0 0 quad.g 0 0 0 0 0]
-     * Referenced by: '<S5>/Assumes takeoff was level'
-     */
-    { 0.0, 0.0, 9.81, 0.0, 0.0, 0.0, 0.0, 0.0 },
+  /*  Expression: [0 0 quad.g 0 0 0 0 0]
+   * Referenced by: '<S5>/Assumes takeoff was level'
+   */
+  { 0.0, 0.0, 9.81, 0.0, 0.0, 0.0, 0.0, 0.0 },
 
-    /*  Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
-     * Referenced by: '<S5>/Delay2'
-     */
-    { 0.0, 0.0, -9.81, 0.0, 0.0, 0.0, 0.0, 101270.95 },
-    0.0,                                 /* Expression: 0
+  /*  Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
+   * Referenced by: '<S5>/simualte random usbdelays'
+   */
+  { 0.0, 0.0, -9.81, 0.0, 0.0, 0.0, 0.0, 101270.95 },
+  0.0,                                 /* Expression: 0
                                         * Referenced by: '<S10>/Random Number'
                                         */
-    1.0,                                 /* Computed Parameter: RandomNumber_StdDev
+  1.0,                                 /* Computed Parameter: RandomNumber_StdDev
                                         * Referenced by: '<S10>/Random Number'
                                         */
 
-    /*  Expression: s
-     * Referenced by: '<S10>/Random Number'
-     */
-    { 41.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 },
+  /*  Expression: s
+   * Referenced by: '<S10>/Random Number'
+   */
+  { 41.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 },
 
-    /*  Expression: d
-     * Referenced by: '<S10>/Matrix Gain'
-     */
-    {
-        1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0165195073635001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0152648883285633, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0215786550496705, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000652733165165932, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000721701528439517, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000690781425279554
-    },
-    0.0,                                 /* Expression: 0
+  /*  Expression: d
+   * Referenced by: '<S10>/Matrix Gain'
+   */
+  { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0165195073635001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0152648883285633, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0215786550496705, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000652733165165932, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000721701528439517, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000690781425279554 },
+  0.0,                                 /* Expression: 0
                                         * Referenced by: '<S10>/Buffer'
                                         */
-    -1.0,                                /* Expression: -1
+  -1.0,                                /* Expression: -1
                                         * Referenced by: '<S5>/alt_Gain'
                                         */
-    0.0,                                 /* Expression: inf
+  0.0,                                 /* Expression: inf
                                         * Referenced by: '<S5>/Saturation'
                                         */
 
-    /*  Expression: [0 0 -quad.g]
-     * Referenced by: '<S5>/gravity'
-     */
-    { 0.0, 0.0, -9.81 },
+  /*  Expression: [0 0 -quad.g]
+   * Referenced by: '<S5>/gravity'
+   */
+  { 0.0, 0.0, -9.81 },
 
-    /*  Expression: 0.8*[-1,1]
-     * Referenced by: '<S6>/Gain1'
-     */
-    { -0.8, 0.8 },
-    -1.0,                                /* Expression: -1
-                                        * Referenced by: '<S6>/Gain2'
-                                        */
-    100.0,                               /* Expression: 100
+  /*  Expression: [quadEDT.sensordataCalib(1:6),0,quadEDT.sensordataCalib(7)]
+   * Referenced by: '<S5>/simulated sensorupdaterate delays'
+   */
+  { 0.0, 0.0, -9.81, 0.0, 0.0, 0.0, 0.0, 101270.95 },
+  100.0,                               /* Expression: 100
                                         * Referenced by: '<S3>/omegaSaturation'
                                         */
 
-    /*  Expression: [1 -1 1 -1]
-     * Referenced by: '<S3>/Directions'
-     */
-    { 1.0, -1.0, 1.0, -1.0 },
-    1U,                                  /* Computed Parameter: Delay3_DelayLength
+  /*  Expression: [1 -1 1 -1]
+   * Referenced by: '<S3>/Directions'
+   */
+  { 1.0, -1.0, 1.0, -1.0 },
+  1U,                                  /* Computed Parameter: Delay3_DelayLength
                                         * Referenced by: '<S11>/Delay3'
                                         */
-    1U,                                  /* Computed Parameter: Delay1_DelayLength
+  1U,                                  /* Computed Parameter: Delay1_DelayLength
                                         * Referenced by: '<S11>/Delay1'
                                         */
-    1U,                                  /* Computed Parameter: Delay3_DelayLength_p
-                                        * Referenced by: '<S6>/Delay3'
+  1U,                                  /* Computed Parameter: simualterandomusbdelays_DelayLe
+                                        * Referenced by: '<S5>/simualte random usbdelays'
                                         */
-    1U                                   /* Expression: quadEDT.sensordelay
-                                        * Referenced by: '<S5>/Delay2'
+  1U,                                  /* Computed Parameter: Delay1_DelayLength_n
+                                        * Referenced by: '<S1>/Delay1'
                                         */
-};                                     /* Modifiable parameters */
+  1U                                   /* Computed Parameter: simulatedsensorupdateratedela_g
+                                        * Referenced by: '<S5>/simulated sensorupdaterate delays'
+                                        */
+};                                  /* Modifiable parameters */
 
 static B_SimulatorDrone_T SimulatorDrone_B;/* Observable signals */
 static DW_SimulatorDrone_T SimulatorDrone_DW;/* Observable states */
@@ -400,11 +401,9 @@ using namespace std;
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool simulator_t::doComputations()
 {
-
-    /* General Infrastructure (keep this infrastructure!) */
-    simulator_t* podWorker = reinterpret_cast<simulator_t*>(data);
+    simulator_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -414,12 +413,12 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     //Update inputs to simulink model
 
-    SimulatorDrone_U_motorsPWM_datin[0] = static_cast<int>(podWorker->motorsPwms.pwms[0] / PWMDISCRESC + 0.5) * PWMDISCRESC; //NOTE: +0.5 to make cast as semi-rounding procedure
-    SimulatorDrone_U_motorsPWM_datin[1] = static_cast<int>(podWorker->motorsPwms.pwms[1] / PWMDISCRESC + 0.5) * PWMDISCRESC;
-    SimulatorDrone_U_motorsPWM_datin[2] = static_cast<int>(podWorker->motorsPwms.pwms[2] / PWMDISCRESC + 0.5) * PWMDISCRESC;
-    SimulatorDrone_U_motorsPWM_datin[3] = static_cast<int>(podWorker->motorsPwms.pwms[3] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[0] = static_cast<int>(motorsPwms.pwms[0] / PWMDISCRESC + 0.5) * PWMDISCRESC; //NOTE: +0.5 to make cast as semi-rounding procedure
+    SimulatorDrone_U_motorsPWM_datin[1] = static_cast<int>(motorsPwms.pwms[1] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[2] = static_cast<int>(motorsPwms.pwms[2] / PWMDISCRESC + 0.5) * PWMDISCRESC;
+    SimulatorDrone_U_motorsPWM_datin[3] = static_cast<int>(motorsPwms.pwms[3] / PWMDISCRESC + 0.5) * PWMDISCRESC;
 
-    //printf("in %d, act int %f\n",podWorker->motorsPwms.pwms[0],SimulatorDrone_U_motorsPWM_datin[0]);
+    //printf("in %d, act int %f\n",motorsPwms.pwms[0],SimulatorDrone_U_motorsPWM_datin[0]);
 
 
     if((rtmGetErrorStatus(SimulatorDrone_M) == (NULL)))
@@ -433,39 +432,39 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     //Pack outputs from simulink model
 
-    podWorker->stateVariancesSim.position[0] = SimulatorDrone_Y_X;
-    podWorker->stateVariancesSim.position[1] = SimulatorDrone_Y_Y;
-    podWorker->stateVariancesSim.position[2] = SimulatorDrone_Y_Z;
+    stateVariancesSim.position[0] = SimulatorDrone_Y_X;
+    stateVariancesSim.position[1] = SimulatorDrone_Y_Y;
+    stateVariancesSim.position[2] = SimulatorDrone_Y_Z;
 
-    podWorker->stateVariancesSim.veloPositionBody[0] = SimulatorDrone_Y_dx;
-    podWorker->stateVariancesSim.veloPositionBody[1] = SimulatorDrone_Y_dy;
-    podWorker->stateVariancesSim.veloPositionBody[2] = SimulatorDrone_Y_dz;
+    stateVariancesSim.veloPositionBody[0] = SimulatorDrone_Y_dx;
+    stateVariancesSim.veloPositionBody[1] = SimulatorDrone_Y_dy;
+    stateVariancesSim.veloPositionBody[2] = SimulatorDrone_Y_dz;
 
-    podWorker->stateVariancesSim.orient[0] = SimulatorDrone_Y_quaternions_datout[0];
-    podWorker->stateVariancesSim.orient[1] = SimulatorDrone_Y_quaternions_datout[1];
-    podWorker->stateVariancesSim.orient[2] = SimulatorDrone_Y_quaternions_datout[2];
-    podWorker->stateVariancesSim.orient[3] = SimulatorDrone_Y_quaternions_datout[3];
+    stateVariancesSim.orient[0] = SimulatorDrone_Y_quaternions_datout[0];
+    stateVariancesSim.orient[1] = SimulatorDrone_Y_quaternions_datout[1];
+    stateVariancesSim.orient[2] = SimulatorDrone_Y_quaternions_datout[2];
+    stateVariancesSim.orient[3] = SimulatorDrone_Y_quaternions_datout[3];
 
-    podWorker->stateVariancesSim.veloOrientBody[0] = SimulatorDrone_Y_p;
-    podWorker->stateVariancesSim.veloOrientBody[1] = SimulatorDrone_Y_q;
-    podWorker->stateVariancesSim.veloOrientBody[2] = SimulatorDrone_Y_r;
+    stateVariancesSim.veloOrientBody[0] = SimulatorDrone_Y_p;
+    stateVariancesSim.veloOrientBody[1] = SimulatorDrone_Y_q;
+    stateVariancesSim.veloOrientBody[2] = SimulatorDrone_Y_r;
 
-    podWorker->stateVariancesSim.timestampJetson = GetTimeStamp();
+    stateVariancesSim.timestampJetson = GetTimeStamp();
 
-    podWorker->imuRawSim.accel[0] = SimulatorDrone_Y_ddx;
-    podWorker->imuRawSim.accel[1] = SimulatorDrone_Y_ddy;
-    podWorker->imuRawSim.accel[2] = SimulatorDrone_Y_ddz;
-    podWorker->imuRawSim.gyro[0] = SimulatorDrone_Y_pb;
-    podWorker->imuRawSim.gyro[1] = SimulatorDrone_Y_qb;
-    podWorker->imuRawSim.gyro[2] = SimulatorDrone_Y_rb;
+    imuRawSim.accel[0] = SimulatorDrone_Y_ddx;
+    imuRawSim.accel[1] = SimulatorDrone_Y_ddy;
+    imuRawSim.accel[2] = SimulatorDrone_Y_ddz;
+    imuRawSim.gyro[0] = SimulatorDrone_Y_pb;
+    imuRawSim.gyro[1] = SimulatorDrone_Y_qb;
+    imuRawSim.gyro[2] = SimulatorDrone_Y_rb;
 
-    podWorker->imuRawSim.timestampJetson = GetTimeStamp();	//@TODO timestamp arduino
+    imuRawSim.timestampJetson = GetTimeStamp();	//@TODO timestamp arduino
 
     //printf("%f %f %f\n",SimulatorDrone_Y_eulerangles_global_RS_datout[0],SimulatorDrone_Y_eulerangles_global_RS_datout[1],SimulatorDrone_Y_eulerangles_global_RS_datout[2]);
-    podWorker->stateEulerSim.orientEuler[0] = SimulatorDrone_Y_yaw;
-    podWorker->stateEulerSim.orientEuler[1] = SimulatorDrone_Y_pitch;
-    podWorker->stateEulerSim.orientEuler[2] = SimulatorDrone_Y_roll;
-    podWorker->stateEulerSim.timestampJetson = GetTimeStamp();
+    stateEulerSim.orientEuler[0] = SimulatorDrone_Y_yaw;
+    stateEulerSim.orientEuler[1] = SimulatorDrone_Y_pitch;
+    stateEulerSim.orientEuler[2] = SimulatorDrone_Y_roll;
+    stateEulerSim.timestampJetson = GetTimeStamp();
 
 
 
@@ -476,17 +475,17 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     /* Publishing computation result, in this case, the status update of drone status */
 
     // statusDrone - publish
-    podWorker->lcm.publish("imuRawSim", &podWorker->imuRawSim);
-    podWorker->lcm.publish("stateVariancesSim", &podWorker->stateVariancesSim);
+    lcm.publish("imuRawSim", &imuRawSim);
+    lcm.publish("stateVariancesSim", &stateVariancesSim);
 
-    podWorker->lcm.publish("stateEulerSim", &podWorker->stateEulerSim);
+    lcm.publish("stateEulerSim", &stateEulerSim);
 
     /*---------*/
 
 
 
     /*General Infrastructure (keep this infrastructure!)*/
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -500,43 +499,41 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool simulator_t::updateStatus()
 {
-
-    /*General Infrastructure (keep this infrastructure!)*/
-    simulator_t* podWorker = reinterpret_cast<simulator_t*>(data);
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    simulator_t* podWorker = this;
+    messageStatus_t messageStatus = checkMessagesUptodate();
     std::lock_guard<std::mutex> guard(podMutex);
     /*---------*/
 
     /*Computation statusPOD*/
 
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US)
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US)
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
     else 
     {
 
 	if(messageStatus == MSGS_LATE)
     	{
-		podWorker->statusPod.status = POD_CRITICAL;
+		statusPod.status = POD_CRITICAL;
 	}
 	else if(messageStatus == MSGS_DEAD)
 	{
-		podWorker->statusPod.status = POD_FATAL;
+		statusPod.status = POD_FATAL;
 	}
 	else
 	{
-		podWorker->statusPod.status = POD_OK;
+		statusPod.status = POD_OK;
 	};
 
     };
 
 
     /*Publishing statusPOD (keep this infrastructure!)*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;

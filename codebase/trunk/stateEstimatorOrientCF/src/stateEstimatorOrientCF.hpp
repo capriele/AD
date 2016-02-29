@@ -42,6 +42,9 @@ public:
     agile::imuRaw_t	 	biases;
     //double imuRawLast[6];
     double imuFiltered[6];
+
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

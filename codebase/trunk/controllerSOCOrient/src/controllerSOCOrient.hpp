@@ -32,6 +32,8 @@ public:
     FILE* controllerFileHandle;
     controllerLookup_t* controllerLookup;
 
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

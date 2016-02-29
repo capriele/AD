@@ -77,9 +77,8 @@ public:
 	this->noCalib = false;
     };
 
-
-
-
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 

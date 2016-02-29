@@ -32,7 +32,7 @@ THIS SENDER IS NOT INTENDED TO BE AN EXAMPLE/TEMPLATE!!!
 
 
 
-class Testpod_t : public podBase_t
+class testSender_t : public podBase_t
 {
 
 public:
@@ -43,7 +43,7 @@ public:
     agile::controlMode_t controlMode;
 
     //constructor
-    Testpod_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)
+    testSender_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)
     {
         //Pod-specific initialization
         //...
@@ -57,13 +57,16 @@ public:
         isControllerSOCOrient = false;
     }
 
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
+bool testSender_t::updateStatus() {};
 
-gboolean gtimerfunc(gpointer data)
+bool testSender_t::doComputations()
 {
 
-    Testpod_t* podWorker = reinterpret_cast<Testpod_t*>(data);
+    testSender_t* podWorker = this;
 
 //publish a statusPOD message
     agile::statusPod_t statusPod;
@@ -72,7 +75,7 @@ gboolean gtimerfunc(gpointer data)
     statusPod.status = POD_OK;
     statusPod.podName = "Testsender";
 
-    podWorker->lcm.publish("statusTestsender", &statusPod);
+    lcm.publish("statusTestsender", &statusPod);
 
 
     /*FAKE data to create messages for some other PODS*/
@@ -123,66 +126,66 @@ gboolean gtimerfunc(gpointer data)
     imuRaw.baro = 0.0;
 
     /*PUBLISH  messages for some pods!*/
-    if(podWorker->isImuAcquisitionStatus)
+    if(isImuAcquisitionStatus)
     {
-        podWorker->lcm.publish("statusImuAcquisition", &statusPod);
+        lcm.publish("statusImuAcquisition", &statusPod);
     }
 
-    if(podWorker->isImuAcquisitionImuRaw)
+    if(isImuAcquisitionImuRaw)
     {
-        podWorker->lcm.publish("imuRaw", &imuRaw);
-    }
-
-
-    if(podWorker->isDetectorVis)
-    {
-        podWorker->lcm.publish("statusDetectorVis", &statusPod);
-    }
-
-    if(podWorker->isStateEstimatorOrientV1)
-    {
-        podWorker->lcm.publish("stateVariancesOrientV1", &stateVariances);
-        podWorker->lcm.publish("statusStateEstimatorOrientV1", &statusPod);
-    }
-
-    if(podWorker->isControllerPDPose)
-    {
-        podWorker->lcm.publish("statusControllerPDPose", &statusPod);
-    }
-
-    if(podWorker->isControllerSOCOrient)
-    {
-        podWorker->lcm.publish("statusControllerSOCOrient", &statusPod);
+        lcm.publish("imuRaw", &imuRaw);
     }
 
 
-    if(podWorker->isControllerSOCPose)
+    if(isDetectorVis)
     {
-        podWorker->lcm.publish("statusControllerSOCPose", &statusPod);
+        lcm.publish("statusDetectorVis", &statusPod);
+    }
+
+    if(isStateEstimatorOrientV1)
+    {
+        lcm.publish("stateVariancesOrientV1", &stateVariances);
+        lcm.publish("statusStateEstimatorOrientV1", &statusPod);
+    }
+
+    if(isControllerPDPose)
+    {
+        lcm.publish("statusControllerPDPose", &statusPod);
+    }
+
+    if(isControllerSOCOrient)
+    {
+        lcm.publish("statusControllerSOCOrient", &statusPod);
+    }
+
+
+    if(isControllerSOCPose)
+    {
+        lcm.publish("statusControllerSOCPose", &statusPod);
     }
 
     /*for examplePOD: */
-    if(podWorker->isExamplePod)
+    if(isExamplePod)
     {
-        podWorker->lcm.publish("statusRemoteController", &statusPod);
-        podWorker->lcm.publish("statusControllerPDOrient", &statusPod);
-        podWorker->lcm.publish("statusMotorCommander", &statusPod);
-        podWorker->lcm.publish("statusWatchdog", &statusPod);
-        podWorker->lcm.publish("controlMode", &(podWorker->controlMode));
+        lcm.publish("statusRemoteController", &statusPod);
+        lcm.publish("statusControllerPDOrient", &statusPod);
+        lcm.publish("statusMotorCommander", &statusPod);
+        lcm.publish("statusWatchdog", &statusPod);
+        lcm.publish("controlMode", &(controlMode));
 
         agile::pose_t pose_data;
 
         pose_data.timestampJetson = GetTimeStamp();
         pose_data.position[0] = 0.0;
         pose_data.position[1] = 0.0;
-        pose_data.position[2] = 0.25 * sin((double)(podWorker->value++) / 10);
+        pose_data.position[2] = 0.25 * sin((double)(value++) / 10);
 
         pose_data.orient[0] = 1.0;//0.923;//1.0;
         pose_data.orient[1] = 0.0;
         pose_data.orient[2] = 0.0;//0.0;
         pose_data.orient[3] = 0.0;//0.38268;
 
-        podWorker->lcm.publish("testdata", &pose_data);
+        lcm.publish("testdata", &pose_data);
     }
 
     return TRUE;
@@ -194,7 +197,7 @@ int main(int argc, char** argv)
 
 
     // Create the app
-    Testpod_t podWorker = Testpod_t("testsender", CALLINTERVAL_TESTSENDER);
+    testSender_t podWorker = testSender_t("testsender", CALLINTERVAL_TESTSENDER);
 
 
     // Create LCM
@@ -291,7 +294,7 @@ int main(int argc, char** argv)
 
 
     // Create a function call
-    guint timer = g_timeout_add(podWorker.callInterval, gtimerfunc, (gpointer)&podWorker);
+    guint timer = g_timeout_add(podWorker.callInterval, podBase_t::gtimerfuncComputations, (gpointer)&podWorker);
 
     // Create the mainloop
     GMainLoop* mainloop = g_main_loop_new(NULL, TRUE);

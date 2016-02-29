@@ -26,11 +26,9 @@ int i;
 Implementation of loop function for computations in this specific POD
 */
 
-gboolean podBase_t::gtimerfuncComputations(gpointer data)
+bool ramperPWM_t::doComputations()
 {
-
-    /* General Infrastructure (maintain this structure!) */
-    ramperPWM_t* podWorker = reinterpret_cast<ramperPWM_t*>(data);
+    ramperPWM_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
 
     /*--------*/
@@ -56,64 +54,107 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
         switch(ch)
         {
         case '+':
-            if(podWorker->motorIdxToRamp <= 3)
+            if(motorIdxToRamp <= 3)
             {
-                crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), +STEPSPWM, MINPWM, MAXPWM + 100);
-                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+                crement(&(motorsPwms.pwms[motorIdxToRamp]), +STEPSPWM, MINPWM, MAXPWM + 100);
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
             }
-            else if(podWorker->motorIdxToRamp == 9)
+            else if(motorIdxToRamp == 9)
                 for(i = 0; i < 4; i++)
                 {
-                    crement(&(podWorker->motorsPwms.pwms[i]), +STEPSPWM, MINPWM, MAXPWM + 100);
-                    printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[i], i);
+                    crement(&(motorsPwms.pwms[i]), +STEPSPWM, MINPWM, MAXPWM + 100);
+                    printf("current pwm %d at motor %d \n", motorsPwms.pwms[i], i);
                 }
             break;
         case '-':
-            if(podWorker->motorIdxToRamp <= 3)
+            if(motorIdxToRamp <= 3)
             {
-                crement(&(podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp]), -STEPSPWM, MINPWM, MAXPWM + 100);
-                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[podWorker->motorIdxToRamp], podWorker->motorIdxToRamp);
+                crement(&(motorsPwms.pwms[motorIdxToRamp]), -STEPSPWM, MINPWM, MAXPWM + 100);
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
             }
-            else if(podWorker->motorIdxToRamp == 9)
+            else if(motorIdxToRamp == 9)
                 for(i = 0; i < 4; i++)
                 {
-                    crement(&(podWorker->motorsPwms.pwms[i]), -STEPSPWM, MINPWM, MAXPWM + 100);
-                    printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[i], i);
+                    crement(&(motorsPwms.pwms[i]), -STEPSPWM, MINPWM, MAXPWM + 100);
+                    printf("current pwm %d at motor %d \n", motorsPwms.pwms[i], i);
                 }
             break;
+	//spcific pwm
+        case 'u':
+            if(motorIdxToRamp <= 3)
+            {
+                motorsPwms.pwms[motorIdxToRamp] = 1300;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
+            }
+            else if(motorIdxToRamp == 9)
+                for(i = 0; i < 4; i++)
+                {
+		motorsPwms.pwms[motorIdxToRamp] = 1300;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
+                }
+            break;
+
+        case 'i':
+            if(motorIdxToRamp <= 3)
+            {
+                motorsPwms.pwms[motorIdxToRamp] = 1500;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
+            }
+            else if(motorIdxToRamp == 9)
+                for(i = 0; i < 4; i++)
+                {
+		motorsPwms.pwms[motorIdxToRamp] = 1500;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
+                }
+            break;
+
+        case 'o':
+            if(motorIdxToRamp <= 3)
+            {
+                motorsPwms.pwms[motorIdxToRamp] = 1700;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
+            }
+            else if(motorIdxToRamp == 9)
+                for(i = 0; i < 4; i++)
+                {
+		motorsPwms.pwms[motorIdxToRamp] = 1700;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[motorIdxToRamp], motorIdxToRamp);
+                }
+            break;
+
         case '0':
-            podWorker->motorIdxToRamp = 0;
-            printf("selected motorindex: %d\n", podWorker->motorIdxToRamp);
+            motorIdxToRamp = 0;
+            printf("selected motorindex: %d\n", motorIdxToRamp);
             break;
         case '1':
-            podWorker->motorIdxToRamp = 1;
-            printf("selected motorindex: %d\n", podWorker->motorIdxToRamp);
+            motorIdxToRamp = 1;
+            printf("selected motorindex: %d\n", motorIdxToRamp);
             break;
         case '2':
-            podWorker->motorIdxToRamp = 2;
-            printf("selected motorindex: %d\n", podWorker->motorIdxToRamp);
+            motorIdxToRamp = 2;
+            printf("selected motorindex: %d\n", motorIdxToRamp);
             break;
         case '3':
-            podWorker->motorIdxToRamp = 3;
-            printf("selected motorindex: %d\n", podWorker->motorIdxToRamp);
+            motorIdxToRamp = 3;
+            printf("selected motorindex: %d\n", motorIdxToRamp);
             break;
         case 'a':
-            podWorker->motorIdxToRamp = 9;
+            motorIdxToRamp = 9;
             printf("selected motorindex: all\n");
             break;
         case 'e':
             for(i = 0; i < 4; i++)
             {
-                podWorker->motorsPwms.pwms[i] = MINPWM;
-                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[i], i);
+                motorsPwms.pwms[i] = MINPWM;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[i], i);
             }
             printf("emergency issued!\n");
             break;
         case 'c':
             for(i = 0; i < 4; i++)
             {
-                podWorker->motorsPwms.pwms[i] = MAXPWM + 100;
-                printf("current pwm %d at motor %d \n", podWorker->motorsPwms.pwms[i], i);
+                motorsPwms.pwms[i] = MAXPWM + 100;
+                printf("current pwm %d at motor %d \n", motorsPwms.pwms[i], i);
             }
             printf("all motors to max!\n");
             break;
@@ -121,14 +162,14 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     } //end if keyboard isHit
 
-    podWorker->motorsPwms.timestampJetson = GetTimeStamp();
+    motorsPwms.timestampJetson = GetTimeStamp();
 
     /*---------*/
 
 
     /* Publishing */
 
-    podWorker->lcm.publish("motorsPwms", &podWorker->motorsPwms);
+    lcm.publish("motorsPwms", &motorsPwms);
 
     /*---------*/
 
@@ -137,11 +178,11 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
     char buf[32];
     //@TODO pay attention to mapping for model motors and real motors order:!!!!
     //model/sim -> flightcontorller: 3->1, 2->2, 4->3, 1->4
-    sprintf(buf, "a%4d%4d%4d%4d", podWorker->motorsPwms.pwms[2], podWorker->motorsPwms.pwms[1], podWorker->motorsPwms.pwms[3], podWorker->motorsPwms.pwms[0]); //a is used as a flag for the arduino!
+    sprintf(buf, "a%4d%4d%4d%4d", motorsPwms.pwms[2], motorsPwms.pwms[1], motorsPwms.pwms[3], motorsPwms.pwms[0]); //a is used as a flag for the arduino!
     //printf("this is to arduino %s\n",buf);
-    if(podWorker->isWriteToArduino)
+    if(isWriteToArduino)
     {
-        podWorker->writeToArdStatus = write(podWorker->fd, buf, 18);
+        writeToArdStatus = write(fd, buf, 18);
     };
 
 
@@ -149,7 +190,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
 
     /*General Infrastructure (maintain this structure!)*/
-    podWorker->updateComputationInterval();
+    updateComputationInterval();
     return TRUE;
     /*---------*/
 }
@@ -163,45 +204,44 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 Implementation of loop function for publishing statusPod
 */
 
-gboolean podBase_t::gtimerfuncStatusPod(gpointer data)
+bool ramperPWM_t::updateStatus()
 {
-    /*General Infrastructure (maintain this infrastructure!)*/
-    ramperPWM_t* podWorker = reinterpret_cast<ramperPWM_t*>(data);
-    messageStatus_t messageStatus = podWorker->checkMessagesUptodate();
+    ramperPWM_t* podWorker = this;
+    messageStatus_t messageStatus = checkMessagesUptodate();
     /*---------*/
 
     /*Computation statusPOD*/
-    if(podWorker->computationInterval > MAXPODDELAY_X * podWorker->callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time //@TODO why has this guy delays oftentimes?
+    if(computationInterval > MAXPODDELAY_X * callInterval * MS2US * 1.5)	//@TODO remove hack for 50% more time //@TODO why has this guy delays oftentimes?
     {
-        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podWorker->podName.c_str(), podWorker->computationInterval,GetTimeStamp());
-        podWorker->statusPod.status = POD_FATAL;
+        printf("%s: delay in computation, dt=% " PRId64 "us at t=%" PRId64 "!\n", podName.c_str(), computationInterval,GetTimeStamp());
+        statusPod.status = POD_FATAL;
     }
-    else if((podWorker->isWriteToArduino) && (podWorker->writeToArdStatus < 0))
+    else if((isWriteToArduino) && (writeToArdStatus < 0))
     {
         printf("ramperPWM: error in write to arduino!\n");
-        podWorker->statusPod.status = POD_FATAL;
+        statusPod.status = POD_FATAL;
     }
     else 
     {
 
 	if(messageStatus == MSGS_LATE)
     	{
-		podWorker->statusPod.status = POD_CRITICAL;
+		statusPod.status = POD_CRITICAL;
 	}
 	else if(messageStatus == MSGS_DEAD)
 	{
-		podWorker->statusPod.status = POD_FATAL;
+		statusPod.status = POD_FATAL;
 	}
 	else
 	{
-		podWorker->statusPod.status = POD_OK;
+		statusPod.status = POD_OK;
 	};
 
     };
     /*---------*/
 
     /*Publishing statusPOD*/
-    podWorker->publishStatus(podWorker->statusPod.status);
+    publishStatus(statusPod.status);
     /*---------*/
 
     return TRUE;

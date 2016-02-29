@@ -7,7 +7,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 
 
 //Drone general parameters
-#define QUADMASS   0.946 	//[kg] @TODO this is with one battery
+#define QUADMASS   1.277 	//[kg]
 #define GRAVITY    9.81
 #define QUADBISQRT 675.0 	//sqrt(1/quad.b)
 
