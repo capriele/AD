@@ -22,17 +22,17 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 
     // Set time stamps
     podWorker->features.timestampJetson = GetTimeStamp();
-    podWorker->featuers.timestampCamera = 0; // @TODO: figure out how to get timestamp from camera
+    podWorker->features.timestampCamera = 0; // @TODO: figure out how to get timestamp from camera
 
     // Retrieve image
     cv::Mat image;
     cv::Mat image_gray;
 
-    m_cap >> image;
-    cv::cvtColor(image, image_gray, CVBGR2GRAY);
+    podWorker->m_cap >> image;
+    cv::cvtColor(image, image_gray, CV_BGR2GRAY);
 
     // Detect april tags
-    vector<AprilTags::TagDetection> detections = m_tagDetector->extractTags(image_gray);
+    vector<AprilTags::TagDetection> detections = podWorker->m_tagDetector->extractTags(image_gray);
 
     // Get relative positions
     podWorker->features.numFeat = detections.size();
@@ -52,7 +52,7 @@ gboolean podBase_t::gtimerfuncComputations(gpointer data)
 	for (int j=0; 9; j++) {
 	    // Uncertainty 0 for now
 	    podWorker->features.featLocVar[i][j] = 0;
-	    podWorker->featuers.featDirEulerVar[i][j] = 0;
+	    podWorker->features.featDirEulerVar[i][j] = 0;
 	}
     }	
 
@@ -145,7 +145,7 @@ int main(int argc, char** argv)
     /* General Infrastructure: setup (keep this infrastructure!)  */
 
     // 1) Create the app
-    detectorVIS_t podWorker = detectorVIS_t("detectorVIS", CALLINTERVAL_DETECTORVISPOD); 	//provide your PODname here!
+    detectorVIS_t podWorker = detectorVIS_t("detectorVIS", CALLINTERVAL_DETECTORVIS); 	//provide your PODname here!
 
     // 2) Create LCM
     if(!podWorker.lcm.good())
@@ -165,18 +165,18 @@ int main(int argc, char** argv)
 
     //Initialization stuff
     podWorker.parseOptions(argc, argv); // parse options, i.e. get environment we're in
-    initEnvironment(environment, m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
+    initEnvironment(podWorker.environment, podWorker.m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
 
     // Initialize detector and video
-    m_tagDetector = new AprilTags::TagDetector(m_tagCodes);
+    podWorker.m_tagDetector = new AprilTags::TagDetector(podWorker.m_tagCodes);
     
-    m_cap = cv::VideoCapture(m_deviceId);
-    if (!m_cap.isOpened()) {
+    podWorker.m_cap = cv::VideoCapture(podWorker.m_deviceId);
+    if (!podWorker.m_cap.isOpened()) {
 	printf("ERROR: Can't find video device...\n");
 	return EXIT_FAILURE;
     }
-    m_cap.set(CV_CAP_PROP_FRAME_WIDTH, VIDEO_FRAME_WIDTH);
-    m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, VIDEO_FRAME_HEIGHT);
+    podWorker.m_cap.set(CV_CAP_PROP_FRAME_WIDTH, VIDEO_FRAME_WIDTH);
+    podWorker.m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, VIDEO_FRAME_HEIGHT);
     
     printf("Initializing POD... DONE\n");
     /*---------*/

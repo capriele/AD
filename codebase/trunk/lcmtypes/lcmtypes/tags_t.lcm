@@ -1,0 +1,16 @@
+package agile;
+
+struct tags_t {
+	int64_t timestampJetson;
+	int64_t timestampCamera;
+
+	int16_t numFeat;
+	int16_t featId[numFeat];
+	double featLoc[numFeat][3];
+	double featLocVar[numFeat][9];
+
+	double featDirEuler[numFeat][3];
+	double featDirEulerVar[numFeat][9];
+
+}
+

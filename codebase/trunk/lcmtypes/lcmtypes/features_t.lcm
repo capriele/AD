@@ -4,13 +4,13 @@ struct features_t {
 	int64_t timestampJetson;
 	int64_t timestampCamera;
 
-	int16_t numFeat;
-	int16_t featId[numFeat];
-	double featLoc[numFeat][3];
-	double featLocVar[numFeat][9];
+	int16_t featuresNrFound;
+	int16_t featureId[featuresNrFound];
+	double pixelLocation[featuresNrFound][2];
+	double plVariances[featuresNrFound][4];
 
-	double featDirEuler[numFeat][3];
-	double featDirEulerVar[numFeat][9];
+	double featureDirectionVersor[featuresNrFound][3];
+	double featDirVersorVariances[featuresNrFound][9];
 
 }
 

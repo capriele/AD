@@ -7,4 +7,7 @@
 #define M_PX           0.0
 #define M_PY           0.0
 
+#define VIDEO_FRAME_WIDTH 680
+#define VIDEO_FRAME_HEIGHT 680
+
 #endif

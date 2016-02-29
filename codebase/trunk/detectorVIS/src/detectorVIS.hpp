@@ -40,7 +40,8 @@ void wRo_to_euler(const Eigen::Matrix3d& wRo, double& yaw, double& pitch, double
     roll  = standardRad(atan2(wRo(0,2)*s - wRo(1,2)*c, -wRo(0,1)*s + wRo(1,1)*c));
 }
 
-void initEnvironment(const std::string& environment, AprilTags::TagCodes& m_tagCodes) {
+// void initEnvironment(const std::string& environment, AprilTags::TagCodes& m_tagCodes) {
+void initEnvironment(const std::string& environment, double& m_tagCodes) {
     if (environment=="test") {
 	m_tagCodes = AprilTags::tagCodes16h5;
     } else {
@@ -57,7 +58,6 @@ public:
     //Pod-specific members to store received messages of channels that this POD is subscribed to (Note that every pod is auto-subscribed to statusWatchdog and has a member to store this (see base class constructor))
     // April tag parameters
     AprilTags::TagDetector* m_tagDetector;
-    AprilTags::TagCodes m_tagCodes;
     double m_tagSize;
 
     // Video loading parameters
@@ -94,7 +94,10 @@ public:
     }
 
     //Pod-specifc members for storing values (if some values in the computation-cycle or statusUpdate-cycle are needed over more than 1 function call)
-    agile::features_t       features;
+    agile::tags_t       features;
+    // AprilTags::TagCodes m_tagCodes;
+    double m_tagCodes;
+
 
     //Pod-specific member functions
 

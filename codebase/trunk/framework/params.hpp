@@ -71,6 +71,7 @@ parameters.hpp contains universal parameters that are used in multiple parts of 
 #define CALLINTERVAL_CONTROLLERSOCPOSE 10
 #define CALLINTERVAL_MOTORCOMMANDER 5
 #define CALLINTERVAL_SIMULATOR 5
+#define CALLINTERVAL_DETECTORVIS 5
 
 
 //multi-POD communication, timing
