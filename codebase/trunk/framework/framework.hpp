@@ -171,6 +171,7 @@ public:
         this->computationInterval = 0;
         this->timestampJetsonLastComputation = GetTimeStamp();
         this->callInterval = callInterval;
+        this->statusPod.status = POD_INITING;	
         this->statusWatchdog.status = POD_CRITICAL;
         this->statusDrone.status = DRONE_WAITPODS;
         this->subscribe("statusWatchdog", CALLINTERVAL_WATCHDOG,	 &(this->statusWatchdog), 	&podBase_t::handleMessage<agile::statusPod_t>);
@@ -300,7 +301,7 @@ public:
     abstract function for loop function for computations in this specific POD, requires implementation in yourPOD.cpp!
      */
     virtual bool doComputations() = 0;
-    static gboolean podBase_t::gtimerfuncComputations(gpointer data) {
+    static gboolean gtimerfuncComputations(gpointer data) {
         podBase_t* obj = reinterpret_cast<podBase_t*>(data);
         return obj->doComputations();
     }

@@ -35,10 +35,10 @@ void complimentaryfilter(double yaw_old,  double pitch_old, double roll_old,  do
 
     if((imuaccl_abs > (1 - gyroAngleUpdate_acc_threshold) * (GRAVITY)) && (imuaccl_abs < (1 + gyroAngleUpdate_acc_threshold) * (GRAVITY)))
     {
-        double roll_hat_acc = atan(sensorIMU[1] / sensorIMU[2]);
+        double roll_hat_acc = atan(sensorIMU[1] / sensorIMU[2]); //printf("roll acc: %f\n",roll_hat_acc);
         roll         = roll * (1 - gyroAngleUpdate_acc_weight) + roll_hat_acc * gyroAngleUpdate_acc_weight;
 
-        double pitch_hat_acc = asin(sensorIMU[0] / GRAVITY) ;
+        double pitch_hat_acc = asin(sensorIMU[0] / GRAVITY) ; //printf("pitch hat acc: %f\n",pitch_hat_acc);
         pitch        = pitch * (1 - gyroAngleUpdate_acc_weight) + pitch_hat_acc * gyroAngleUpdate_acc_weight;
     }
 
@@ -73,14 +73,14 @@ bool stateEstimatorOrientCF_t::doComputations()
 
         imuOrig[0] = imudata.accel[0] - biases.accel[0]; 
         imuOrig[1] = imudata.accel[1] - biases.accel[1];
-        imuOrig[2] = imudata.accel[2] - biases.accel[2]; //printf("%f %f\n",imudata.accel[2],biases.accel[2]);
+        imuOrig[2] = imudata.accel[2] - biases.accel[2];
         imuOrig[3] = imudata.gyro[0] - biases.gyro[0];
         imuOrig[4] = imudata.gyro[1] - biases.gyro[1];
         imuOrig[5] = imudata.gyro[2] - biases.gyro[2];
 
 
         //Apply IIR filter to Accel
-        double imuFiltered[6];
+        //double imuFiltered[6];
         imuFiltered[0] = IIRIMU * imuFiltered[0] + (1.0 - IIRIMU) * imuOrig[0];
         imuFiltered[1] = IIRIMU * imuFiltered[1] + (1.0 - IIRIMU) * imuOrig[1];
         imuFiltered[2] = IIRIMU * imuFiltered[2] + (1.0 - IIRIMU) * imuOrig[2];
@@ -124,15 +124,15 @@ bool stateEstimatorOrientCF_t::doComputations()
         //prepare current estimates
         double yaw_cur, pitch_cur, roll_cur;
         quat2Euler(stateVariances.orient, &(yaw_cur), &(pitch_cur), &(roll_cur));
-
+	
         //feed complimentary filter
         double euler_hat[3];
         int64_t nowCompUpdate = GetTimeStamp();		
 
         double dt = (nowCompUpdate - stateVariances.timestampJetson) / (1000000.0); //printf("dt: %f\n",dt); //@TODO should probably refer to Arduino clock, but then we need some sort of clock sync!
 
-
-        if(dt > 10) dt = 0.01; //initial timestamp
+        if(abs(dt) > 1) dt = 0.01; //initial timestamp
+	
         complimentaryfilter(yaw_cur, pitch_cur, roll_cur, dt, imuTrafo, euler_hat);
 
         //transform to quaternions and update stateVariances
@@ -142,7 +142,7 @@ bool stateEstimatorOrientCF_t::doComputations()
         stateVariances.veloOrientBody[1] = imuTrafo[4];
         stateVariances.veloOrientBody[2] = imuTrafo[5];
 
-        stateVariances.timestampJetson = nowCompUpdate;
+	stateVariances.timestampJetson = nowCompUpdate;
 
         /* Publishing computation result*/
 
@@ -194,6 +194,9 @@ bool stateEstimatorOrientCF_t::updateStatus()
     {
         statusPod.status = POD_FATAL;
     }
+
+    else if(isGotBiases == 1) {statusPod.status = POD_OK;}	
+
     else
     {
         if(isGotBiases == -1)
@@ -220,10 +223,10 @@ bool stateEstimatorOrientCF_t::updateStatus()
                 //initial values for IIR-IMU filter
                 imuFiltered[0] = biases.accel[0];
                 imuFiltered[1] = biases.accel[1];
-                imuFiltered[2] = biases.accel[2] - GRAVITY;
-                imuFiltered[0] = biases.gyro[0];
-                imuFiltered[1] = biases.gyro[1];
-                imuFiltered[2] = biases.gyro[2];
+                imuFiltered[2] = biases.accel[2] + GRAVITY; //in IMU-frame!
+                imuFiltered[3] = biases.gyro[0];
+                imuFiltered[4] = biases.gyro[1];
+                imuFiltered[5] = biases.gyro[2];
                 /*
                 imuRawLast[0] = biases.accel[0];
                 imuRawLast[1] = biases.accel[1];
@@ -262,7 +265,7 @@ bool stateEstimatorOrientCF_t::updateStatus()
             else if(imuRawChannel == "imuRawSim")
             {
                 printf("IMU calibration ok! Continuing...it's only simulated anyway!\n");
-                isGotBiases == 1;
+                
 
                 biases.accel[0] = 0.0;
                 biases.accel[1] = 0.0;
@@ -277,9 +280,9 @@ bool stateEstimatorOrientCF_t::updateStatus()
                 imuFiltered[0] = 0.0;
                 imuFiltered[1] = 0.0;
                 imuFiltered[2] = -GRAVITY;
-                imuFiltered[0] = 0.0;
-                imuFiltered[1] = 0.0;
-                imuFiltered[2] = 0.0;
+                imuFiltered[3] = 0.0;
+                imuFiltered[4] = 0.0;
+                imuFiltered[5] = 0.0;
                 /*
                 imuRawLast[0] = 0.0;
                 imuRawLast[1] = 0.0;
@@ -311,13 +314,12 @@ bool stateEstimatorOrientCF_t::updateStatus()
                 unsubscribe("stateVariancesOrientCF");
                 //unsubscribe("features");
 
-                isGotBiases = true;
+                isGotBiases = 1;
 		//statusPod.status = POD_OK;
                 
             };	
-        }
-
-    else if(isGotBiases == 1) statusPod.status = POD_OK;	
+        } //end else if(isGotBiases == 0)
+    
     };
 
     /*---------*/

@@ -32,7 +32,7 @@ THIS SENDER IS NOT INTENDED TO BE AN EXAMPLE/TEMPLATE!!!
 
 
 
-class Testpod_t : public podBase_t
+class testSender_t : public podBase_t
 {
 
 public:
@@ -43,7 +43,7 @@ public:
     agile::controlMode_t controlMode;
 
     //constructor
-    Testpod_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)
+    testSender_t (string podName, int64_t callInterval) : podBase_t(podName, callInterval)
     {
         //Pod-specific initialization
         //...
@@ -61,11 +61,12 @@ public:
     bool doComputations() override;
 };
 
+bool testSender_t::updateStatus() {};
 
-gboolean gtimerfunc(gpointer data)
+bool testSender_t::doComputations()
 {
 
-    Testpod_t* podWorker = reinterpret_cast<Testpod_t*>(data);
+    testSender_t* podWorker = this;
 
 //publish a statusPOD message
     agile::statusPod_t statusPod;
@@ -196,7 +197,7 @@ int main(int argc, char** argv)
 
 
     // Create the app
-    Testpod_t podWorker = Testpod_t("testsender", CALLINTERVAL_TESTSENDER);
+    testSender_t podWorker = testSender_t("testsender", CALLINTERVAL_TESTSENDER);
 
 
     // Create LCM
@@ -293,7 +294,7 @@ int main(int argc, char** argv)
 
 
     // Create a function call
-    guint timer = g_timeout_add(podWorker.callInterval, gtimerfunc, (gpointer)&podWorker);
+    guint timer = g_timeout_add(podWorker.callInterval, podBase_t::gtimerfuncComputations, (gpointer)&podWorker);
 
     // Create the mainloop
     GMainLoop* mainloop = g_main_loop_new(NULL, TRUE);
