@@ -57,7 +57,7 @@ public:
 
     //Pod-specific members to store received messages of channels that this POD is subscribed to (Note that every pod is auto-subscribed to statusWatchdog and has a member to store this (see base class constructor))
     // April tag parameters
-    AprilTags::TagDetector* m_tagDetector;
+    AprilTags::TagDetector *m_tagDetector;
     // double m_tagSize;
 
     // // Video loading parameters
@@ -77,11 +77,13 @@ public:
 
     //Pod-specifc members for storing values (if some values in the computation-cycle or statusUpdate-cycle are needed over more than 1 function call)
     agile::tags_t       features;
+    agile::statusDrone_t statusDrone;
     AprilTags::TagCodes m_tagCodes = AprilTags::tagCodes16h5;
 
 
     //Pod-specific member functions
-
+    bool updateStatus() override;
+    bool doComputations() override;
 };
 
 
