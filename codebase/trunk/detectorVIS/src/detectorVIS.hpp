@@ -45,13 +45,14 @@ void wRo_to_euler(const Eigen::Matrix3d& wRo, double& yaw, double& pitch, double
 }
 
 // void initEnvironment(const std::string& environment, AprilTags::TagCodes& m_tagCodes) {
-void initEnvironment(const int& environment, AprilTags::TagCodes& m_tagCodes) {
+void initEnvironment(const int& environment, AprilTags::TagCodes& m_tagCodes, int& m_deviceId) {
     if (environment==0) {
-	m_tagCodes = AprilTags::tagCodes16h5;
+	m_tagCodes = AprilTags::tagCodes25h7;
     } else {
 	std::cout << "Invalid environment" << std::endl;
 	std::exit(1);
     }
+    m_deviceId = 0;
 }
 
 class detectorVIS_t : public podBase_t
@@ -65,8 +66,8 @@ public:
     // double m_tagSize;
 
     // // Video loading parameters
-    // cv::VideoCapture m_cap;
-    // int m_deviceId;
+    cv::VideoCapture m_cap;
+    int m_deviceId;
 
     // // Initialize environment
     const int environment = 0;

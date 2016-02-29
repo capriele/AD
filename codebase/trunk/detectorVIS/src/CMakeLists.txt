@@ -4,10 +4,11 @@ pods_install_pkg_config_file(detectorVIS
     REQUIRES ${REQUIRED_PACKAGES}
     VERSION 0.0.1)
 
+find_package(OpenCV REQUIRED)
+
 include_directories(${PROJECT_SOURCE_DIR}/src
     ${LCM_INCLUDE_DIRS}
-    # ${OpenCV_INCLUDE_DIRS})
-    )
+    ${OpenCV_INCLUDE_DIRS})
 
 # find_path (OPENCV_PATH opencv REQUIRED)
 
@@ -18,7 +19,8 @@ pods_use_pkg_config_packages(detectorVIS detectorVIS
 
 target_link_libraries(detectorVIS
     ${LCM_LDFLAGS}
-    apriltags)
+    apriltags
+    ${OpenCV_LIBS})
 
 # target_link_libraries(detectorVIS opencv_core.so opencv_highgui.so opencv_imgproc.so opencv_calib3d.so opencv_features2d.so)
 

@@ -163,13 +163,12 @@ int main(int argc, char** argv)
     podWorker.publishStatus(POD_INITING);
 
     // //Initialization stuff
-    initEnvironment(podWorker.environment, podWorker.m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
+    initEnvironment(podWorker.environment, podWorker.m_tagCodes, podWorker.m_deviceId); // Initialize environment parameters (i.e. where are what tags)
 
     // // Initialize detector and video
     podWorker.m_tagDetector = new AprilTags::TagDetector(podWorker.m_tagCodes);
-    // AprilTags::TagDetector m_tagDetector = AprilTags::TagDetector(podWorker.m_tagCodes);
     
-    // podWorker.m_cap = cv::VideoCapture(podWorker.m_deviceId);
+    podWorker.m_cap = cv::VideoCapture(podWorker.m_deviceId);
     // if (!podWorker.m_cap.isOpened()) {
     // 	printf("ERROR: Can't find video device...\n");
     // 	return EXIT_FAILURE;
