@@ -1,14 +1,51 @@
 #include "controllerSOCOrient.hpp"
 
+
 using namespace std;
 
 
-//WORK IN PROGRESS//TEMPLATE illustration for Alex contgroller interface
+void controller_load(struct Controller * c,std::string filename)
+{
+  char filename2[256];
+  strcpy(filename2,filename.c_str());
+  c->controls = ft1d_array_load(filename2);
+  if (c->controls == NULL){
+    fprintf(stderr,"Loaded Controller is NULL\n");
+    exit(1);
+  }
+}
+
+void controller_free(struct Controller * c)
+{
+  if (c != NULL){
+    ft1d_array_free(c->controls); c->controls = NULL;
+  }
+}
+
+void controller_eval(struct Controller * c, double * state, double * controls)
+{
+  ft1d_array_eval2(c->controls,state,controls);
+}
+
+//
 
 
 /*
 Implementation of loop function for computations in this specific POD
 */
+
+
+void controllerSOCOrient_t::getControlleraction(double * orientState, double * torquesRefs)
+{
+
+  controller_eval(&(this->controller),orientState,torquesRefs);
+
+}
+
+/*
+Implementation of loop function for computations in this specific POD
+*/
+
 
 bool controllerSOCOrient_t::doComputations()
 {
@@ -33,7 +70,7 @@ bool controllerSOCOrient_t::doComputations()
     orientState[5] = stateVariances.veloOrientBody[2];
 
     //get optimal torque references from Alex controller
-    getResultsControllerSOCOrient(orientState, podWorker.controllerLookup, torquesRefs);
+    getControlleraction(orientState, torquesRefs);
 
     //compute total thrust as function of user-requested thrust
     double totalThrust = - QUADMASS * GRAVITY - powerAdjust.tBiasPDO;
@@ -131,16 +168,17 @@ int main(int argc, char** argv)
     /* General Infrastructure: setup (maintain this structure!)  */
 
     // 1) Create the app
-    controllerSOCOrient_t podWorker = controllerSOCOrient_t("controllerSOCOrient", CALLINTERVAL_controllerSOCOrient); 	//provide your PODname here!
-    podWorker.controllerFilePath = "controllerSOCOrient.bin";
+    controllerSOCOrient_t podWorker = controllerSOCOrient_t("controllerSOCOrient", CALLINTERVAL_CONTROLLERSOCORIENT); 	//provide your PODname here!
+    //podWorker.controllerFilePath = "controllerSOCOrient.ft";
 
-    if(argc < 2)
+    if(argc < 3)
     {
-        printf("Please provide estimationChannel that controller will use!\n");
+        printf("Please provide estimationChannel and controller's filename that controller will use!\n");
         return EXIT_FAILURE;
     };
 
     podWorker.stateVariancesChannel = argv[1];
+    podWorker.controllerFilePath    = argv[2];
 
     // 2) Create LCM
     if(!podWorker.lcm.good())
@@ -170,12 +208,11 @@ int main(int argc, char** argv)
 
     //Load controller lookup
 
-    if((podWorker.controllerFileHandle = fopen(podWorker.controllerFilePath, "rb")) == NULL)
-    {
-        printf("ERROR opening controller file!\n");
-        return 1;
-    }
-    else fread(podWorker.controllerLookup, sizeof(controllerLookup_t), 1, podWorker.controllerFileHandle);
+
+
+    controller_load(&(podWorker.controller),podWorker.controllerFilePath);
+   
+    
 
     /*---------*/
 

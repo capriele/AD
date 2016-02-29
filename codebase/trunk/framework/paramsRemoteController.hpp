@@ -10,7 +10,7 @@
 //total thrust bias PD-Orient-controller
 #define INITBIASPDO -4.0
 #define MINTBIASPDO -4.0
-#define MAXTBIASPDO 4.0
+#define MAXTBIASPDO 6.0
 #define STEPSTBIASPDO 1.0
 
 //yaw  bias (via added value) PD-Orient-controller //@TODO correct minmaxsteps

@@ -10,6 +10,7 @@ examplePod
 remoteController
 controllerPDOrient
 controllerPDPose
+controllerSOCOrient
 motorCommander
 simulator
 stateEstimatorOrientCF

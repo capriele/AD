@@ -4,8 +4,9 @@
 #include "../../framework/framework.hpp"
 #include <math.h>
 
+//POD parameters
+#include "../../framework/paramsStateEstimatorOrientCF.hpp"
 
-#define IIRIMU 0.9
 
 class stateEstimatorOrientCF_t : public podBase_t
 {

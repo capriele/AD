@@ -6,6 +6,9 @@ include(cmake/pods.cmake)
 
 find_package(PkgConfig REQUIRED)
 
+include_directories("/home/ra/tools/c3/include")
+include_directories("/home/ra/tools/c3sc/src")
+
 # Add this to be able to debug:
 #add_definitions(-g)
 add_definitions(-std=c++11)
