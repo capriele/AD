@@ -8,9 +8,8 @@ using namespace std;
 Implementation of loop function for computations in this specific POD
 */
 
-bool podBase_t::doComputations()
+bool detectorVIS_t::doComputations()
 {
-
     /* General Infrastructure (keep this infrastructure!) */
     detectorVIS_t* podWorker = this;
     std::lock_guard<std::mutex> guard(podMutex);
@@ -168,6 +167,7 @@ int main(int argc, char** argv)
 
     // // Initialize detector and video
     podWorker.m_tagDetector = new AprilTags::TagDetector(podWorker.m_tagCodes);
+    // AprilTags::TagDetector m_tagDetector = AprilTags::TagDetector(podWorker.m_tagCodes);
     
     // podWorker.m_cap = cv::VideoCapture(podWorker.m_deviceId);
     // if (!podWorker.m_cap.isOpened()) {

@@ -5,13 +5,13 @@ set(POD_NAME detectorVIS)
 include(cmake/pods.cmake)
 
 find_package(PkgConfig REQUIRED)
-find_package(OpenCV REQUIRED)
+# find_package(OpenCV REQUIRED)
 
 add_definitions(-std=c++11)
 
 
 pkg_check_modules(LCM REQUIRED lcm)
-pkg_check_modules(APRILTAGS REQUIRED apriltags)
+# pkg_check_modules(APRILTAGS REQUIRED apriltags)
 
 
 #tell cmake to build these subdirectories

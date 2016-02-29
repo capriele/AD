@@ -39,4 +39,5 @@ codebase_lowlevel/vision/locator/Makefile
 cmake_install.cmake
 *.*.autosave\
 *.*mexw64
-#*#
+\#*\#
+.\#*
