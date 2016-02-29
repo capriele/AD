@@ -161,14 +161,13 @@ int main(int argc, char** argv)
     /*  POD-specific init procedures  */
     // Update and publish status of detectorVIS (keep this infrastructure!)
     // printf("Initializing POD...\n");
-    // podWorker.publishStatus(POD_INITING);
+    podWorker.publishStatus(POD_INITING);
 
     // //Initialization stuff
-    // podWorker.parseOptions(argc, argv); // parse options, i.e. get environment we're in
-    // initEnvironment(podWorker.environment, podWorker.m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
+    initEnvironment(podWorker.environment, podWorker.m_tagCodes); // Initialize environment parameters (i.e. where are what tags)
 
     // // Initialize detector and video
-    // podWorker.m_tagDetector = new AprilTags::TagDetector(podWorker.m_tagCodes);
+    podWorker.m_tagDetector = new AprilTags::TagDetector(podWorker.m_tagCodes);
     
     // podWorker.m_cap = cv::VideoCapture(podWorker.m_deviceId);
     // if (!podWorker.m_cap.isOpened()) {
