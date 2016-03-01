@@ -16,6 +16,10 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(apriltags ${OpenCV_LIBS}) #-pg) #-fopenmp)
 pods_use_pkg_config_packages(apriltags eigen3)
 
+# find_path(FLY_CAPTURE_PATH flycapture REQUIRED)
+# find_LIBRARY (FLYCAPTURE_LIB flycapture /usr/include/ REQUIRED)
+# target_link_libraries(apriltags ${FLYCAPTURE_LIB})
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   target_link_libraries(apriltags -L/opt/local/lib/) # MacPorts special treatment...
 else (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

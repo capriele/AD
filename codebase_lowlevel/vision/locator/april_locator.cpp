@@ -27,6 +27,9 @@ using namespace std;
 // on screen
 #include "opencv2/opencv.hpp"
 
+// Point grey camera interface
+#include "../pgr2opencv.cpp"
+
 // April tags detector and tag family
 #include "AprilTags/TagDetector.h"
 #include "AprilTags/Tag16h5.h"
@@ -84,8 +87,9 @@ class Detect
 
     int m_deviceId; // camera id (in case of multiple cameras)
 
-    cv::VideoCapture m_cap;
-    
+    // cv::VideoCapture m_cap;
+    pgr2cv::VideoCapture cap;
+   
 public:
 
   // default constructor
@@ -178,17 +182,24 @@ public:
 	m_tagDetector = new AprilTags::TagDetector(m_tagCodes);
 
 	// find and open a USB camera
-	m_cap =  cv::VideoCapture(m_deviceId);
-        if(!m_cap.isOpened()) {
-	    cerr << "ERROR: Can't find video device " << m_deviceId << "\n";
+	// m_cap =  cv::VideoCapture(m_deviceId);
+        // if(!m_cap.isOpened()) {
+	//     cerr << "ERROR: Can't find video device " << m_deviceId << "\n";
+	//     exit(1);
+	// }
+	cap.open(0);
+	if(!cap.isOpened())
+	{
+	    std::cout << "could not open camera!" << std::endl;
 	    exit(1);
 	}
-	m_cap.set(CV_CAP_PROP_FRAME_WIDTH, m_width);
-	m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, m_height);
-	cout << "Camera successfully opened (ignore error messages above...)" << endl;
-	cout << "Actual resolution: "
-	     << m_cap.get(CV_CAP_PROP_FRAME_WIDTH) << "x"
-	     << m_cap.get(CV_CAP_PROP_FRAME_HEIGHT) << endl;
+	
+	// m_cap.set(CV_CAP_PROP_FRAME_WIDTH, m_width);
+	// m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, m_height);
+	// cout << "Camera successfully opened (ignore error messages above...)" << endl;
+	// cout << "Actual resolution: "
+	//      << m_cap.get(CV_CAP_PROP_FRAME_WIDTH) << "x"
+	//      << m_cap.get(CV_CAP_PROP_FRAME_HEIGHT) << endl;
 
     }
 
@@ -243,8 +254,9 @@ public:
 	double last_t = tic();
 	while (true) {
 
-	    // capture frame
-	    m_cap >> image;
+	    // // capture frame
+	    // m_cap >> image;
+	    cap >> image;
 
 	    // do actual image processing
 	    processImage(image, image_gray);

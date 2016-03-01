@@ -11,6 +11,8 @@ find_LIBRARY (FLYCAPTURE_LIB flycapture /usr/local/lib REQUIRED)
 
 add_definitions(-g)
 add_executable(locator locator.cpp)
+add_executable(april_locator.cpp)
 
 target_link_libraries(locator opencv_core.so  opencv_highgui.so opencv_imgproc.so opencv_calib3d.so opencv_features2d.so)
 target_link_libraries(locator ${FLYCAPTURE_LIB})
+target_link_libraries(locator apriltags)
